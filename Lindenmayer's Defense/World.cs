@@ -16,7 +16,20 @@ namespace Lindenmayers_Defense
     public World()
     {
       gameObjects = new List<GameObject>();
+      SpawnTestEnemies(10);
     }
+
+
+    private void SpawnTestEnemies(int nrToSpawn)
+    {
+      for (int i = 0; i < nrToSpawn; i++)
+      {
+        Vector2 pos = new Vector2(100 + i * 10, 500);
+        Enemy spawn = new Enemy(AssetManager.GetTexture("dot"), pos);
+        AddGameObject(spawn);
+      }
+    }
+    
     public void Update(GameTime gt)
     {
       foreach(GameObject go in gameObjects)
@@ -26,7 +39,6 @@ namespace Lindenmayers_Defense
     }
     public void Draw(SpriteBatch sb)
     {
-      sb.Draw(AssetManager.GetTexture("dot"), Vector2.Zero, Color.White);
       foreach (GameObject go in gameObjects)
       {
         go.Draw(sb);

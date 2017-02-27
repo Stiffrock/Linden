@@ -44,11 +44,15 @@ namespace Lindenmayers_Defense
     {
       // Create a new SpriteBatch, which can be used to draw textures.
       spriteBatch = new SpriteBatch(GraphicsDevice);
-
       AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
       AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
+
+
+
+      //world måste vara sist om den ska anväda inladdade texturer
+      world = new World();
       // TODO: use this.Content to load your game content here
-      world.PostGameObject(new GameObject(AssetManager.GetTexture("dot"), new Vector2(500, 500)));
+      // world.AddGameObject(new GameObject(AssetManager.GetTexture("dot"), new Vector2(500, 500)));
     }
 
     /// <summary>
