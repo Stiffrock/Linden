@@ -17,7 +17,6 @@ namespace Lindenmayers_Defense
     {
       graphics = new GraphicsDeviceManager(this);
       Content.RootDirectory = "Content";
-      world = new World();
     }
 
     /// <summary>
@@ -28,7 +27,7 @@ namespace Lindenmayers_Defense
     /// </summary>
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+      world = new World();
       this.IsMouseVisible = true;
       base.Initialize();
     }
@@ -39,12 +38,13 @@ namespace Lindenmayers_Defense
     /// </summary>
     protected override void LoadContent()
     {
-            // Create a new SpriteBatch, which can be used to draw textures.
+      // Create a new SpriteBatch, which can be used to draw textures.
+      spriteBatch = new SpriteBatch(GraphicsDevice);
 
-       AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
-       spriteBatch = new SpriteBatch(GraphicsDevice);
-
+      AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
+      AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
       // TODO: use this.Content to load your game content here
+      world.PostGameObject(new GameObject(AssetManager.GetTexture("dot"), new Vector2(500, 500)));
     }
 
     /// <summary>
@@ -76,11 +76,12 @@ namespace Lindenmayers_Defense
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Draw(GameTime gameTime)
     {
-        spriteBatch.Begin();
-        world.Draw(spriteBatch);
-        
-        spriteBatch.End();
       GraphicsDevice.Clear(Color.CornflowerBlue);
+
+      spriteBatch.Begin();
+      world.Draw(spriteBatch);
+
+      spriteBatch.End();
       // TODO: Add your drawing code here
       base.Draw(gameTime);
     }

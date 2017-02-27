@@ -13,7 +13,7 @@ namespace Lindenmayers_Defense
     class Enemy : GameObject
     {
 
-        public Enemy(Vector2 pos) : base(pos)
+        public Enemy(Texture2D tex, Vector2 pos) : base(tex, pos)
         {
             this.pos = pos;
         }

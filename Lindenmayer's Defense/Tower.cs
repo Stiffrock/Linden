@@ -11,7 +11,7 @@ namespace Lindenmayers_Defense
 {
     class Tower : GameObject
     {              
-        public Tower(Vector2 pos) :base(pos)
+        public Tower(Texture2D tex, Vector2 pos) :base(tex, pos)
         {
             this.pos = pos;
         }

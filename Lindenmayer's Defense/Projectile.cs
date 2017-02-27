@@ -11,7 +11,7 @@ namespace Lindenmayers_Defense
 {
     class Projectile : GameObject
     {
-        public Projectile(Vector2 pos) : base(pos)
+        public Projectile(Texture2D tex, Vector2 pos) : base(tex, pos)
         {
             this.pos = pos;
         }     
