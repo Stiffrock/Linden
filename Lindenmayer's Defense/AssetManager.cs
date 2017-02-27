@@ -6,26 +6,23 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 
 namespace Lindenmayers_Defense
 {
-    class Enemy : GameObject
-    {
+    public static class AssetManager
+    {    
+        public static Dictionary<string, Texture2D> Textures;
 
-        public Enemy(Vector2 pos) : base(pos)
+        public static void AddTexture(string name, Texture2D tex)
         {
-            this.pos = pos;
+            Textures.Add(name, tex);
         }
 
-        public override void Draw(SpriteBatch sb)
+        public static Texture2D GetTexture(string name)
         {
-            base.Draw(sb);
-        }
-
-        public override void Update(GameTime gt)
-        {
-            base.Update(gt);
+            return Textures[name];
         }
     }
 }
