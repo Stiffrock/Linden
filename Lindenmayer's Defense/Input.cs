@@ -26,6 +26,7 @@ namespace Lindenmayers_Defense
       mouseWheelValue = mouseState.ScrollWheelValue;
     }
     public static Vector2 GetMousePos() { return new Vector2(mouseState.X, mouseState.Y); }
+    public static Point GetMousePoint() { return mouseState.Position; }
     public static bool LeftMouseButtonDown() { return mouseState.LeftButton == ButtonState.Pressed; }
     public static bool RightMouseButtonDown() { return mouseState.RightButton == ButtonState.Pressed; }
     public static bool MiddleMouseButtonDown() { return mouseState.MiddleButton == ButtonState.Pressed; }
