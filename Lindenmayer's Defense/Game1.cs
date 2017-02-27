@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Lindenmayer_s_Defense
+namespace Lindenmayers_Defense
 {
     /// <summary>
     /// This is the main type for your game.

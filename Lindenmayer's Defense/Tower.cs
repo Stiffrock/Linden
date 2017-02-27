@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lindenmayer_s_Defense
+namespace Lindenmayers_Defense
 {
     class Tower : GameObject
     {
