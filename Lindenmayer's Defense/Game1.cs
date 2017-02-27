@@ -32,7 +32,6 @@ namespace Lindenmayers_Defense
     protected override void Initialize()
     {
       // TODO: Add your initialization logic here
-      world = new World();
       this.IsMouseVisible = true;
       base.Initialize();
     }
@@ -45,14 +44,11 @@ namespace Lindenmayers_Defense
     {
       // Create a new SpriteBatch, which can be used to draw textures.
       spriteBatch = new SpriteBatch(GraphicsDevice);
-
       AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
       AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
-      // TODO: use this.Content to load your game content here
-      world.AddGameObject(new Base(AssetManager.GetTexture("dot"), new Vector2(500, 500)));
-      Enemy e = new Enemy(world, AssetManager.GetTexture("pixel"), new Vector2(100, 100), 100, 100, 100);
-      e.scale = 100;
-      world.AddGameObject(e);
+
+      //world måste vara sist om den ska anväda inladdade texturer
+      world = new World();
     }
 
     /// <summary>

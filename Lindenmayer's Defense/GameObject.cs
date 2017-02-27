@@ -22,7 +22,7 @@ namespace Lindenmayers_Defense
     public Texture2D tex;
     public Vector2 origin;
     public Rectangle? spriteRec = null;
-    public Color color = Color.Red;
+    public Color color = Color.White;
     public float alpha = 1f;
     public float layerDepth = 0f;
 
@@ -36,7 +36,7 @@ namespace Lindenmayers_Defense
 
     public bool Disposed { get; protected set; }
 
-    public bool drawHitbox = false;
+    public bool drawHitbox = true;
     public GameObject(Texture2D tex, Vector2 pos)
     {
       this.tex = tex;

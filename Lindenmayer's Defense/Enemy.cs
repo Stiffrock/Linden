@@ -27,6 +27,7 @@ namespace Lindenmayers_Defense
       this.health = health;
       this.speed = speed;
 
+      target = world.baseTower;
       layerMask = CollisionLayer.TOWER;
     }
     protected virtual void Movement(GameTime gt)
@@ -51,16 +52,11 @@ namespace Lindenmayers_Defense
     }
     public override void Update(GameTime gt)
     {
-      target = world.GetGameObjects()[0]; //TO DO: Better way of aquiring base reference
       if (target != null && target != this)
       {
         Movement(gt);
       }
       base.Update(gt);
-    }
-    public override void Draw(SpriteBatch sb)
-    {
-      base.Draw(sb);
     }
   }
 }
