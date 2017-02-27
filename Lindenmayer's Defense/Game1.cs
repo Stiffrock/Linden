@@ -16,6 +16,10 @@ namespace Lindenmayers_Defense
     public Game1()
     {
       graphics = new GraphicsDeviceManager(this);
+      graphics.IsFullScreen = false;
+      graphics.PreferredBackBufferWidth = 1200;
+      graphics.PreferredBackBufferHeight = 800;
+      graphics.ApplyChanges();
       Content.RootDirectory = "Content";
     }
 
@@ -27,7 +31,7 @@ namespace Lindenmayers_Defense
     /// </summary>
     protected override void Initialize()
     {
-      world = new World();
+      // TODO: Add your initialization logic here
       this.IsMouseVisible = true;
       base.Initialize();
     }
@@ -77,12 +81,10 @@ namespace Lindenmayers_Defense
     protected override void Draw(GameTime gameTime)
     {
       GraphicsDevice.Clear(Color.CornflowerBlue);
-
+      // TODO: Add your drawing code here
       spriteBatch.Begin();
       world.Draw(spriteBatch);
-
       spriteBatch.End();
-      // TODO: Add your drawing code here
       base.Draw(gameTime);
     }
   }

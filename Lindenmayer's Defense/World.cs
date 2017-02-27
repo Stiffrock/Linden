@@ -26,6 +26,7 @@ namespace Lindenmayers_Defense
     }
     public void Draw(SpriteBatch sb)
     {
+      sb.Draw(AssetManager.GetTexture("dot"), Vector2.Zero, Color.White);
       foreach (GameObject go in gameObjects)
       {
         go.Draw(sb);
