@@ -12,12 +12,12 @@ namespace Lindenmayers_Defense
   {
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
-
+    World world;
     public Game1()
     {
       graphics = new GraphicsDeviceManager(this);
       Content.RootDirectory = "Content";
-      World world = new World();
+      world = new World();
     }
 
     /// <summary>
@@ -39,8 +39,10 @@ namespace Lindenmayers_Defense
     /// </summary>
     protected override void LoadContent()
     {
-      // Create a new SpriteBatch, which can be used to draw textures.
-      spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Create a new SpriteBatch, which can be used to draw textures.
+
+       AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
+       spriteBatch = new SpriteBatch(GraphicsDevice);
 
       // TODO: use this.Content to load your game content here
     }
@@ -64,9 +66,7 @@ namespace Lindenmayers_Defense
       if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
         Exit();
       Input.Update();
-
-      // TODO: Add your update logic here
-
+      world.Update(gameTime);
       base.Update(gameTime);
     }
 
@@ -76,10 +76,12 @@ namespace Lindenmayers_Defense
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Draw(GameTime gameTime)
     {
+        spriteBatch.Begin();
+        world.Draw(spriteBatch);
+        
+        spriteBatch.End();
       GraphicsDevice.Clear(Color.CornflowerBlue);
-
       // TODO: Add your drawing code here
-
       base.Draw(gameTime);
     }
   }
