@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lindenmayer_s_Defense
+namespace Lindenmayers_Defense
 {
 #if WINDOWS || LINUX
     /// <summary>

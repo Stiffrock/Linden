@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Lindenmayer_s_Defense
+namespace Lindenmayers_Defense
 {
     class GameObject
     {
