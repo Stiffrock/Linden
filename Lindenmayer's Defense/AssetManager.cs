@@ -13,7 +13,7 @@ namespace Lindenmayers_Defense
 {
     public static class AssetManager
     {    
-        public static Dictionary<string, Texture2D> Textures;
+        public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
 
         public static void AddTexture(string name, Texture2D tex)
         {
