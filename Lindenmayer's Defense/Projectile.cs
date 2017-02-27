@@ -16,14 +16,14 @@ namespace Lindenmayers_Defense
             this.pos = pos;
         }     
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gt)
         {
-            base.Update(gameTime);
+            base.Update(gt);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch sb)
         {
-            base.Draw(spriteBatch);
+            base.Draw(sb);
         }
     }
 }

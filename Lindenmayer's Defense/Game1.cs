@@ -27,8 +27,8 @@ namespace Lindenmayers_Defense
     /// </summary>
     protected override void Initialize()
     {
-      // TODO: Add your initialization logic here
-
+        // TODO: Add your initialization logic here
+      this.IsMouseVisible = true;
       base.Initialize();
     }
 
