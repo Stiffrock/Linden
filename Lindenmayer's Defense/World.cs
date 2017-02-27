@@ -19,11 +19,17 @@ namespace Lindenmayers_Defense
     }
     public void Update(GameTime gt)
     {
-
+      foreach(GameObject go in gameObjects)
+      {
+        go.Update(gt);
+      }
     }
     public void Draw(SpriteBatch sb)
     {
-
+      foreach (GameObject go in gameObjects)
+      {
+        go.Draw(sb);
+      }
     }
     public void PostGameObject(GameObject go)
     {

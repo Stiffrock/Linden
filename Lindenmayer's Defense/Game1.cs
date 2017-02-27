@@ -62,6 +62,7 @@ namespace Lindenmayers_Defense
     {
       if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
         Exit();
+      Input.Update();
 
       // TODO: Add your update logic here
 
