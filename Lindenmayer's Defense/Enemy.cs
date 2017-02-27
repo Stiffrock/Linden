@@ -26,7 +26,6 @@ namespace Lindenmayers_Defense
       this.damage = damage;
       this.health = health;
       this.speed = speed;
-
       target = world.baseTower;
       layerMask = CollisionLayer.TOWER;
     }

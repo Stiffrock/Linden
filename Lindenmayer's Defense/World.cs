@@ -13,6 +13,7 @@ namespace Lindenmayers_Defense
   class World
   {
     public Base baseTower;
+    Tower testTower;
     List<GameObject> gameObjects;
     public World()
     {
@@ -20,6 +21,8 @@ namespace Lindenmayers_Defense
       baseTower = new Base(AssetManager.GetTexture("dot"), new Vector2(500, 500));
       AddGameObject(baseTower);
       SpawnTestEnemies(10);
+      testTower = new Tower(AssetManager.GetTexture("dot"), new Vector2(600, 500));
+      AddGameObject(testTower);
     }
 
     private void SpawnTestEnemies(int nrToSpawn)
@@ -27,7 +30,7 @@ namespace Lindenmayers_Defense
       for (int i = 0; i < nrToSpawn; i++)
       {
         Vector2 pos = new Vector2(100 + i * 10, 500);
-        Enemy spawn = new Enemy(this, AssetManager.GetTexture("pixel"), pos, 10, 50, 100);
+        Enemy spawn = new Enemy(this, AssetManager.GetTexture("pixel"), pos, 10, 50, 20);
         spawn.scale = 100;
         AddGameObject(spawn);
       }
@@ -42,6 +45,12 @@ namespace Lindenmayers_Defense
         {
           if (go != go2 && go.CollidesWith(go2))
             go.DoCollision(go2);
+
+          if (go is Tower && go != go2 && !(go is Base))
+          {
+            Tower t = (Tower)go;
+            t.AggroCollision(go2);
+          }
         }
       }
 
