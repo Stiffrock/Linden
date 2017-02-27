@@ -32,7 +32,7 @@ namespace Lindenmayers_Defense
         go.Draw(sb);
       }
     }
-    public void PostGameObject(GameObject go)
+    public void AddGameObject(GameObject go)
     {
       gameObjects.Add(go);
     }
