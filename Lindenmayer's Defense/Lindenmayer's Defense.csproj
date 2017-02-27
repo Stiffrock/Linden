@@ -54,10 +54,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssetManager.cs" />
+    <Compile Include="Base.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GUI\Button.cs" />
+    <Compile Include="IDamageable.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />

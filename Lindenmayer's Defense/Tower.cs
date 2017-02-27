@@ -9,21 +9,22 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Lindenmayers_Defense
 {
-    class Tower : GameObject
-    {              
-        public Tower(Texture2D tex, Vector2 pos) :base(tex, pos)
-        {
-            this.pos = pos;
-        }
-
-        public override void Draw(SpriteBatch sb)
-        {
-            base.Draw(sb);
-        }
-
-        public override void Update(GameTime gt)
-        {
-            base.Update(gt);
-        }
+  class Tower : GameObject
+  {
+    public Tower(Texture2D tex, Vector2 pos) : base(tex, pos)
+    {
+      this.pos = pos;
+      layer = CollisionLayer.TOWER;
     }
+
+    public override void Draw(SpriteBatch sb)
+    {
+      base.Draw(sb);
+    }
+
+    public override void Update(GameTime gt)
+    {
+      base.Update(gt);
+    }
+  }
 }

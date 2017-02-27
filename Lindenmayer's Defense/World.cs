@@ -19,14 +19,20 @@ namespace Lindenmayers_Defense
     }
     public void Update(GameTime gt)
     {
-      foreach(GameObject go in gameObjects)
+      foreach (GameObject go in gameObjects)
       {
         go.Update(gt);
+        foreach (GameObject go2 in gameObjects)
+        {
+          if (go != go2 && go.CollidesWith(go2))
+            go.DoCollision(go2);
+        }
       }
+
+      gameObjects.RemoveAll(go => go.Disposed);
     }
     public void Draw(SpriteBatch sb)
     {
-      sb.Draw(AssetManager.GetTexture("dot"), Vector2.Zero, Color.White);
       foreach (GameObject go in gameObjects)
       {
         go.Draw(sb);
