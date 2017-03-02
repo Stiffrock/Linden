@@ -28,7 +28,7 @@ namespace Lindenmayers_Defense
       this.world = world;
       layer = CollisionLayer.TOWER;
       Radius = tex.Width * 2;
-      Cooldown = 2000.0f;
+      Cooldown = 200.0f;
       timer = Cooldown;
       Scale = 0.1f;
       aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), Radius);
@@ -78,7 +78,7 @@ namespace Lindenmayers_Defense
     protected void ShootProjectile()
     {
       //Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), new Vector2(10,10), 1000.0f, 10.0f);
-      LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos);
+      LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos, "X", 5);
       projectileList.Add(p);
     }
 

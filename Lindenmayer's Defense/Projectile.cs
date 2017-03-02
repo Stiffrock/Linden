@@ -12,15 +12,19 @@ using System;
 namespace Lindenmayers_Defense
 {
 
-    class Projectile : GameObject
-    {
+  class Projectile : GameObject
+  {
     protected Vector2 Velocity { get; set; }
     protected float Accuracy { get; set; }
     protected Vector2 TurnRate { get; set; }
     protected float Speed { get; set; }
+
     protected float Damage { get; set; }
-    protected bool Seeking{ get; set; }
-    protected double Lifetime{ get; set; }
+
+    protected bool Seeking { get; set; }
+    protected double Lifetime { get; set; }
+
+
     protected Vector2 targetPos;
     protected BoundingSphere aggroRange;
     protected float Radius;
@@ -28,6 +32,7 @@ namespace Lindenmayers_Defense
     protected World world;
 
     public Projectile(World world, Texture2D tex, Vector2 pos, Vector2 velocity, float accuracy, float speed, float damage) : base(tex, pos)
+
     {
       this.pos = pos;
       this.world = world;
@@ -41,12 +46,10 @@ namespace Lindenmayers_Defense
       hitbox.Height -= tex.Height / 2;
       aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), Radius);
       drawHitbox = false;
-      Seeking = false;   
-      Scale = 0.1f;
+      Seeking = false;
+      Scale = 0.05f;
       targetPos = SetTargetPos();
     }
-
-
 
     private Vector2 SetTargetPos()
     {
@@ -73,10 +76,10 @@ namespace Lindenmayers_Defense
               }
             }
           }
-        }      
+        }
       }
 
-      Vector2 Offset = CalculateAccuracy(newTarget);  
+      Vector2 Offset = CalculateAccuracy(newTarget);
       return Offset;
     }
 
@@ -105,6 +108,8 @@ namespace Lindenmayers_Defense
         x = (float)(target.X + Math.Cos(-90.0) * offMagnitude);
         y = (float)(target.Y + Math.Sin(-90.0) * offMagnitude);
       }
+
+
       return new Vector2(x, y);
     }
 
@@ -128,14 +133,14 @@ namespace Lindenmayers_Defense
       }
     }
 
-  public override bool CollidesWith(GameObject other)
-   {
+    public override bool CollidesWith(GameObject other)
+    {
       if (other.hitbox.Intersects(hitbox))
       {
         return true;
       }
       return false;
-   }
+    }
 
     public override void DoCollision(GameObject other)
     {
@@ -145,7 +150,7 @@ namespace Lindenmayers_Defense
     }
 
     private void MoveTo(GameTime gt)
-    {   
+    {
       if (pos != targetPos)
       {
         Vector2 dir = targetPos - this.pos;
@@ -156,17 +161,17 @@ namespace Lindenmayers_Defense
       if (GetDistanceToTarget(targetPos) <= 20)
       {
         Die();
-      } 
+      }
     }
-  protected double GetDistanceToTarget(Vector2 target)
-  {
-    float x = pos.X - target.X;
-    float y = pos.Y - target.Y;
-    return Math.Sqrt(x * x + y * y);
-  }
+    protected double GetDistanceToTarget(Vector2 target)
+    {
+      float x = pos.X - target.X;
+      float y = pos.Y - target.Y;
+      return Math.Sqrt(x * x + y * y);
+    }
 
-  public override void Update(GameTime gt)
-      {
+    public override void Update(GameTime gt)
+    {
       base.Update(gt);
       Lifetime -= gt.ElapsedGameTime.Seconds;
       if (Lifetime <= 0)
@@ -177,9 +182,9 @@ namespace Lindenmayers_Defense
       CheckForCollision();
 
     }
-      public override void Draw(SpriteBatch sb)
-      {
-          base.Draw(sb);
-      }
-}
+    public override void Draw(SpriteBatch sb)
+    {
+      base.Draw(sb);
+    }
+  }
 }

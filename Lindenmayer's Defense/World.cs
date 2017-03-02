@@ -20,10 +20,10 @@ namespace Lindenmayers_Defense
     public World()
     {
       gameObjects = new List<GameObject>();
-      baseTower = new Base(this,AssetManager.GetTexture("dot"), new Vector2(800, 300));
+      baseTower = new Base(this, AssetManager.GetTexture("dot"), new Vector2(800, 300));
       AddGameObject(baseTower);
       SpawnTestEnemies(5);
-      testTower = new Tower(this,AssetManager.GetTexture("dot"), new Vector2(600, 500));
+      testTower = new Tower(this, AssetManager.GetTexture("dot"), new Vector2(600, 500));
       AddGameObject(testTower);
     }
 
@@ -40,8 +40,9 @@ namespace Lindenmayers_Defense
 
     public void Update(GameTime gt)
     {
-      foreach (GameObject go in gameObjects)
+      for (int i = 0; i < gameObjects.Count; i++)
       {
+        GameObject go = gameObjects[i];
         go.Update(gt);
         foreach (GameObject go2 in gameObjects)
         {
