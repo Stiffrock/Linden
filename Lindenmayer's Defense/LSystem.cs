@@ -11,29 +11,31 @@ namespace Lindenmayers_Defense
   {
     static Dictionary<char, string> grammar = new Dictionary<char, string>()
     {
-      {'F',"F+F-F-F+F" },
-      {'B',"A" }
+      {'F',"F" },
+      {'X', "F[+X]-X" }
+      //{'F',"F" },
+      //{'X',"F−[[X]+X]+F[+FX]−X" }
     };
 
-    public string Representation { get; protected set; }
+    public string Str { get; protected set; }
 
     public LSystem(string axiom)
     {
-      Representation = axiom;
+      Str = axiom;
     }
     public void Evolve(int generations)
     {
       for (int i = 0; i < generations; i++)
       {
         string result = "";
-        foreach(char c in Representation)
+        foreach(char c in Str)
         {
           if (grammar.ContainsKey(c))
             result += grammar[c];
           else
             result += c;
         }
-        Representation = result;
+        Str = result;
       }
     }
   }

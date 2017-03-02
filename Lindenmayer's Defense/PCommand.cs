@@ -9,14 +9,14 @@ namespace Lindenmayers_Defense
 {
   class PCommand
   {
-    Action<Projectile, GameTime> command;
+    Action<LProjectile, GameTime> command;
     public float Duration { get; private set; }
-    public PCommand(float duration, Action<Projectile, GameTime> command)
+    public PCommand(float duration, Action<LProjectile, GameTime> command)
     {
       this.Duration = duration;
       this.command = command;
     }
-    public void Invoke(Projectile p, GameTime gt)
+    public void Invoke(LProjectile p, GameTime gt)
     {
       command.Invoke(p, gt);
     }
