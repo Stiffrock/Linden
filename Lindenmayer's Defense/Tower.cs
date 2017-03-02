@@ -31,10 +31,9 @@ namespace Lindenmayers_Defense
 
       aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), Radius);
       projectileList = new List<GameObject>();
-      target = null;    
-      Disposed = false; 
+      target = null;
+      Disposed = false;
     }
-
 
     public void AggroCollision(GameObject other)
     {
@@ -52,7 +51,7 @@ namespace Lindenmayers_Defense
         else
         {
           target = (Enemy)other;
-        }       
+        }
       }
     }
 

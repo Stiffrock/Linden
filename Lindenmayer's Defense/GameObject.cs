@@ -28,8 +28,10 @@ namespace Lindenmayers_Defense
 
     public Vector2 pos;
     public float rotation = 0.0f;
-    public float scale = 1.0f;
     public Rectangle hitbox;
+
+    private float scale = 1.0f;
+    public float Scale { get { return scale; } set { scale = value; UpdateHitbox(); } }
 
     public CollisionLayer layer { get; protected set; }
     public CollisionLayer layerMask;
@@ -43,8 +45,12 @@ namespace Lindenmayers_Defense
       this.pos = pos;
       origin = new Vector2(tex.Width / 2.0f, tex.Height / 2.0f);
       hitbox = new Rectangle((int)(pos.X - origin.X), (int)(pos.Y - origin.Y), tex.Width, tex.Height);
-      hitbox.X = (int)(pos.X - origin.X - (0.5f * ((hitbox.Width * (scale - 1.0f)))) / scale);
-      hitbox.Y = (int)(pos.Y - origin.Y - (0.5f * ((hitbox.Height * (scale - 1.0f)))) / scale);
+      UpdateHitbox();
+    }
+    protected void UpdateHitbox()
+    {
+      hitbox.X = (int)(pos.X - origin.X - (0.5f * ((hitbox.Width * (Scale - 1.0f)))) / Scale);
+      hitbox.Y = (int)(pos.Y - origin.Y - (0.5f * ((hitbox.Height * (Scale - 1.0f)))) / Scale);
     }
     public virtual void Die()
     {
@@ -62,12 +68,11 @@ namespace Lindenmayers_Defense
     }
     public virtual void Update(GameTime gt)
     {
-      hitbox.X = (int)(pos.X - origin.X - (0.5f * ((hitbox.Width * (scale - 1.0f)))) / scale);
-      hitbox.Y = (int)(pos.Y - origin.Y - (0.5f * ((hitbox.Height * (scale - 1.0f)))) / scale);
+      UpdateHitbox();
     }
     public virtual void Draw(SpriteBatch sb)
     {
-      sb.Draw(tex, pos, spriteRec, color * alpha, rotation, origin, scale, SpriteEffects.None, layerDepth);
+      sb.Draw(tex, pos, spriteRec, color * alpha, rotation, origin, Scale, SpriteEffects.None, layerDepth);
       if (drawHitbox)
         sb.Draw(AssetManager.GetTexture("pixel"), hitbox, Color.Blue * 0.5f);
     }

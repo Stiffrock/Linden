@@ -31,7 +31,7 @@ namespace Lindenmayers_Defense
       {
         Vector2 pos = new Vector2(100 + i * 10, 500);
         Enemy spawn = new Enemy(this, AssetManager.GetTexture("pixel"), pos, 10, 50, 20);
-        spawn.scale = 100;
+        spawn.Scale = 100;
         AddGameObject(spawn);
       }
     }
