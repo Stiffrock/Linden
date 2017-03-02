@@ -34,7 +34,7 @@ namespace Lindenmayers_Defense
     PCommand currentCommand;
     float currentCommandElapsedTime;
 
-    public LProjectile(World world, Texture2D tex, Vector2 pos, string axiom, int generations) : base(world, tex, pos, Vector2.Zero, Vector2.Zero, 1.0f, 1.0f)
+    public LProjectile(World world, Texture2D tex, Vector2 pos, string axiom, int generations) : base(world, tex, pos, Vector2.Zero, 50.0f, 1.0f, 1.0f)
     {
       L = new LSystem(axiom);
       L.Evolve(generations);

@@ -18,13 +18,9 @@ namespace Lindenmayers_Defense
     protected float Accuracy { get; set; }
     protected Vector2 TurnRate { get; set; }
     protected float Speed { get; set; }
-
     protected float Damage { get; set; }
-
     protected bool Seeking { get; set; }
     protected double Lifetime { get; set; }
-
-
     protected Vector2 targetPos;
     protected BoundingSphere aggroRange;
     protected float Radius;
@@ -32,7 +28,6 @@ namespace Lindenmayers_Defense
     protected World world;
 
     public Projectile(World world, Texture2D tex, Vector2 pos, Vector2 velocity, float accuracy, float speed, float damage) : base(tex, pos)
-
     {
       this.pos = pos;
       this.world = world;
@@ -91,7 +86,6 @@ namespace Lindenmayers_Defense
     {
       rand = new Random();
       int Negative = rand.Next(0, 2);
-
       float acc = rand.Next((int)Accuracy, 100);
       float accPercent = (acc / 100);
       double magnitude = GetDistanceToTarget(target);
@@ -108,45 +102,40 @@ namespace Lindenmayers_Defense
         x = (float)(target.X + Math.Cos(-90.0) * offMagnitude);
         y = (float)(target.Y + Math.Sin(-90.0) * offMagnitude);
       }
-
-
       return new Vector2(x, y);
     }
-
 
     private void CheckForCollision()
     {
       foreach (GameObject e in world.GetGameObjects())
       {
         if (e is Enemy)
-        {
           if (hitbox.Intersects(e.hitbox))
             if (CollidesWith(e))
             {
               Enemy enemy = (Enemy)e;
               enemy.TakeDamage(Damage);
               Die();
-              DoCollision(e);
+              DoCollision(enemy);
             }
-        }
-
       }
     }
 
     public override bool CollidesWith(GameObject other)
     {
       if (other.hitbox.Intersects(hitbox))
-      {
         return true;
-      }
       return false;
     }
 
     public override void DoCollision(GameObject other)
     {
-      Enemy enemy = (Enemy)other;
-      enemy.TakeDamage(Damage);
-      Die();
+      if (other is Enemy)
+      {
+        Enemy enemy = (Enemy)other;
+        enemy.TakeDamage(Damage);
+        Die();
+      }
     }
 
     private void MoveTo(GameTime gt)
@@ -159,9 +148,7 @@ namespace Lindenmayers_Defense
       }
 
       if (GetDistanceToTarget(targetPos) <= 20)
-      {
         Die();
-      }
     }
     protected double GetDistanceToTarget(Vector2 target)
     {
@@ -180,7 +167,6 @@ namespace Lindenmayers_Defense
       }
       MoveTo(gt);
       CheckForCollision();
-
     }
     public override void Draw(SpriteBatch sb)
     {
