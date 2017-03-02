@@ -61,6 +61,9 @@
     <Compile Include="GUI\Button.cs" />
     <Compile Include="IDamageable.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="LProjectile.cs" />
+    <Compile Include="LSystem.cs" />
+    <Compile Include="PCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -49,8 +50,16 @@ namespace Lindenmayers_Defense
     }
     protected void UpdateHitbox()
     {
+      hitbox.Width = (int)(tex.Width * Scale);
+      hitbox.Height = (int)(tex.Height * Scale);
       hitbox.X = (int)(pos.X - origin.X - (0.5f * ((hitbox.Width * (Scale - 1.0f)))) / Scale);
       hitbox.Y = (int)(pos.Y - origin.Y - (0.5f * ((hitbox.Height * (Scale - 1.0f)))) / Scale);
+    }
+    public Vector2 Forward()
+    {
+      Vector2 direction = new Vector2((float)Math.Sin(rotation), (float)-Math.Cos(rotation));
+      direction.Normalize();
+      return direction;
     }
     public virtual void Die()
     {
