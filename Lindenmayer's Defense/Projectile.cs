@@ -15,7 +15,7 @@ namespace Lindenmayers_Defense
     class Projectile : GameObject
     {
     protected Vector2 Velocity { get; set; }
-    protected Vector2 Accuracy { get; set; }
+    protected float Accuracy { get; set; }
     protected Vector2 TurnRate { get; set; }
     protected float Speed { get; set; }
     protected float Damage { get; set; }
@@ -30,7 +30,7 @@ namespace Lindenmayers_Defense
 
 
 
-    public Projectile(World world, Texture2D tex, Vector2 pos, Vector2 velocity, Vector2 accuracy, float speed, float damage) : base(tex, pos)
+    public Projectile(World world, Texture2D tex, Vector2 pos, Vector2 velocity, float accuracy, float speed, float damage) : base(tex, pos)
     {
       this.pos = pos;
       this.world = world;
@@ -38,6 +38,7 @@ namespace Lindenmayers_Defense
       this.Velocity = velocity;
       this.Speed = speed;
       this.Damage = damage;
+      layerMask = CollisionLayer.ENEMY;
       Radius = tex.Width * 2;
       hitbox.Width -= tex.Width / 2;
       hitbox.Height -= tex.Height / 2;
@@ -45,19 +46,47 @@ namespace Lindenmayers_Defense
       drawHitbox = false;
       Seeking = false;   
       Scale = 0.1f;
+      Lifetime = 5.0f;
       targetPos = SetTargetPos();
-    }     
+    }
 
+
+    /// <summary>
+    /// Based on max accuracy being 100% meaning correct projectile target. Using projectiles accuracy as base for how close to the target it will land.
+    /// example: 64% meaning get its target position with a 34% offset
+    /// </summary>
+    private Vector2 CalculateAccuracy(Vector2 target)
+    {     
+      rand = new Random();
+      int Negative = rand.Next(0, 2);
+
+      float acc = rand.Next((int)Accuracy, 100);
+      float accPercent = (acc / 100);   
+      double magnitude = GetDistanceToTarget(target);
+      double offMagnitude = magnitude * ( 1 - accPercent);
+
+      float x = 0, y = 0;
+      if (Negative == 0)
+      {
+        x = (float)(target.X + Math.Cos(90.0) * offMagnitude);
+        y = (float)(target.Y + Math.Sin(90.0) * offMagnitude);
+      }
+      if (Negative == 1)
+      {
+        x = (float)(target.X + Math.Cos(-90.0) * offMagnitude);
+        y = (float)(target.Y + Math.Sin(-90.0) * offMagnitude);
+      } 
+      return new Vector2(x,y);
+    }
+
+    /// <summary>
+    /// Calculates the projectiles accuracy and applies it to the targetposition.
+    /// Use the aggroRange for the projectile to look for a new target.
+    /// </summary>
     private Vector2 SetTargetPos()
     {
       Vector2 newTarget = Vector2.Zero;
       bool first = true;
-
-      //100 max
-      rand = new Random();
-      Vector2 Acc = new Vector2(rand.Next((int)Accuracy.X, 100), rand.Next((int)Accuracy.Y, 100));
-      Acc.Normalize();
-
       foreach (GameObject e in world.GetGameObjects())
       {
         if (e is Enemy)
@@ -78,42 +107,45 @@ namespace Lindenmayers_Defense
               }
             }
           }
-        }
-       
+        }       
       }
-      Vector2 newTargetPos = new Vector2(newTarget.X * Acc.X, newTarget.Y * Acc.Y);
-      return newTargetPos;
+      Vector2 Offset = CalculateAccuracy(newTarget);
+      return Offset;
     }
 
-    private void DoCollision()
+    private void CheckForCollision()
     {
       foreach (GameObject e in world.GetGameObjects())
       {
         if (e is Enemy)
         {
-          if (hitbox.Intersects(e.hitbox))
+          if (CollidesWith(e))
           {
-            Enemy enemy = (Enemy)e;
-            enemy.TakeDamage(Damage);
-            Die();
+            DoCollision(e);
           }
-        }
-   
+        }       
       }
     }
 
+  public override bool CollidesWith(GameObject other)
+  {
+      if (other.hitbox.Intersects(hitbox))
+      {
+        return true;
+      }
+      return false;
+    }
+
+    public override void DoCollision(GameObject other)
+    {
+      Enemy enemy = (Enemy)other;
+      enemy.TakeDamage(Damage);
+      Die();
+    }
+
+
     private void MoveTo(GameTime gt)
     {
-     
-    //  Vector2 newTargetPos;
-      //if (!Seeking)
-      //{
-      //  newTargetPos = new Vector2(targetPos.X + Accuracy.X, targetPos.Y + Accuracy.Y);
-      //}
-      //else
-      //{
-      //  newTargetPos = new Vector2(targetPos.X, targetPos.Y);
-      //}
       if (pos != targetPos)
       {
         Vector2 dir = targetPos - this.pos;
@@ -121,6 +153,7 @@ namespace Lindenmayers_Defense
         this.pos += dir * Speed * (float)gt.ElapsedGameTime.TotalSeconds;
       }   
     }
+
   protected double GetDistanceToTarget(Vector2 target)
   {
     float x = pos.X - target.X;
@@ -132,57 +165,17 @@ namespace Lindenmayers_Defense
       {
       base.Update(gt);
 
+      Lifetime -= gt.ElapsedGameTime.Seconds;
+      if (Lifetime <= 0)
+      {
+        Die();
+      }
       MoveTo(gt);
-      DoCollision();    
+      CheckForCollision();    
       }
       public override void Draw(SpriteBatch sb)
       {
           base.Draw(sb);
       }
-}
-
-
-//  class Projectile : GameObject
-//  {
-//    Vector2 targetPos;
-//    public Projectile(Texture2D tex, Vector2 pos, Vector2 targetPos) : base(tex, pos)
-//    {
-//      this.pos = pos;
-//      this.targetPos = targetPos;
-//      drawHitbox = false;
-//      Scale = 0.05f;
-//    }
-
-//    private void MoveTo(Vector2 target, GameTime gt)
-//    {
-//      Vector2 termPos = new Vector2(target.X - tex.Width, target.Y - tex.Height);
-//      if (pos != termPos)
-//      {
-//        Vector2 direction = target - this.pos;
-//        direction.Normalize();
-//        this.pos += direction * 1000 * (float)gt.ElapsedGameTime.TotalSeconds;
-//      }
-//      if (GetDistanceToTarget(target) < 20)
-//      {
-//        Die();
-//        Disposed = true;
-//      }
-//    }
-//    protected double GetDistanceToTarget(Vector2 target)
-//    {
-//      float x = pos.X - target.X;
-//      float y = pos.Y - target.Y;
-//      return Math.Sqrt(x * x + y * y);
-//    }
-//    public override void Update(GameTime gt)
-//    {
-//      MoveTo(targetPos, gt);
-
-//    }
-//    public override void Draw(SpriteBatch sb)
-//    {
-//      base.Draw(sb);
-//    }
-//  }
-//>>>>>>> a66eff422afd3d57ce2d885e02275c470251dd30
+  }
 }

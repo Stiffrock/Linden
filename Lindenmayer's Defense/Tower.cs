@@ -77,8 +77,8 @@ namespace Lindenmayers_Defense
 
     protected void ShootProjectile()
     {
-      //Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), new Vector2(10,10), 1000.0f, 10.0f);
-      LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos);
+      Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), 50.0f, 1000.0f, 10.0f);
+      //LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos);
       projectileList.Add(p);
     }
 
@@ -98,7 +98,6 @@ namespace Lindenmayers_Defense
         item.Update(gt);
       }
       projectileList.RemoveAll(go => go.Disposed);
-
       timer += gt.ElapsedGameTime.Milliseconds;
       if (target != null && timer >= Cooldown)
       {
