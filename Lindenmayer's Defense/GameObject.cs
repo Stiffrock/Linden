@@ -42,7 +42,7 @@ namespace Lindenmayers_Defense
       this.tex = tex;
       this.pos = pos;
       origin = new Vector2(tex.Width / 2.0f, tex.Height / 2.0f);
-      hitbox = new Rectangle((int)(pos.X - origin.X), (int)(pos.Y - origin.Y), tex.Width, tex.Height);
+      hitbox = new Rectangle((int)(pos.X - origin.X), (int)(pos.Y - origin.Y), (int)(tex.Width * scale), (int)(tex.Height));
       hitbox.X = (int)(pos.X - origin.X - (0.5f * ((hitbox.Width * (scale - 1.0f)))) / scale);
       hitbox.Y = (int)(pos.Y - origin.Y - (0.5f * ((hitbox.Height * (scale - 1.0f)))) / scale);
     }
@@ -62,6 +62,8 @@ namespace Lindenmayers_Defense
     }
     public virtual void Update(GameTime gt)
     {
+      hitbox.Width = (int)(tex.Width * scale);
+      hitbox.Height = (int)(tex.Width * scale);
       hitbox.X = (int)(pos.X - origin.X - (0.5f * ((hitbox.Width * (scale - 1.0f)))) / scale);
       hitbox.Y = (int)(pos.Y - origin.Y - (0.5f * ((hitbox.Height * (scale - 1.0f)))) / scale);
     }

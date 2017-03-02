@@ -19,20 +19,21 @@ namespace Lindenmayers_Defense
     protected float Radius;
     private Enemy target;
     private double timer;
-    protected List<GameObject> projectileList;
+    public List<GameObject> projectileList;
+    protected World world;
 
-    public Tower(Texture2D tex, Vector2 pos) : base(tex, pos)
+    public Tower(World world, Texture2D tex, Vector2 pos) : base(tex, pos)
     {
       this.pos = pos;
+      this.world = world;
       layer = CollisionLayer.TOWER;
       Radius = tex.Width * 2;
       Cooldown = 2000.0f;
       timer = Cooldown;
-
+      scale = 0.1f;
       aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), Radius);
       projectileList = new List<GameObject>();
       target = null;    
-      Disposed = false; 
     }
 
 
@@ -76,7 +77,7 @@ namespace Lindenmayers_Defense
 
     protected void ShootProjectile()
     {
-      Projectile p = new Projectile(AssetManager.GetTexture("dot"), pos, target.pos);
+      Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), new Vector2(10,10), 1000.0f, 10.0f);
       projectileList.Add(p);
     }
 
@@ -96,7 +97,6 @@ namespace Lindenmayers_Defense
         item.Update(gt);
       }
       projectileList.RemoveAll(go => go.Disposed);
-
 
       timer += gt.ElapsedGameTime.Milliseconds;
       if (target != null && timer >= Cooldown)

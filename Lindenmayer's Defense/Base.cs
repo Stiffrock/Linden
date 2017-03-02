@@ -11,8 +11,9 @@ namespace Lindenmayers_Defense
   class Base : Tower, IDamageable
   {
     float health;
-    public Base(Texture2D tex, Vector2 pos):base(tex,pos)
+    public Base(World world, Texture2D tex, Vector2 pos):base(world, tex,pos)
     {
+      scale = 0.5f;
       health = 100;
     }
     public void TakeDamage(float damage)

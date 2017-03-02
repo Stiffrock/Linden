@@ -28,6 +28,8 @@ namespace Lindenmayers_Defense
       this.speed = speed;
       target = world.baseTower;
       layerMask = CollisionLayer.TOWER;
+      drawHitbox = false;
+
     }
     protected virtual void Movement(GameTime gt)
     {
@@ -51,11 +53,12 @@ namespace Lindenmayers_Defense
     }
     public override void Update(GameTime gt)
     {
+      base.Update(gt);
+
       if (target != null && target != this)
       {
         Movement(gt);
       }
-      base.Update(gt);
     }
   }
 }

@@ -15,13 +15,15 @@ namespace Lindenmayers_Defense
     public Base baseTower;
     Tower testTower;
     List<GameObject> gameObjects;
+    //List<GameObject> projectileList;
+
     public World()
     {
       gameObjects = new List<GameObject>();
-      baseTower = new Base(AssetManager.GetTexture("dot"), new Vector2(500, 500));
+      baseTower = new Base(this,AssetManager.GetTexture("dot"), new Vector2(800, 300));
       AddGameObject(baseTower);
-      SpawnTestEnemies(10);
-      testTower = new Tower(AssetManager.GetTexture("dot"), new Vector2(600, 500));
+      SpawnTestEnemies(5);
+      testTower = new Tower(this,AssetManager.GetTexture("dot"), new Vector2(600, 500));
       AddGameObject(testTower);
     }
 
@@ -29,7 +31,7 @@ namespace Lindenmayers_Defense
     {
       for (int i = 0; i < nrToSpawn; i++)
       {
-        Vector2 pos = new Vector2(100 + i * 10, 500);
+        Vector2 pos = new Vector2(100, 200 + i * 100);
         Enemy spawn = new Enemy(this, AssetManager.GetTexture("pixel"), pos, 10, 50, 20);
         spawn.scale = 100;
         AddGameObject(spawn);
