@@ -11,6 +11,7 @@ using System;
 
 namespace Lindenmayers_Defense
 {
+
     class Projectile : GameObject
     {
     protected Vector2 Velocity { get; set; }
@@ -43,7 +44,7 @@ namespace Lindenmayers_Defense
       aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), Radius);
       drawHitbox = false;
       Seeking = false;   
-      scale = 0.1f;
+      Scale = 0.1f;
       targetPos = SetTargetPos();
     }     
 
@@ -139,4 +140,49 @@ namespace Lindenmayers_Defense
           base.Draw(sb);
       }
 }
+
+
+//  class Projectile : GameObject
+//  {
+//    Vector2 targetPos;
+//    public Projectile(Texture2D tex, Vector2 pos, Vector2 targetPos) : base(tex, pos)
+//    {
+//      this.pos = pos;
+//      this.targetPos = targetPos;
+//      drawHitbox = false;
+//      Scale = 0.05f;
+//    }
+
+//    private void MoveTo(Vector2 target, GameTime gt)
+//    {
+//      Vector2 termPos = new Vector2(target.X - tex.Width, target.Y - tex.Height);
+//      if (pos != termPos)
+//      {
+//        Vector2 direction = target - this.pos;
+//        direction.Normalize();
+//        this.pos += direction * 1000 * (float)gt.ElapsedGameTime.TotalSeconds;
+//      }
+//      if (GetDistanceToTarget(target) < 20)
+//      {
+//        Die();
+//        Disposed = true;
+//      }
+//    }
+//    protected double GetDistanceToTarget(Vector2 target)
+//    {
+//      float x = pos.X - target.X;
+//      float y = pos.Y - target.Y;
+//      return Math.Sqrt(x * x + y * y);
+//    }
+//    public override void Update(GameTime gt)
+//    {
+//      MoveTo(targetPos, gt);
+
+//    }
+//    public override void Draw(SpriteBatch sb)
+//    {
+//      base.Draw(sb);
+//    }
+//  }
+//>>>>>>> a66eff422afd3d57ce2d885e02275c470251dd30
 }

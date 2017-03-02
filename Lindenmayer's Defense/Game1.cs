@@ -12,6 +12,7 @@ namespace Lindenmayers_Defense
   {
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
+    TowerManager towerManager;
     World world;
     public Game1()
     {
@@ -49,6 +50,7 @@ namespace Lindenmayers_Defense
 
       //world måste vara sist om den ska anväda inladdade texturer
       world = new World();
+      towerManager = new TowerManager(world);
     }
 
     /// <summary>
@@ -71,6 +73,7 @@ namespace Lindenmayers_Defense
         Exit();
       Input.Update();
       world.Update(gameTime);
+      towerManager.Update(gameTime);
       base.Update(gameTime);
     }
 

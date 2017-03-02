@@ -13,7 +13,7 @@ namespace Lindenmayers_Defense
     float health;
     public Base(World world, Texture2D tex, Vector2 pos):base(world, tex,pos)
     {
-      scale = 0.5f;
+      Scale = 0.5f;
       health = 100;
     }
     public void TakeDamage(float damage)

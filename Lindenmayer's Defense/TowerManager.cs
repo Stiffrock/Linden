@@ -19,9 +19,21 @@ namespace Lindenmayers_Defense
     {
       this.world = world;
     }
+    public void SetTowerType(Tower t)
+    {
+    }
+    void CreateTower(Vector2 pos)
+    {
+      Tower t = new Tower(world, AssetManager.GetTexture("dot"), pos);
+      t.Scale = 0.1f;
+      world.AddGameObject(t);
+    }
     public void Update(GameTime gt)
     {
-
+      if(Input.LeftMouseButtonClicked())
+      {
+        CreateTower(Input.GetMousePos());
+      }
     }
     public void Draw(SpriteBatch sb)
     {

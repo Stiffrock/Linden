@@ -30,12 +30,12 @@ namespace Lindenmayers_Defense
       Radius = tex.Width * 2;
       Cooldown = 2000.0f;
       timer = Cooldown;
-      scale = 0.1f;
+      Scale = 0.1f;
       aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), Radius);
       projectileList = new List<GameObject>();
       target = null;    
-    }
 
+    }
 
     public void AggroCollision(GameObject other)
     {
@@ -53,7 +53,7 @@ namespace Lindenmayers_Defense
         else
         {
           target = (Enemy)other;
-        }       
+        }
       }
     }
 
@@ -77,7 +77,8 @@ namespace Lindenmayers_Defense
 
     protected void ShootProjectile()
     {
-      Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), new Vector2(10,10), 1000.0f, 10.0f);
+      //Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), new Vector2(10,10), 1000.0f, 10.0f);
+      LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos);
       projectileList.Add(p);
     }
 
