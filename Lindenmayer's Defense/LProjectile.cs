@@ -28,7 +28,7 @@ namespace Lindenmayers_Defense
     PCommand currentCommand;
     float currentCommandElapsedTime;
 
-    public LProjectile(World world, Texture2D tex, Vector2 pos) : base(world, tex, pos, Vector2.Zero, 0.0f, 1.0f, 1.0f)
+    public LProjectile(World world, Texture2D tex, Vector2 pos) : base(world, tex, pos, Vector2.Zero, Vector2.Zero, 1.0f, 1.0f)
     {
       commandQueue = new Queue<PCommand>();
       L = new LSystem("F");
