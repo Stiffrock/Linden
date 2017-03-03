@@ -26,6 +26,7 @@ namespace Lindenmayers_Defense
     protected float Radius;
     protected Random rand;
     protected World world;
+    protected int MaxAccuracyOffset;
 
     public Projectile(World world, Texture2D tex, Vector2 pos, Vector2 velocity, float accuracy, float speed, float damage) : base(tex, pos)
     {
@@ -35,6 +36,7 @@ namespace Lindenmayers_Defense
       this.Velocity = velocity;
       this.Speed = speed;
       this.Damage = damage;
+      MaxAccuracyOffset = 200;
       Lifetime = 3.0f;
       Radius = tex.Width * 2;
       hitbox.Width -= tex.Width / 2;
@@ -43,54 +45,21 @@ namespace Lindenmayers_Defense
       drawHitbox = false;
       Seeking = false;
       Scale = 0.05f;
-      targetPos = SetTargetPos();
-    }
-
-    private Vector2 SetTargetPos()
-    {
-      Vector2 newTarget = Vector2.Zero;
-      bool first = true;
-
-      //foreach (GameObject e in world.GetGameObjects())
-      //{
-      //  if (e is Enemy)
-      //  {
-      //    BoundingSphere temp = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), e.tex.Width);
-
-      //    if (temp.Intersects(aggroRange))
-      //    {
-      //      if (first)
-      //      {
-      //        newTarget = e.pos;
-      //      }
-      //      else
-      //      {
-      //        if (GetDistanceToTarget(e.pos) < GetDistanceToTarget(newTarget))
-      //        {
-      //          newTarget = e.pos;
-      //        }
-      //      }
-      //    }
-      //  }
-      //}
-      newTarget = Forward();
-
-      Vector2 Offset = CalculateAccuracy(newTarget);
-      return Offset;
+      targetPos = CalculateAccuracy(Forward());
     }
 
     /// <summary>
     /// Based on max accuracy being 100% meaning correct projectile target. Using projectiles accuracy as base for how close to the target it will land.
     /// example: 64% meaning get its target position with a 34% offset
     /// </summary>
-    private Vector2 CalculateAccuracy(Vector2 target)
+    protected Vector2 CalculateAccuracy(Vector2 target)
     {
       rand = new Random();
       int Negative = rand.Next(0, 2);
       float acc = rand.Next((int)Accuracy, 100);
       float accPercent = (acc / 100);
-      double magnitude = GetDistanceToTarget(target);
-      double offMagnitude = magnitude * (1 - accPercent);
+     // double magnitude = GetDistanceToTarget(target);
+      double offMagnitude = MaxAccuracyOffset * (1 - accPercent);
 
       float x = 0, y = 0;
       if (Negative == 0)
@@ -103,7 +72,9 @@ namespace Lindenmayers_Defense
         x = (float)(target.X + Math.Cos(-90.0) * offMagnitude);
         y = (float)(target.Y + Math.Sin(-90.0) * offMagnitude);
       }
-      return new Vector2(x, y);
+      Vector2 res = new Vector2(x, y);
+      res.Normalize();
+      return res;
     }
 
     private void CheckForCollision()

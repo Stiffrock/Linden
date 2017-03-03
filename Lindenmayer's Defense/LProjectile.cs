@@ -13,7 +13,7 @@ namespace Lindenmayers_Defense
     static Dictionary<char, PCommand> commands = new Dictionary<char, PCommand>()
     {
       {'F', new PCommand(0.4f, (p, gt)=> {
-        p.pos += p.Forward() * 150 * (float)gt.ElapsedGameTime.TotalSeconds;
+        p.pos += p.CalculateAccuracy(p.Forward()) * 150 * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'-', new PCommand(0.0f, (p, gt)=> {
         p.rotation -= (float)Math.PI/7.2f;

@@ -77,8 +77,8 @@ namespace Lindenmayers_Defense
 
     protected void ShootProjectile()
     {
-      Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), 50.0f, 1000.0f, 10.0f);
-      //LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos, "X", 5);
+     // Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), 50.0f, 1000.0f, 10.0f);
+      LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos, "F", 5);
       projectileList.Add(p);
     }
 
