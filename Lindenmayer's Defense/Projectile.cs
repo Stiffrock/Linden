@@ -51,28 +51,29 @@ namespace Lindenmayers_Defense
       Vector2 newTarget = Vector2.Zero;
       bool first = true;
 
-      foreach (GameObject e in world.GetGameObjects())
-      {
-        if (e is Enemy)
-        {
-          BoundingSphere temp = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), e.tex.Width);
+      //foreach (GameObject e in world.GetGameObjects())
+      //{
+      //  if (e is Enemy)
+      //  {
+      //    BoundingSphere temp = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), e.tex.Width);
 
-          if (temp.Intersects(aggroRange))
-          {
-            if (first)
-            {
-              newTarget = e.pos;
-            }
-            else
-            {
-              if (GetDistanceToTarget(e.pos) < GetDistanceToTarget(newTarget))
-              {
-                newTarget = e.pos;
-              }
-            }
-          }
-        }
-      }
+      //    if (temp.Intersects(aggroRange))
+      //    {
+      //      if (first)
+      //      {
+      //        newTarget = e.pos;
+      //      }
+      //      else
+      //      {
+      //        if (GetDistanceToTarget(e.pos) < GetDistanceToTarget(newTarget))
+      //        {
+      //          newTarget = e.pos;
+      //        }
+      //      }
+      //    }
+      //  }
+      //}
+      newTarget = Forward();
 
       Vector2 Offset = CalculateAccuracy(newTarget);
       return Offset;
