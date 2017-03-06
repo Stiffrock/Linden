@@ -15,11 +15,12 @@ namespace Lindenmayers_Defense
     public Base baseTower;
     Tower testTower;
     List<GameObject> gameObjects;
-    //List<GameObject> projectileList;
+    List<Projectile> projectiles;
 
     public World()
     {
       gameObjects = new List<GameObject>();
+      projectiles = new List<Projectile>();
       baseTower = new Base(this, AssetManager.GetTexture("dot"), new Vector2(800, 300));
       AddGameObject(baseTower);
       SpawnTestEnemies(5);
@@ -48,22 +49,30 @@ namespace Lindenmayers_Defense
         {
           if (go != go2 && go.CollidesWith(go2))
             go.DoCollision(go2);
-
-          if (go is Tower && go != go2 && !(go is Base))
-          {
-            Tower t = (Tower)go;
-            t.AggroCollision(go2);
-          }
         }
       }
-
+      for(int i = 0; i < projectiles.Count; i++)
+      {
+        Projectile p = projectiles[i];
+        p.Update(gt);
+        foreach (GameObject go in gameObjects)
+        {
+          if(p.CollidesWith(go))
+            p.DoCollision(go);
+        }
+      }
       gameObjects.RemoveAll(go => go.Disposed);
+      projectiles.RemoveAll(p => p.Disposed);
     }
     public void Draw(SpriteBatch sb)
     {
       foreach (GameObject go in gameObjects)
       {
         go.Draw(sb);
+      }
+      foreach(Projectile p in projectiles)
+      {
+        p.Draw(sb);
       }
     }
     public void AddGameObject(GameObject go)
@@ -73,6 +82,10 @@ namespace Lindenmayers_Defense
     public List<GameObject> GetGameObjects()
     {
       return gameObjects;
+    }
+    public void AddProjectile(Projectile p)
+    {
+      projectiles.Add(p);
     }
   }
 }
