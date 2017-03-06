@@ -45,36 +45,24 @@ namespace Lindenmayers_Defense
       drawHitbox = false;
       Seeking = false;
       Scale = 0.05f;
-      targetPos = CalculateAccuracy(Forward());
+      CalculateAccuracy();
     }
 
     /// <summary>
     /// Based on max accuracy being 100% meaning correct projectile target. Using projectiles accuracy as base for how close to the target it will land.
     /// example: 64% meaning get its target position with a 34% offset
     /// </summary>
-    protected Vector2 CalculateAccuracy(Vector2 target)
+    protected void CalculateAccuracy()
     {
       rand = new Random();
       int Negative = rand.Next(0, 2);
-      float acc = rand.Next((int)Accuracy, 100);
-      float accPercent = (acc / 100);
-     // double magnitude = GetDistanceToTarget(target);
-      double offMagnitude = MaxAccuracyOffset * (1 - accPercent);
-
-      float x = 0, y = 0;
-      if (Negative == 0)
-      {
-        x = (float)(target.X + Math.Cos(90.0) * offMagnitude);
-        y = (float)(target.Y + Math.Sin(90.0) * offMagnitude);
-      }
+      float acc = rand.Next((int)75, 100) - 100;
+      
       if (Negative == 1)
-      {
-        x = (float)(target.X + Math.Cos(-90.0) * offMagnitude);
-        y = (float)(target.Y + Math.Sin(-90.0) * offMagnitude);
-      }
-      Vector2 res = new Vector2(x, y);
-      res.Normalize();
-      return res;
+        acc *= -1.0f;
+
+      //target = Vector2.Transform(target, Matrix.CreateRotationZ(acc * (float)(Math.PI / 180)));
+      rotation = acc * (float)(Math.PI / 180);
     }
 
     private void CheckForCollision()
