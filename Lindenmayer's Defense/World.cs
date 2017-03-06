@@ -17,12 +17,14 @@ namespace Lindenmayers_Defense
     Tower testTower;
     List<GameObject> gameObjects;
     List<Projectile> projectiles;
+    GUI.UserInterface UI;
 
     public World()
     {
       ParticleManager = new ParticleManager();
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
+      UI = new GUI.UserInterface();
       baseTower = new Base(this, AssetManager.GetTexture("dot"), new Vector2(800, 300));
       AddGameObject(baseTower);
       SpawnTestEnemies(5);
@@ -43,6 +45,7 @@ namespace Lindenmayers_Defense
 
     public void Update(GameTime gt)
     {
+      UI.Update(gt);
       for (int i = 0; i < gameObjects.Count; i++)
       {
         GameObject go = gameObjects[i];
@@ -79,6 +82,8 @@ namespace Lindenmayers_Defense
         p.Draw(sb);
       }
       ParticleManager.Draw(sb);
+      UI.Draw(sb);
+
     }
     public void AddGameObject(GameObject go)
     {
