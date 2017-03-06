@@ -10,6 +10,7 @@ namespace Lindenmayers_Defense
   /// </summary>
   public class Game1 : Game
   {
+    public static Random rnd = new Random();
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
     TowerManager towerManager;

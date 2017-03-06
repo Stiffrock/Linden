@@ -12,43 +12,61 @@ namespace Lindenmayers_Defense
   {
     static Dictionary<char, PCommand> commands = new Dictionary<char, PCommand>()
     {
+      {'f', new PCommand(0.4f, (p, gt)=> {
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+      })},
       {'F', new PCommand(0.4f, (p, gt)=> {
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'-', new PCommand(0.0f, (p, gt)=> {
         p.rotation -= (float)Math.PI/7.2f;
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'+', new PCommand(0.0f, (p, gt)=> {
         p.rotation += (float)Math.PI/7.2f;
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'[', new PCommand(0.0f, (p, gt)=> {
-        string axiom = p.BracketSubstring(p.cmdIndex);
-        LProjectile newP = new LProjectile(p.world, p.tex, p.pos, axiom, 0);
-        newP.rotation = p.rotation;
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+        string axiom = p.BracketSubstring(p.commandIndex);
+        LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
         p.world.AddGameObject(newP);
+      })},
+      {'(', new PCommand(0.0f, (p, gt)=> {
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+        string axiom = p.BracketSubstring(p.commandIndex);
+        LExpProjectile newP = new LExpProjectile(p.world, p.owner, p.tex, p.pos, axiom, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
+        p.world.AddGameObject(newP);
+      })},
+      {'S', new PCommand(0.0f, (p, gt)=> {
+        p.Speed += 50.0f;
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })}
     };
+    static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()
+    { {'[', ']' }, {'(', ')'} };
 
-    int cmdIndex;
+    int commandIndex;
     LSystem L;
     PCommand currentCommand;
     float currentCommandElapsedTime;
 
-    public LProjectile(World world, Texture2D tex, Vector2 pos, string axiom, int generations) : base(world, tex, pos, Vector2.Zero, 50.0f, 1.0f, 1.0f)
+    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
+      : base(world, owner, tex, pos, direction, speed, damage, accuracy, targetSeeking)
     {
       L = new LSystem(axiom);
       L.Evolve(generations);
       currentCommandElapsedTime = 0.0f;
-      cmdIndex = -1;
+      commandIndex = -1;
       GotoNextCommand();
     }
-    void GotoNextCommand()
+    private void GotoNextCommand()
     {
-      for (int i = cmdIndex + 1; i < L.Str.Length; i++)
+      for (int i = commandIndex + 1; i < L.Str.Length; i++)
       {
         if (commands.ContainsKey(L.Str[i]))
         {
-          cmdIndex = i;
+          commandIndex = i;
           currentCommand = commands[L.Str[i]];
           currentCommandElapsedTime = 0.0f;
           return;
@@ -59,17 +77,17 @@ namespace Lindenmayers_Defense
     }
     private string BracketSubstring(int bracketIndex)
     {
-      Stack<object> brackets = new Stack<object>();
+      Stack<char> brackets = new Stack<char>();
       for (int i = bracketIndex; i < L.Str.Length; i++)
       {
-        if (L.Str[i] == '[')
-          brackets.Push(new object());
-        else if (L.Str[i] == ']')
+        if(bracketPairs.ContainsKey(L.Str[i]))
+          brackets.Push(L.Str[i]);
+        else if (L.Str[i] == bracketPairs[brackets.Peek()])
         {
           brackets.Pop();
           if (brackets.Count == 0)
           {
-            cmdIndex = i;
+            commandIndex = i;
             return L.Str.Substring(bracketIndex + 1, i - (bracketIndex + 1));
           }
         }
@@ -88,55 +106,3 @@ namespace Lindenmayers_Defense
     }
   }
 }
-
-//class LProjectile : Projectile
-//{
-//  static Dictionary<char, PCommand> commands = new Dictionary<char, PCommand>()
-//    {
-//      {'F', new PCommand(0.1f, (p, gt)=> {
-//        p.pos += p.Forward() * 500 * (float)gt.ElapsedGameTime.TotalSeconds;
-//      })},
-//      {'-', new PCommand(0.0f, (p, gt)=> {
-//        p.rotation -= (float)Math.PI/2;
-//      })},
-//      {'+', new PCommand(0.0f, (p, gt)=> {
-//        p.rotation += (float)Math.PI/2;
-//      })},
-//      {'[', new PCommand(0.0f, (p, gt)=> {
-
-
-//      })}
-//    };
-
-//  Queue<PCommand> commandQueue;
-//  LSystem L;
-//  PCommand currentCommand;
-//  float currentCommandElapsedTime;
-//  public LProjectile(World world, Texture2D tex, Vector2 pos, string axiom, int generations) : base(world, tex, pos, Vector2.Zero, Vector2.Zero, 1.0f, 1.0f)
-//  {
-//    commandQueue = new Queue<PCommand>();
-//    L = new LSystem(axiom);
-//    L.Evolve(generations);
-//    currentCommandElapsedTime = 0.0f;
-//    ParseLSystem();
-//    currentCommand = commandQueue.Dequeue();
-//  }
-//  private void ParseLSystem()
-//  {
-//    foreach (char c in L.Representation)
-//    {
-//      if (commands.ContainsKey(c))
-//        commandQueue.Enqueue(commands[c]);
-//    }
-//  }
-//  public override void Update(GameTime gt)
-//  {
-//    currentCommandElapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
-//    if (currentCommandElapsedTime >= currentCommand.Duration && commandQueue.Count() != 0)
-//    {
-//      currentCommand = commandQueue.Dequeue();
-//      currentCommandElapsedTime = 0;
-//    }
-//    currentCommand.Invoke(this, gt);
-//  }
-//}

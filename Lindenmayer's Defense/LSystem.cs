@@ -11,10 +11,14 @@ namespace Lindenmayers_Defense
   {
     static Dictionary<char, string> grammar = new Dictionary<char, string>()
     {
-      {'F',"F" },
-      {'X', "F[+X]-X" }
-      //{'F',"F" },
-      //{'X',"F−[[X]+X]+F[+FX]−X" }
+      {'F', "Ff" },
+      {'L', "L-f" },
+      {'R', "R+f" },
+      {'S', "S" },
+      {'X', "Sf(+++LR(X))[---RL[X]]" }
+      //{'X', "F[+X]-X" },
+      //{'[',"[F[XF]" },
+      //{'-',"F−[[X]+X]+F[+FX]−X" }
     };
 
     public string Str { get; protected set; }
@@ -28,7 +32,7 @@ namespace Lindenmayers_Defense
       for (int i = 0; i < generations; i++)
       {
         string result = "";
-        foreach(char c in Str)
+        foreach (char c in Str)
         {
           if (grammar.ContainsKey(c))
             result += grammar[c];

@@ -61,8 +61,11 @@
     <Compile Include="GUI\Button.cs" />
     <Compile Include="IDamageable.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="LExpProjectile.cs" />
     <Compile Include="LProjectile.cs" />
     <Compile Include="LSystem.cs" />
+    <Compile Include="Particle.cs" />
+    <Compile Include="ParticleManager.cs" />
     <Compile Include="PCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />

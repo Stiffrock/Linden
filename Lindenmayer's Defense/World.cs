@@ -12,6 +12,7 @@ namespace Lindenmayers_Defense
 {
   class World
   {
+    public ParticleManager ParticleManager { get; private set; }
     public Base baseTower;
     Tower testTower;
     List<GameObject> gameObjects;
@@ -19,6 +20,7 @@ namespace Lindenmayers_Defense
 
     public World()
     {
+      ParticleManager = new ParticleManager();
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
       baseTower = new Base(this, AssetManager.GetTexture("dot"), new Vector2(800, 300));
@@ -63,6 +65,8 @@ namespace Lindenmayers_Defense
       }
       gameObjects.RemoveAll(go => go.Disposed);
       projectiles.RemoveAll(p => p.Disposed);
+
+      ParticleManager.Update(gt);
     }
     public void Draw(SpriteBatch sb)
     {
@@ -74,6 +78,7 @@ namespace Lindenmayers_Defense
       {
         p.Draw(sb);
       }
+      ParticleManager.Draw(sb);
     }
     public void AddGameObject(GameObject go)
     {

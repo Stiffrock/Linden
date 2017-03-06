@@ -14,7 +14,10 @@ namespace Lindenmayers_Defense
 
   class Projectile : GameObject
   {
-    protected Vector2 Velocity { get; set; }
+    public Vector2 Velocity { get; set; }
+    /// <summary>
+    /// 0 = 45 degree spread in either direction, 100 = 0 degree spread
+    /// </summary>
     protected float Accuracy { get; set; }
     protected Vector2 TurnRate { get; set; }
     protected float Speed { get; set; }
@@ -22,34 +25,30 @@ namespace Lindenmayers_Defense
     protected bool bIsTargetSeeking { get; set; }
     protected double Lifetime { get; set; }
 
-    protected BoundingSphere aggroRange;
     protected float aggroRadius;
-    protected Random rand;
     protected World world;
-    protected int MaxAccuracyOffset;
+    protected Tower owner;
 
-    public Projectile(World world, Texture2D tex, Vector2 pos, Vector2 velocity, float accuracy, float speed, float damage) : base(tex, pos)
+    public Projectile(World world, Tower owner, Texture2D tex, Vector2 pos, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false) : base(tex, pos)
     {
       this.pos = pos;
       this.world = world;
       this.Accuracy = accuracy;
-      this.Velocity = velocity;
+      this.Velocity = direction * speed;
+      rotation = Utility.Vector2ToAngle(direction);
       this.Speed = speed;
       this.Damage = damage;
-      MaxAccuracyOffset = 200;
+      this.bIsTargetSeeking = targetSeeking;
+      this.owner = owner;
+      color = Color.Purple;
       Lifetime = 3.0f;
-      hitbox.Width -= tex.Width / 2;
-      hitbox.Height -= tex.Height / 2;
       aggroRadius = tex.Width * 2;
-      aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), aggroRadius);
-      drawHitbox = false;
-      bIsTargetSeeking = false;
       Scale = 0.05f;
-      Speed = 150.0f;
+      Accuracy = 100;
       CalculateAccuracy();
-
+      layer = CollisionLayer.PROJECTILE;
+      layerMask = CollisionLayer.ENEMY;
     }
-
 
     /// <summary>
     /// Based on max accuracy being 100% meaning correct projectile target. Using projectiles accuracy as base for how close to the target it will land.
@@ -57,39 +56,16 @@ namespace Lindenmayers_Defense
     /// </summary>
     protected void CalculateAccuracy()
     {
-      rand = new Random();
-      int Negative = rand.Next(0, 2);
-      float acc = rand.Next((int)85, 100) - 100;
+      if (Accuracy >= 100)
+        return;
+      float degrees = 45 - (Accuracy / 100 * 45);
+      float spread = (float)(Game1.rnd.NextDouble() * degrees * 2) - degrees;
+      //int Negative = rand.Next(0, 2);
+      //float acc = rand.Next(85, 100) - 100;
 
-      if (Negative == 1)
-        acc *= -1.0f;
-      rotation = acc * (float)(Math.PI / 180);
-
-      
-
-    }
-
-    private void CheckForCollision()
-    {
-      foreach (GameObject e in world.GetGameObjects())
-      {
-        if (e is Enemy)
-          if (hitbox.Intersects(e.hitbox))
-            if (CollidesWith(e))
-            {
-              Enemy enemy = (Enemy)e;
-              enemy.TakeDamage(Damage);
-              Die();
-              DoCollision(enemy);
-            }
-      }
-    }
-
-    public override bool CollidesWith(GameObject other)
-    {
-      if (other.hitbox.Intersects(hitbox))
-        return true;
-      return false;
+      //if (Negative == 1)
+      //  acc *= -1.0f;
+      rotation = spread * (float)(Math.PI / 180);
     }
 
     public override void DoCollision(GameObject other)
@@ -102,11 +78,6 @@ namespace Lindenmayers_Defense
       }
     }
 
-    protected void SetVelocity()
-    {
-      Velocity = Forward() * Speed;
-    }
-
     protected void SkewVelocity(Vector2 vel, GameTime gt)
     {
       Velocity += vel * (float)gt.ElapsedGameTime.TotalSeconds;
@@ -114,32 +85,21 @@ namespace Lindenmayers_Defense
 
     protected void SkewDirection(float angle, GameTime gt)
     {
-      rotation +=  angle * (float)(Math.PI / 180) * (float)gt.ElapsedGameTime.TotalSeconds;
-    }
-
-
-
-
-    protected double GetDistanceToTarget(Vector2 target)
-    {
-      float x = pos.X - target.X;
-      float y = pos.Y - target.Y;
-      return Math.Sqrt(x * x + y * y);
+      rotation += angle * (float)(Math.PI / 180) * (float)gt.ElapsedGameTime.TotalSeconds;
     }
 
     public override void Update(GameTime gt)
     {
       base.Update(gt);
-      SetVelocity();
-      SkewVelocity(new Vector2(0.0f, 0.0f), gt);
-      SkewDirection(-45.0f, gt);
+      Velocity = Forward() * Speed;
+      //SkewVelocity(new Vector2(0.0f, 0.0f), gt);
+      //SkewDirection(-45.0f, gt);
 
       Lifetime -= gt.ElapsedGameTime.Seconds;
       if (Lifetime <= 0)
       {
         Die();
       }
-      CheckForCollision();
     }
     public override void Draw(SpriteBatch sb)
     {

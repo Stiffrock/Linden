@@ -27,9 +27,10 @@ namespace Lindenmayers_Defense
       this.health = health;
       this.speed = speed;
       target = world.baseTower;
+      layer = CollisionLayer.ENEMY;
       layerMask = CollisionLayer.TOWER;
       drawHitbox = false;
-
+      color = Color.BlanchedAlmond;
     }
     protected virtual void Movement(GameTime gt)
     {
@@ -45,9 +46,9 @@ namespace Lindenmayers_Defense
     }
     public override void DoCollision(GameObject other)
     {
-      if(other == target && target is IDamageable)
+      if(other == target && target is Base)
       {
-        ((IDamageable)target).TakeDamage(damage);
+        ((Base)target).TakeDamage(damage);
         Die();
       }
     }

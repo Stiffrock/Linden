@@ -39,7 +39,7 @@ namespace Lindenmayers_Defense
 
     public bool Disposed { get; protected set; }
 
-    public bool drawHitbox = true;
+    public bool drawHitbox = false;
     public GameObject(Texture2D tex, Vector2 pos)
     {
       this.tex = tex;
@@ -52,20 +52,19 @@ namespace Lindenmayers_Defense
     {
       hitbox.Width = (int)(tex.Width * Scale);
       hitbox.Height = (int)(tex.Height * Scale);
-      hitbox.X = (int)(pos.X - origin.X - (0.5f * ((hitbox.Width * (Scale - 1.0f)))) / Scale);
-      hitbox.Y = (int)(pos.Y - origin.Y - (0.5f * ((hitbox.Height * (Scale - 1.0f)))) / Scale);
+      hitbox.X = (int)(pos.X - (0.5f * hitbox.Width));
+      hitbox.Y = (int)(pos.Y - (0.5f * hitbox.Height));
     }
     public Vector2 Forward()
     {
       Vector2 direction = new Vector2((float)Math.Sin(rotation), (float)-Math.Cos(rotation));
-      direction.Normalize();
       return direction;
     }
     public virtual void Die()
     {
       Disposed = true;
     }
-    public virtual bool CollidesWith(GameObject other)
+    public bool CollidesWith(GameObject other)
     {
       if ((layerMask & other.layer) != CollisionLayer.NONE && hitbox.Intersects(other.hitbox))
         return true;

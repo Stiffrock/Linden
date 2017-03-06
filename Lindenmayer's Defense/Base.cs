@@ -13,8 +13,14 @@ namespace Lindenmayers_Defense
     float health;
     public Base(World world, Texture2D tex, Vector2 pos):base(world, tex,pos)
     {
+      shootCooldown = 100000.0f;
       Scale = 0.5f;
       health = 100;
+      color = Color.Black;
+    }
+    public override void Update(GameTime gt)
+    {
+      base.Update(gt);
     }
     public void TakeDamage(float damage)
     {
