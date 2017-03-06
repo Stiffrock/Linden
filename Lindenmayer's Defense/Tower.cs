@@ -14,63 +14,42 @@ namespace Lindenmayers_Defense
 {
   class Tower : GameObject
   {
-    protected BoundingSphere aggroRange;
-    protected float Cooldown;
-    protected float Radius;
+    protected float aggroRadius;
+    protected float shootCooldown;
+    private double shootTimer;
     private Enemy target;
-    private double timer;
-    public List<GameObject> projectileList;
     protected World world;
 
     public Tower(World world, Texture2D tex, Vector2 pos) : base(tex, pos)
     {
       this.pos = pos;
       this.world = world;
-      layer = CollisionLayer.TOWER;
-      Radius = tex.Width * 2;
-      Cooldown = 200.0f;
-      timer = Cooldown;
+      aggroRadius = tex.Width * 2;   // send as parameter instead?
+      shootCooldown = 200.0f;
+      shootTimer = shootCooldown;
       Scale = 0.1f;
-      aggroRange = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), Radius);
-      projectileList = new List<GameObject>();
-      target = null;    
-
+      target = null;
+      layer = CollisionLayer.TOWER;
     }
 
-    public void AggroCollision(GameObject other)
+    /// <summary>
+    /// Sets the target. Target is null if no valid targets can be found.
+    /// </summary>
+    protected virtual void AcquireTarget()
     {
-      BoundingSphere temp = new BoundingSphere(new Vector3(origin.X, origin.Y, 0f), other.tex.Width);
-      if (aggroRange.Intersects(temp) && other is Enemy)
+      List<GameObject> gameObjects = world.GetGameObjects();
+      target = null;
+      float closest = aggroRadius;
+      foreach (GameObject go in gameObjects)
       {
-        if (target != null)
+        if(go is Enemy && !go.Disposed)
         {
-          if (GetDistanceToTarget(target.pos) > GetDistanceToTarget(other.pos))
+          float distance = Vector2.Distance(go.pos, pos);
+          if (distance <= closest)
           {
-            double x = GetDistanceToTarget(target.pos);
-            target = (Enemy)other;
+            target = (Enemy)go;
+            closest = distance;
           }
-        }
-        else
-        {
-          target = (Enemy)other;
-        }
-      }
-    }
-
-    protected double GetDistanceToTarget(Vector2 target) // Borde göras static för den används i projectile atm
-    {
-      float x = pos.X - target.X;
-      float y = pos.Y - target.Y;
-      return Math.Sqrt(x * x + y * y);
-    }
-
-    private void ClearTarget()
-    {
-      if (target != null)
-      {
-        if (GetDistanceToTarget(target.pos) > Radius || target.Disposed)
-        {
-          target = null;
         }
       }
     }
@@ -79,33 +58,25 @@ namespace Lindenmayers_Defense
     {
      // Projectile p = new Projectile(world, AssetManager.GetTexture("dot"), pos, new Vector2(1,1), 50.0f, 1000.0f, 10.0f);
       LProjectile p = new LProjectile(world, AssetManager.GetTexture("dot"), pos, "X", 5);
-      projectileList.Add(p);
+      world.AddProjectile(p);
     }
 
     public override void Draw(SpriteBatch sb)
     {
       base.Draw(sb);
-      foreach (var item in projectileList)
-      {
-        item.Draw(sb);
-      }
     }
     public override void Update(GameTime gt)
     {
       base.Update(gt);
-      foreach (var item in projectileList)
-      {
-        item.Update(gt);
-      }
-      projectileList.RemoveAll(go => go.Disposed);
 
-      timer += gt.ElapsedGameTime.Milliseconds;
-      if (target != null && timer >= Cooldown)
+      AcquireTarget();
+
+      shootTimer += gt.ElapsedGameTime.Milliseconds;
+      if (target != null && shootTimer >= shootCooldown)
       {
         ShootProjectile();
-        timer = 0;
+        shootTimer = 0;
       }
-      ClearTarget();
     }
   }
 }

@@ -78,6 +78,7 @@ namespace Lindenmayers_Defense
     }
     public override void Update(GameTime gt)
     {
+      base.Update(gt);
       currentCommand.Invoke(this, gt);
       currentCommandElapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
       if (currentCommandElapsedTime >= currentCommand.Duration)
