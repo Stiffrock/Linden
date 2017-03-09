@@ -17,6 +17,8 @@ namespace Lindenmayers_Defense
     Tower testTower;
     List<GameObject> gameObjects;
     List<Projectile> projectiles;
+    TowerManager tm;
+    Dictionary<string, LComponent> grammarComponents;
     GUI.UserInterface UI;
 
     public World()
@@ -24,12 +26,24 @@ namespace Lindenmayers_Defense
       ParticleManager = new ParticleManager();
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
-      UI = new GUI.UserInterface();
+      grammarComponents = new Dictionary<string, LComponent>();
+      InitGrammarComponents();
+      tm = new TowerManager(this);
+      UI = new GUI.UserInterface(grammarComponents);
       baseTower = new Base(this, AssetManager.GetTexture("dot"), new Vector2(800, 300));
       AddGameObject(baseTower);
       SpawnTestEnemies(5);
       testTower = new Tower(this, AssetManager.GetTexture("dot"), new Vector2(600, 500));
       AddGameObject(testTower);
+    }
+
+    private void InitGrammarComponents()
+    {
+      grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("dot"), "LL"));
+      grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("dot"), "W"));
+      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "P"));
+      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "Y"));
+      grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("dot"), "RR"));
     }
 
     private void SpawnTestEnemies(int nrToSpawn)
@@ -43,9 +57,21 @@ namespace Lindenmayers_Defense
       }
     }
 
+    public string GetGrammar()
+    {
+      return UI.GetResult();
+    }
     public void Update(GameTime gt)
     {
       UI.Update(gt);
+      if (UI.towerBox.rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
+      {
+        tm.CreateTower(Input.GetMousePos());
+      }
+      if (Input.RightMouseButtonClicked())
+      {
+        string res = UI.GetResult();
+      }
       for (int i = 0; i < gameObjects.Count; i++)
       {
         GameObject go = gameObjects[i];
@@ -68,7 +94,7 @@ namespace Lindenmayers_Defense
       }
       gameObjects.RemoveAll(go => go.Disposed);
       projectiles.RemoveAll(p => p.Disposed);
-
+      tm.Update(gt);
       ParticleManager.Update(gt);
     }
     public void Draw(SpriteBatch sb)
