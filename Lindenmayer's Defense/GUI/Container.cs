@@ -16,33 +16,51 @@ namespace Lindenmayers_Defense.GUI
   class Container
   {
     private Texture2D tex;
-    private Vector2 pos;
+    public Vector2 pos;
     public Rectangle rec;
-    private Color color;
+    private Color color, defaultColor, highlightColor;
+    public LComponent component;
+    public string name;
+    private bool showComponentInfo;
+    public bool ComponentArray;
 
     public Container(Texture2D tex, Vector2 pos)
     {
       this.tex = tex;
       this.pos = pos;
       this.rec = new Rectangle((int)pos.X, (int)pos.Y, 50, 50);
-      color = Color.Blue;
+      component = new LComponent(null, null);
+      name = null;
+      defaultColor = Color.Blue;
+      highlightColor = Color.White;
+    }
+
+    public void SetComponent(LComponent component)
+    {
+      this.component = component;
     }
 
     public void Update(GameTime gt)
     {
       if (rec.Contains(Input.GetMousePoint()))
       {
-        color = Color.White;
+        color = highlightColor;
+        showComponentInfo = true;
       }
       else
       {
-        color = Color.Blue;
+        showComponentInfo = false;
+        color = defaultColor;
       }
     }
 
     public  void Draw(SpriteBatch sb)
     {
       sb.Draw(tex, pos, rec, color);
+      if (showComponentInfo && name != null)
+      {     
+        sb.DrawString(AssetManager.GetFont("font1"), name, new Vector2(100, 580), Color.Black, 0.0f , Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+      }
     }
   }
 }

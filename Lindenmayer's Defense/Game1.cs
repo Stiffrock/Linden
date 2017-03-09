@@ -48,6 +48,7 @@ namespace Lindenmayers_Defense
       spriteBatch = new SpriteBatch(GraphicsDevice);
       AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
       AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
+      AssetManager.AddFont("font1", Content.Load<SpriteFont>("Font"));
 
       //world måste vara sist om den ska anväda inladdade texturer
       world = new World();

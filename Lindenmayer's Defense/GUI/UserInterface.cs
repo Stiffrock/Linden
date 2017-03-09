@@ -14,18 +14,45 @@ namespace Lindenmayers_Defense.GUI
   {
     private Container[,] inventoryArray;
     private Container[] componentArray;
-    private Container towerBox;
+    public Container towerBox;
     private List<Container> containerList;
+    private List<LComponent> componentList;
+    public List<LComponent> result;
+    private Dictionary<string, LComponent> grammarComponenets;
 
 
-    public UserInterface()
+    public UserInterface(Dictionary<string, LComponent> grammarComponenets)
     {
       containerList = new List<Container>();    
       inventoryArray = new Container[3, 6];
-      componentArray = new Container[5];  
+      componentArray = new Container[5];
+      this.grammarComponenets = grammarComponenets;
+      componentList = new List<LComponent>();
+      result = new List<LComponent>();
       InitInventoryArray();
       InitComponentArray();
       InitTowerBox();
+      InitComponent();
+    }
+
+    private void InitComponent()
+    {
+      int i = 0, j = 0;
+      foreach (KeyValuePair<string, LComponent> entry in grammarComponenets)
+      {      
+        inventoryArray[j, i].component = entry.Value;
+        inventoryArray[j, i].name = entry.Key;
+        inventoryArray[j, i].component.pos = inventoryArray[j, i].pos;
+        inventoryArray[j, i].component.rec = new Rectangle(100, 100, 20, 20);//inventoryArray[j, i].rec;
+        componentList.Add(inventoryArray[j, i].component);
+
+        ++i;
+        if (i >= inventoryArray.GetLength(1))
+        {
+          i = 0;
+          ++j;
+        }
+      }
     }
 
     private void InitTowerBox()
@@ -52,8 +79,8 @@ namespace Lindenmayers_Defense.GUI
       for (int i = 0; i < componentArray.GetLength(0); i++)
       {
         componentArray[i] = new Container(AssetManager.GetTexture("pixel"), new Vector2(550 + 55 * i, 705));
+        componentArray[i].ComponentArray = true;
         containerList.Add(componentArray[i]);
-
       }
     }
     
@@ -62,7 +89,57 @@ namespace Lindenmayers_Defense.GUI
       for (int i = 0; i < containerList.Count; i++)
       {
         containerList[i].Update(gt);
+
+        if (containerList[i].name != null)
+        {
+          if (containerList[i].rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
+            {
+              for (int j = 0; j < componentArray.GetLength(0); j++)
+              {
+               if (componentArray[j].name == null && !containerList[i].ComponentArray)
+                {
+                  componentArray[j].component = componentList[i];
+                  componentArray[j].name = containerList[i].name;
+                  LComponent temp = new LComponent(componentList[i].tex, componentList[i].grammar);
+                  temp.pos = componentArray[j].pos;
+                  temp.rec = new Rectangle(100, 100, 20, 20);
+                  temp.chosen = true;
+                  result.Add(temp);
+                  componentList.Add(temp);
+                  break;
+                }
+            }
+          }
+        }
+        }   
+        for (int j = 0; j < componentArray.GetLength(0); j++)
+        {
+          if (componentArray[j].name != null && componentArray[j].rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
+          {
+            for (int c = 0; c < componentList.Count; c++)
+            {
+            if (componentList[c].pos == componentArray[j].pos)
+            {
+              componentArray[j].component = null;
+              componentArray[j].name = null;
+              componentList.Remove(componentList[c]);           
+            }
+            }
+          }
+        }     
       }
+
+    public string GetResult()
+    {
+      string result = "";
+      for (int i = 0; i < componentList.Count; i++)
+      {
+        if (componentList[i].chosen)
+        {
+          result += componentList[i].grammar;      
+        }
+      }
+      return result;
     }
 
     public virtual void Draw(SpriteBatch sb)
@@ -70,6 +147,10 @@ namespace Lindenmayers_Defense.GUI
       for (int i = 0; i < containerList.Count; i++)
       {
         containerList[i].Draw(sb);
+      }
+      for (int i = 0; i < componentList.Count; i++)
+      {
+        componentList[i].Draw(sb);
       }
     }
 

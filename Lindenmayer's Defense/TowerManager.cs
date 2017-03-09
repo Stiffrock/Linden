@@ -14,26 +14,48 @@ namespace Lindenmayers_Defense
   class TowerManager
   {
     protected World world;
-
+    private Tower t;
+    public bool hasTower;
     public TowerManager(World world)
     {
       this.world = world;
+      t = null;
     }
     public void SetTowerType(Tower t)
     {
     }
-    void CreateTower(Vector2 pos)
+    public void CreateTower(Vector2 pos)
     {
-      Tower t = new Tower(world, AssetManager.GetTexture("dot"), pos);
-      t.Scale = 0.1f;
-      world.AddGameObject(t);
+      if (!hasTower)
+      {
+        string g = world.GetGrammar();
+        t = new Tower(world, AssetManager.GetTexture("dot"), pos);
+        t.towerGrammar = g;
+        t.Scale = 0.1f;
+        hasTower = true;
+        world.AddGameObject(t);
+
+      }
+
     }
     public void Update(GameTime gt)
     {
-      if(Input.LeftMouseButtonClicked())
+   
+      if (t != null && hasTower)
       {
-        CreateTower(Input.GetMousePos());
+        t.pos = Input.GetMousePos();
+        
       }
+
+      if (hasTower && Input.RightMouseButtonClicked())
+      {
+        hasTower = false;
+
+      }
+      //if (Input.LeftMouseButtonClicked())
+      //{
+      //  CreateTower(Input.GetMousePos());
+      //}
     }
     public void Draw(SpriteBatch sb)
     {
