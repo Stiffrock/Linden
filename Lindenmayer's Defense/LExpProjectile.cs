@@ -10,8 +10,8 @@ namespace Lindenmayers_Defense
 {
   class LExpProjectile : LProjectile
   {
-    public LExpProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
-      : base(world, owner, tex, pos, axiom, generations, direction, speed, damage, accuracy, targetSeeking)
+    public LExpProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
+      : base(world, owner, tex, pos, axiom, xRule, generations, direction, speed, damage, accuracy, targetSeeking)
     {
     }
     public override void DoCollision(GameObject other)

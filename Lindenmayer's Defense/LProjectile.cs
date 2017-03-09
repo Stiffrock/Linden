@@ -34,12 +34,12 @@ namespace Lindenmayers_Defense
       })},
       {'[', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
-        LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
+        LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
         p.world.AddProjectile(newP);
       })},
       {'(', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
-        LExpProjectile newP = new LExpProjectile(p.world, p.owner, p.tex, p.pos, axiom, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
+        LExpProjectile newP = new LExpProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
         p.world.AddProjectile(newP);
       })},
       {'S', new PCommand(0.0f, (p, gt)=> {
@@ -55,10 +55,10 @@ namespace Lindenmayers_Defense
     PCommand currentCommand;
     float currentCommandElapsedTime;
 
-    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string xRule, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
+    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
       : base(world, owner, tex, pos, direction, speed, damage, accuracy, targetSeeking)
     {
-      L = new LSystem("X", xRule);
+      L = new LSystem(axiom, xRule);
       L.Evolve(generations);
       currentCommandElapsedTime = 0.0f;
       commandIndex = -1;

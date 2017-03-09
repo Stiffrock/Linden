@@ -28,7 +28,7 @@ namespace Lindenmayers_Defense
       shootTimer = shootCooldown;
       Scale = 0.1f;
       target = null;
-      towerGrammar = "X";
+      towerGrammar = "S[+++LRY][---RLY]FF[+FY][-FY]";
       layer = CollisionLayer.TOWER;
       layerMask = CollisionLayer.NONE;
       color = Color.BlueViolet;
@@ -59,7 +59,7 @@ namespace Lindenmayers_Defense
     protected void ShootProjectile()
     {
       //LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("dot"), pos, "X", 3, this.Forward(), 150.0f, 10.0f);
-      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("dot"), pos, towerGrammar, 5, this.Forward(), 150.0f, 10.0f);
+      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("dot"), pos, "X", towerGrammar, 3, this.Forward(), 150.0f, 10.0f);
       world.AddProjectile(p);
     }
 
