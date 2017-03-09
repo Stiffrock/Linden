@@ -14,6 +14,7 @@ namespace Lindenmayers_Defense
     public static class AssetManager
     {    
         public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
+        public static Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
 
         public static void AddTexture(string name, Texture2D tex)
         {
@@ -24,5 +25,14 @@ namespace Lindenmayers_Defense
         {
             return Textures[name];
         }
-    }
+        public static void AddFont(string name, SpriteFont font)
+        {
+          Fonts.Add(name, font);
+        }
+
+        public static SpriteFont GetFont(string name)
+        {
+          return Fonts[name];
+        }
+  }
 }
