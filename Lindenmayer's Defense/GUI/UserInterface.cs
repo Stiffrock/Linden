@@ -139,6 +139,7 @@ namespace Lindenmayers_Defense.GUI
           result += componentList[i].grammar;      
         }
       }
+      result += "X";
       return result;
     }
 

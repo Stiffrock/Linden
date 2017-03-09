@@ -19,17 +19,11 @@ namespace Lindenmayers_Defense
       {'V', "--F++++FF----F++V" }, //wave
       {'Y', "X" },
 
-      //{'X', "[+++LRY][---RLY][LRY][RLY][FY]" }
-      //{'X', "[+++LRWY][---RLVY]" }
-
-      {'X', "S[+++LRY][---RLY]FF[+FY][-FY]" }
+      {'X', "S[+++LRY][---RLY]FF[+FY][-FY]" } //snake + fork
       //{'X', "f[+FY]-FY" } // fork
       //{'X', "WX" } //wave
       //{'X', "[-f+fX][+f-fX]WX" } //volley
       //{'X', "f[+++LR[X]][---RL[X]]" }  //snakes
-      //{'X', "F[+X]-X" },
-      //{'[',"[F[XF]" },
-      //{'-',"F−[[X]+X]+F[+FX]−X" }
     };
 
     /* removes X
@@ -44,10 +38,12 @@ namespace Lindenmayers_Defense
     */
 
     public string Str { get; protected set; }
+    public string XRule { get; protected set; }
 
-    public LSystem(string axiom)
+    public LSystem(string axiom, string x = "")
     {
       Str = axiom;
+      XRule = x;
     }
     public void Evolve(int generations)
     {
@@ -56,7 +52,9 @@ namespace Lindenmayers_Defense
         string result = "";
         foreach (char c in Str)
         {
-          if (grammar.ContainsKey(c))
+          if (c == 'X')
+            result += XRule;
+          else if (grammar.ContainsKey(c))
             result += grammar[c];
           else
             result += c;

@@ -55,10 +55,10 @@ namespace Lindenmayers_Defense
     PCommand currentCommand;
     float currentCommandElapsedTime;
 
-    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
+    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string xRule, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
       : base(world, owner, tex, pos, direction, speed, damage, accuracy, targetSeeking)
     {
-      L = new LSystem(axiom);
+      L = new LSystem("X", xRule);
       L.Evolve(generations);
       currentCommandElapsedTime = 0.0f;
       commandIndex = -1;
