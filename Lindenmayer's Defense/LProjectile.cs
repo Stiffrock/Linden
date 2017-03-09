@@ -12,35 +12,39 @@ namespace Lindenmayers_Defense
   {
     static Dictionary<char, PCommand> commands = new Dictionary<char, PCommand>()
     {
-      {'f', new PCommand(0.4f, (p, gt)=> {
+      {'Y', new PCommand(0.6f, (p, gt)=> {
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+        p.alpha = 1 - (p.currentCommandElapsedTime/p.currentCommand.Duration);
+      })},
+      {'X', new PCommand(0.6f, (p, gt)=> {
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+        p.alpha = 1 - (p.currentCommandElapsedTime/p.currentCommand.Duration);
+      })},
+      {'f', new PCommand(0.05f, (p, gt)=> {
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
-      {'F', new PCommand(0.4f, (p, gt)=> {
+      {'F', new PCommand(0.2f, (p, gt)=> {
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'-', new PCommand(0.0f, (p, gt)=> {
-        p.rotation -= (float)Math.PI/7.2f;
-        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+        p.rotation -= (float)Math.PI/8f;
       })},
       {'+', new PCommand(0.0f, (p, gt)=> {
-        p.rotation += (float)Math.PI/7.2f;
-        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+        p.rotation += (float)Math.PI/8f;
       })},
       {'[', new PCommand(0.0f, (p, gt)=> {
-        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
         string axiom = p.BracketSubstring(p.commandIndex);
         LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
-        p.world.AddGameObject(newP);
+        p.world.AddProjectile(newP);
       })},
       {'(', new PCommand(0.0f, (p, gt)=> {
-        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
         string axiom = p.BracketSubstring(p.commandIndex);
         LExpProjectile newP = new LExpProjectile(p.world, p.owner, p.tex, p.pos, axiom, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
-        p.world.AddGameObject(newP);
+        p.world.AddProjectile(newP);
       })},
       {'S', new PCommand(0.0f, (p, gt)=> {
-        p.Speed += 50.0f;
-        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+        p.Speed *= 1.1f;
+        p.world.ParticleManager.CreateExplosion(p.pos, 52, Color.White, 0.1f);
       })}
     };
     static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()
@@ -72,6 +76,7 @@ namespace Lindenmayers_Defense
           return;
         }
       }
+      currentCommandElapsedTime = 0.0f;
       currentCommand = commands['F'];
       Die();
     }
@@ -80,7 +85,7 @@ namespace Lindenmayers_Defense
       Stack<char> brackets = new Stack<char>();
       for (int i = bracketIndex; i < L.Str.Length; i++)
       {
-        if(bracketPairs.ContainsKey(L.Str[i]))
+        if (bracketPairs.ContainsKey(L.Str[i]))
           brackets.Push(L.Str[i]);
         else if (L.Str[i] == bracketPairs[brackets.Peek()])
         {
@@ -101,6 +106,11 @@ namespace Lindenmayers_Defense
       currentCommandElapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
       if (currentCommandElapsedTime >= currentCommand.Duration)
       {
+        GotoNextCommand();
+      }
+      while (currentCommand.Duration < 0.0001f)
+      {
+        currentCommand.Invoke(this, gt);
         GotoNextCommand();
       }
     }

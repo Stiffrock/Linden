@@ -41,9 +41,9 @@ namespace Lindenmayers_Defense
       this.bIsTargetSeeking = targetSeeking;
       this.owner = owner;
       color = Color.Purple;
-      Lifetime = 3.0f;
+      Lifetime = 15.0f;
       aggroRadius = tex.Width * 2;
-      Scale = 0.05f;
+      Scale = 0.04f;
       Accuracy = 100;
       CalculateAccuracy();
       layer = CollisionLayer.PROJECTILE;
@@ -95,7 +95,11 @@ namespace Lindenmayers_Defense
       //SkewVelocity(new Vector2(0.0f, 0.0f), gt);
       //SkewDirection(-45.0f, gt);
 
-      Lifetime -= gt.ElapsedGameTime.Seconds;
+      Lifetime -= (float)gt.ElapsedGameTime.TotalSeconds;
+      if (Lifetime < 0.5f)
+      {
+        alpha = (float)(Lifetime / 0.5f);
+      }
       if (Lifetime <= 0)
       {
         Die();

@@ -17,7 +17,7 @@ namespace Lindenmayers_Defense
     public override void DoCollision(GameObject other)
     {
       base.DoCollision(other);
-      world.ParticleManager.CreateExplosion(pos, 50, color, 250.0f);
+      world.ParticleManager.CreateExplosion(pos, 50, color, 0.25f);
     }
     public override void Die()
     {

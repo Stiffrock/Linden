@@ -19,7 +19,7 @@ namespace Lindenmayers_Defense
 
     public void CreateExplosion(Vector2 pos, float radius, Color color, float duration)
     {
-      Particle exp = new Particle(AssetManager.GetTexture("dot"), pos, duration, color, 0.8f, true);
+      Particle exp = new Particle(AssetManager.GetTexture("dot"), pos, duration, color, 0.8f, true, Vector2.Zero);
       exp.Scale = radius / 512.0f;
       particles.Add(exp);
     }
