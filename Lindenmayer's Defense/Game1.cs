@@ -19,8 +19,8 @@ namespace Lindenmayers_Defense
     {
       graphics = new GraphicsDeviceManager(this);
       graphics.IsFullScreen = false;
-      graphics.PreferredBackBufferWidth = 1200;
-      graphics.PreferredBackBufferHeight = 800;
+      graphics.PreferredBackBufferWidth = 1920;
+      graphics.PreferredBackBufferHeight = 1080;
       graphics.ApplyChanges();
       Content.RootDirectory = "Content";
     }
