@@ -83,51 +83,74 @@ namespace Lindenmayers_Defense.GUI
         containerList.Add(componentArray[i]);
       }
     }
+
+    public bool MouseIntersect(Rectangle uiObject)
+    {
+      if (uiObject.Contains(Input.GetMousePoint()))
+      {
+        return true;
+      }
+      return false;
+    }
     
+    private void HandleComponent(int i)
+    {
+      if (containerList[i].name != null)
+      {
+        if (MouseIntersect(containerList[i].rec))
+        {
+          for (int j = 0; j < componentArray.GetLength(0); j++)
+          {
+            if (componentArray[j].name == null && !containerList[i].ComponentArray)
+            {
+              componentArray[j].component = componentList[i];
+              componentArray[j].name = containerList[i].name;
+
+              LComponent temp = new LComponent(componentList[i].tex, componentList[i].grammar);
+              temp.pos = componentArray[j].pos;
+              temp.rec = new Rectangle(100, 100, 20, 20);
+              temp.chosen = true;
+              result.Add(temp);
+              componentList.Add(temp);
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    private void RemoveComponent()
+    {
+      for (int i = 0; i < componentArray.GetLength(0); i++)
+      {
+        if (componentArray[i].name != null && MouseIntersect(componentArray[i].rec))
+        {
+          for (int j = 0; j < componentList.Count; j++)
+          {
+            if (componentList[j].pos == componentArray[i].pos)
+            {
+              componentArray[i].component = null;
+              componentArray[i].name = null;
+              componentList.Remove(componentList[j]);
+            }
+          }
+        }
+      }
+    }
+
     public virtual void Update(GameTime gt)
     {
       for (int i = 0; i < containerList.Count; i++)
       {
         containerList[i].Update(gt);
-
-        if (containerList[i].name != null)
-        {
-          if (containerList[i].rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
-            {
-              for (int j = 0; j < componentArray.GetLength(0); j++)
-              {
-               if (componentArray[j].name == null && !containerList[i].ComponentArray)
-                {
-                  componentArray[j].component = componentList[i];
-                  componentArray[j].name = containerList[i].name;
-                  LComponent temp = new LComponent(componentList[i].tex, componentList[i].grammar);
-                  temp.pos = componentArray[j].pos;
-                  temp.rec = new Rectangle(100, 100, 20, 20);
-                  temp.chosen = true;
-                  result.Add(temp);
-                  componentList.Add(temp);
-                  break;
-                }
-            }
-          }
-        }
-        }   
-        for (int j = 0; j < componentArray.GetLength(0); j++)
-        {
-          if (componentArray[j].name != null && componentArray[j].rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
-          {
-            for (int c = 0; c < componentList.Count; c++)
-            {
-            if (componentList[c].pos == componentArray[j].pos)
-            {
-              componentArray[j].component = null;
-              componentArray[j].name = null;
-              componentList.Remove(componentList[c]);           
-            }
-            }
-          }
-        }     
+        if (Input.LeftMouseButtonClicked())
+          HandleComponent(i);
       }
+      if (Input.LeftMouseButtonClicked())
+        RemoveComponent();
+
+
+    }
 
     public string GetResult()
     {
