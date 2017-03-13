@@ -24,10 +24,11 @@ namespace Lindenmayers_Defense
     protected float Damage { get; set; }
     protected bool bIsTargetSeeking { get; set; }
     protected double Lifetime { get; set; }
-
     protected float aggroRadius;
     protected World world;
-    protected Tower owner;
+    public Tower owner;
+    public float damage;
+
 
     public Projectile(World world, Tower owner, Texture2D tex, Vector2 pos, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false) : base(tex, pos)
     {
@@ -40,6 +41,7 @@ namespace Lindenmayers_Defense
       this.Damage = damage;
       this.bIsTargetSeeking = targetSeeking;
       this.owner = owner;
+      damage = owner.towerDamage;
       color = Color.Purple;
       Lifetime = 15.0f;
       aggroRadius = tex.Width * 2;
@@ -51,8 +53,6 @@ namespace Lindenmayers_Defense
     }
 
     /// <summary>
-    /// Based on max accuracy being 100% meaning correct projectile target. Using projectiles accuracy as base for how close to the target it will land.
-    /// example: 64% meaning get its target position with a 34% offset
     /// </summary>
     protected void CalculateAccuracy()
     {

@@ -53,9 +53,11 @@ namespace Lindenmayers_Defense
     { {'[', ']' }, {'(', ')'} };
 
     int commandIndex;
+    
     LSystem L;
     PCommand currentCommand;
     float currentCommandElapsedTime;
+    
 
     public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
       : base(world, owner, tex, pos, direction, speed, damage, accuracy, targetSeeking)
@@ -64,7 +66,19 @@ namespace Lindenmayers_Defense
       L.Evolve(generations);
       currentCommandElapsedTime = 0.0f;
       commandIndex = -1;
+      CalculateStats();
       GotoNextCommand();
+    }
+
+    private void CalculateStats()
+    {
+      foreach (char c in L.Str)
+      {
+        if (c == 'S')
+        {
+          damage += 0.1f;
+        }
+      }
     }
     private void GotoNextCommand()
     {

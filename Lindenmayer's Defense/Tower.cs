@@ -19,6 +19,7 @@ namespace Lindenmayers_Defense
     private double shootTimer;
     protected World world;
     public string towerGrammar;
+    public float towerDamage;
 
     public Tower(World world, Texture2D tex, Vector2 pos) : base(tex, pos)
     {

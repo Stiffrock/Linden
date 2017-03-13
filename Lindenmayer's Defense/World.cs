@@ -95,7 +95,10 @@ namespace Lindenmayers_Defense
         foreach (GameObject go in gameObjects)
         {
           if(p.CollidesWith(go))
+          {
+            p.owner.towerDamage += p.damage;
             p.DoCollision(go);
+          }
         }
       }
       gameObjects.RemoveAll(go => go.Disposed);
@@ -117,6 +120,17 @@ namespace Lindenmayers_Defense
       }
       ParticleManager.Draw(sb);
       UI.Draw(sb);
+
+      for (int i = 0; i < gameObjects.Count; i++)
+      {
+        if (gameObjects[i] is Tower)
+        {
+          Tower t = (Tower)gameObjects[i];
+          sb.DrawString(AssetManager.GetFont("font1"), t.towerDamage.ToString(), new Vector2(1200, 50 + i * 5), Color.Black);
+
+        }
+      }
+
 
     }
     public void AddGameObject(GameObject go)
