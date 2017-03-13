@@ -55,6 +55,10 @@ namespace Lindenmayers_Defense
       AssetManager.AddTexture("tower02", Content.Load<Texture2D>("tower02"));
       AssetManager.AddTexture("towerplatform", Content.Load<Texture2D>("towerplatform"));
       AssetManager.AddTexture("enemy01", Content.Load<Texture2D>("enemy01"));
+      AssetManager.AddTexture("particle01", Content.Load<Texture2D>("particle01"));
+      AssetManager.AddTexture("particle02", Content.Load<Texture2D>("particle02"));
+      AssetManager.AddTexture("particle03", Content.Load<Texture2D>("particle03"));
+      AssetManager.AddTexture("particle04", Content.Load<Texture2D>("particle04"));
       AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
       AssetManager.AddFont("font1", Content.Load<SpriteFont>("Font"));
 

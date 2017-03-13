@@ -46,8 +46,8 @@ namespace Lindenmayers_Defense
       //Scale = 0.04f;
       Accuracy = 100;
       CalculateAccuracy();
-      layer = CollisionLayer.PROJECTILE;
-      layerMask = CollisionLayer.ENEMY;
+      Layer = CollisionLayer.PROJECTILE;
+      LayerMask = CollisionLayer.ENEMY;
     }
 
     /// <summary>

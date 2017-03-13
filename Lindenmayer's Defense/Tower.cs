@@ -32,8 +32,8 @@ namespace Lindenmayers_Defense
       //Scale = 0.1f;
       target = null;
       towerGrammar = "f[+++LR[X]][---RL[X]]";
-      layer = CollisionLayer.TOWER;
-      layerMask = CollisionLayer.NONE;
+      Layer = CollisionLayer.TOWER;
+      LayerMask = CollisionLayer.NONE;
       color = Color.BlueViolet;
       color = new Color(Game1.rnd.Next(255), Game1.rnd.Next(255), Game1.rnd.Next(255));
     }
@@ -67,6 +67,8 @@ namespace Lindenmayers_Defense
       LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "X", towerGrammar, 5, this.Forward(), 150.0f, 10.0f);
       p.color = color;
       world.AddProjectile(p);
+      for (int i = 0; i < 5; i++)
+        world.ParticleManager.GenerateParticle(spawnPos, 0.5f, 200.0f, 0.5f, color);
     }
 
     public override void Draw(SpriteBatch sb)

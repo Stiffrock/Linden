@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Lindenmayers_Defense
 {
-  class GameObject
+  class GameObject : Sprite
   {
     public enum CollisionLayer
     {
@@ -20,31 +20,16 @@ namespace Lindenmayers_Defense
       PROJECTILE = 4
     }
 
-    public Texture2D tex;
-    public Vector2 origin;
-    public Rectangle? spriteRec = null;
-    public Color color = Color.White;
-    public float alpha = 1f;
-    public float layerDepth = 0f;
-
-    public Vector2 pos;
-    public float rotation = 0.0f;
-    public Rectangle hitbox;
-
-    private float scale = 1.0f;
+    protected new float scale = 1.0f;
     public float Scale { get { return scale; } set { scale = value; UpdateHitbox(); } }
-
-    public CollisionLayer layer { get; protected set; }
-    public CollisionLayer layerMask;
-
+    public CollisionLayer Layer { get; protected set; }
+    public CollisionLayer LayerMask { get; set; }
     public bool Disposed { get; protected set; }
 
+    public Rectangle hitbox;
     public bool drawHitbox = false;
-    public GameObject(Texture2D tex, Vector2 pos)
+    public GameObject(Texture2D tex, Vector2 pos) : base(tex, pos)
     {
-      this.tex = tex;
-      this.pos = pos;
-      origin = new Vector2(tex.Width / 2.0f, tex.Height / 2.0f);
       hitbox = new Rectangle((int)(pos.X - origin.X), (int)(pos.Y - origin.Y), tex.Width, tex.Height);
       UpdateHitbox();
     }
@@ -66,7 +51,7 @@ namespace Lindenmayers_Defense
     }
     public bool CollidesWith(GameObject other)
     {
-      if ((layerMask & other.layer) != CollisionLayer.NONE && hitbox.Intersects(other.hitbox))
+      if ((LayerMask & other.Layer) != CollisionLayer.NONE && hitbox.Intersects(other.hitbox))
         return true;
       return false;
     }
@@ -78,9 +63,9 @@ namespace Lindenmayers_Defense
     {
       UpdateHitbox();
     }
-    public virtual void Draw(SpriteBatch sb)
+    public override void Draw(SpriteBatch sb)
     {
-      sb.Draw(tex, pos, spriteRec, color * alpha, rotation, origin, Scale, SpriteEffects.None, layerDepth);
+      base.Draw(sb);
       if (drawHitbox)
         sb.Draw(AssetManager.GetTexture("pixel"), hitbox, Color.Blue * 0.5f);
     }

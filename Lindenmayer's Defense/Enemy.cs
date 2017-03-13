@@ -27,8 +27,8 @@ namespace Lindenmayers_Defense
       this.health = health;
       this.speed = speed;
       target = world.baseTower;
-      layer = CollisionLayer.ENEMY;
-      layerMask = CollisionLayer.TOWER;
+      Layer = CollisionLayer.ENEMY;
+      LayerMask = CollisionLayer.TOWER;
     }
     protected virtual void Movement(GameTime gt)
     {

@@ -21,12 +21,10 @@ namespace Lindenmayers_Defense
       this.tex = tex;
       this.grammar = grammar;
     }
-
     public void Draw(SpriteBatch sb)
     {
       sb.Draw(tex, pos, rec, Color.Red);
     }
-
     public void Update(GameTime gt)
     {
     }

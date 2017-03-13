@@ -8,32 +8,38 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Lindenmayers_Defense
 {
-  class Particle : GameObject
+  class Particle : Sprite
   {
+    public bool Disposed { get; protected set; }
+
     Vector2 velocity;
-    float initialAlpha;
-    double lifeTime;
-    double elapsedTime;
+    float rotationalSpeed;
+    float lifeTime;
+    float elapsedTime;
     bool fades;
-    public Particle(Texture2D tex, Vector2 pos, float lifeTime, Color color, float alpha, bool fades, Vector2 velocity) : base(tex, pos)
+    float initialAlpha;
+
+    public Particle(Texture2D tex, Vector2 pos, float lifeTime, Color color, float scale, Vector2 velocity, float rotationalSpeed, float alpha, bool fades) : base(tex, pos)
     {
       this.color = color;
       this.alpha = alpha;
-      initialAlpha = alpha;
-      this.lifeTime = lifeTime;
-      this.fades = fades;
-      elapsedTime = 0;
       this.velocity = velocity;
+      this.rotationalSpeed = rotationalSpeed;
+      this.lifeTime = lifeTime;
+      this.scale = scale;
+      elapsedTime = 0;
+      this.fades = fades;
+      initialAlpha = alpha;
     }
-    public override void Update(GameTime gt)
+    public void Update(GameTime gt)
     {
-      elapsedTime += gt.ElapsedGameTime.TotalSeconds;
+      elapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
       if (fades)
         alpha = (float)((1 - elapsedTime / lifeTime) * initialAlpha);
       if (elapsedTime >= lifeTime)
-        Die();
-
+        Disposed = true;
       pos += velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+      rotation += rotationalSpeed * (float)gt.ElapsedGameTime.TotalSeconds;
     }
     public override void Draw(SpriteBatch sb)
     {
