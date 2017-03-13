@@ -12,21 +12,25 @@ namespace Lindenmayers_Defense
 {
   class Tower : GameObject
   {
+    private Enemy target;
+    protected Vector2 muzzlePos;
     protected float aggroRadius;
     protected float shootCooldown;
     private double shootTimer;
-    private Enemy target;
     protected World world;
     public string towerGrammar;
 
     public Tower(World world, Texture2D tex, Vector2 pos) : base(tex, pos)
     {
+      drawHitbox = true;
       this.pos = pos;
       this.world = world;
+      muzzlePos = new Vector2(0, -35);
+      origin += new Vector2(0, 15);
       aggroRadius = tex.Width * 2;   // send as parameter instead?
       shootCooldown = 200.0f;
       shootTimer = shootCooldown;
-      Scale = 0.1f;
+      //Scale = 0.1f;
       target = null;
       towerGrammar = "f[+++LR[X]][---RL[X]]";
       layer = CollisionLayer.TOWER;
@@ -59,8 +63,9 @@ namespace Lindenmayers_Defense
 
     protected void ShootProjectile()
     {
-      //LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("dot"), pos, "X", 3, this.Forward(), 150.0f, 10.0f);
-      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("dot"), pos, "X", towerGrammar, 5, this.Forward(), 150.0f, 10.0f);
+      rotation += 0.5f;
+      Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
+      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "X", towerGrammar, 5, this.Forward(), 150.0f, 10.0f);
       p.color = color;
       world.AddProjectile(p);
     }

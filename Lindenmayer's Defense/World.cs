@@ -30,10 +30,10 @@ namespace Lindenmayers_Defense
       InitGrammarComponents();
       tm = new TowerManager(this);
       UI = new GUI.UserInterface(grammarComponents);
-      baseTower = new Base(this, AssetManager.GetTexture("dot"), new Vector2(800, 300));
+      baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
       AddGameObject(baseTower);
       SpawnTestEnemies(5);
-      testTower = new Tower(this, AssetManager.GetTexture("dot"), new Vector2(600, 500));
+      testTower = new Tower(this, AssetManager.GetTexture("tower01"), new Vector2(600, 500));
       AddGameObject(testTower);
     }
 
@@ -51,8 +51,8 @@ namespace Lindenmayers_Defense
       for (int i = 0; i < nrToSpawn; i++)
       {
         Vector2 pos = new Vector2(100, 200 + i * 100);
-        Enemy spawn = new Enemy(this, AssetManager.GetTexture("pixel"), pos, 10, 50, 20);
-        spawn.Scale = 100;
+        Enemy spawn = new Enemy(this, AssetManager.GetTexture("enemy01"), pos, 10, 50, 20);
+        //spawn.Scale = 100;
         AddGameObject(spawn);
       }
     }

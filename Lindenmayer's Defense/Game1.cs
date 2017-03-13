@@ -47,6 +47,11 @@ namespace Lindenmayers_Defense
       // Create a new SpriteBatch, which can be used to draw textures.
       spriteBatch = new SpriteBatch(GraphicsDevice);
       AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
+      AssetManager.AddTexture("bullet01", Content.Load<Texture2D>("bullet01"));
+      AssetManager.AddTexture("tower01", Content.Load<Texture2D>("tower01"));
+      AssetManager.AddTexture("tower02", Content.Load<Texture2D>("tower02"));
+      AssetManager.AddTexture("towerplatform", Content.Load<Texture2D>("towerplatform"));
+      AssetManager.AddTexture("enemy01", Content.Load<Texture2D>("enemy01"));
       AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
       AssetManager.AddFont("font1", Content.Load<SpriteFont>("Font"));
 

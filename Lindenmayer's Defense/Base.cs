@@ -10,13 +10,16 @@ namespace Lindenmayers_Defense
 {
   class Base : Tower, IDamageable
   {
+    Texture2D platform;
     float health;
     public Base(World world, Texture2D tex, Vector2 pos):base(world, tex,pos)
     {
+      origin = new Vector2(tex.Width/2, tex.Height/2);
+      platform = AssetManager.GetTexture("towerplatform");
       shootCooldown = 100000.0f;
-      Scale = 0.5f;
+      Scale = 2.0f;
       health = 100;
-      color = Color.Black;
+      color = Color.White;
     }
     public override void Update(GameTime gt)
     {
@@ -27,6 +30,11 @@ namespace Lindenmayers_Defense
       health -= damage;
       if (health <= 0)
         Die();
+    }
+    public override void Draw(SpriteBatch sb)
+    {
+      sb.Draw(platform, pos, spriteRec, color * alpha, rotation, origin, Scale, SpriteEffects.None, layerDepth);
+      base.Draw(sb);
     }
   }
 }

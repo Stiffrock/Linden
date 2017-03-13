@@ -34,7 +34,7 @@ namespace Lindenmayers_Defense
       })},
       {'[', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
-        LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
+        LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage/2, p.Accuracy, p.bIsTargetSeeking);
         newP.color = p.color;
         p.world.AddProjectile(newP);
       })},

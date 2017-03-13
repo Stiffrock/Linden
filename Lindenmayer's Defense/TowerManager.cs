@@ -29,9 +29,8 @@ namespace Lindenmayers_Defense
       if (!hasTower)
       {
         string g = world.GetGrammar();
-        t = new Tower(world, AssetManager.GetTexture("dot"), pos);
+        t = new Tower(world, AssetManager.GetTexture("tower01"), pos);
         t.towerGrammar = g;
-        t.Scale = 0.1f;
         hasTower = true;
         world.AddGameObject(t);
 

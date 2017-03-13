@@ -43,7 +43,7 @@ namespace Lindenmayers_Defense
       color = Color.Purple;
       Lifetime = 15.0f;
       aggroRadius = tex.Width * 2;
-      Scale = 0.04f;
+      //Scale = 0.04f;
       Accuracy = 100;
       CalculateAccuracy();
       layer = CollisionLayer.PROJECTILE;

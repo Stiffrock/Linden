@@ -29,13 +29,13 @@ namespace Lindenmayers_Defense
       target = world.baseTower;
       layer = CollisionLayer.ENEMY;
       layerMask = CollisionLayer.TOWER;
-      drawHitbox = false;
       color = Color.BlanchedAlmond;
     }
     protected virtual void Movement(GameTime gt)
     {
       Vector2 direction = target.pos - this.pos;
       direction.Normalize();
+      rotation = Utility.Vector2ToAngle(direction);
       this.pos += direction * speed * (float)gt.ElapsedGameTime.TotalSeconds;
     }
     public void TakeDamage(float damage)
