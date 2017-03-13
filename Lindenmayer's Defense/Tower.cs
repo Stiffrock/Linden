@@ -22,7 +22,6 @@ namespace Lindenmayers_Defense
 
     public Tower(World world, Texture2D tex, Vector2 pos) : base(tex, pos)
     {
-      drawHitbox = true;
       this.pos = pos;
       this.world = world;
       muzzlePos = new Vector2(0, -35);

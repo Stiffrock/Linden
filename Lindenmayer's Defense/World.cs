@@ -13,23 +13,28 @@ namespace Lindenmayers_Defense
   class World
   {
     public ParticleManager ParticleManager { get; private set; }
-    public Base baseTower;
-    Tower testTower;
+    TowerManager towerManager;
+    EnemyManager enemyManager;
     List<GameObject> gameObjects;
     List<Projectile> projectiles;
-    TowerManager tm;
-    Dictionary<string, LComponent> grammarComponents;
+
     GUI.UserInterface UI;
+    Dictionary<string, LComponent> grammarComponents;
+    public Base baseTower;
+    Tower testTower;
 
     public World()
     {
       ParticleManager = new ParticleManager();
+      enemyManager = new EnemyManager(this);
+      towerManager = new TowerManager(this);
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
+
       grammarComponents = new Dictionary<string, LComponent>();
       InitGrammarComponents();
-      tm = new TowerManager(this);
       UI = new GUI.UserInterface(grammarComponents);
+
       baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
       AddGameObject(baseTower);
       SpawnTestEnemies(5);
@@ -66,12 +71,13 @@ namespace Lindenmayers_Defense
       UI.Update(gt);
       if (UI.towerBox.rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
       {
-        tm.CreateTower(Input.GetMousePos());
+        towerManager.CreateTower(Input.GetMousePos());
       }
       if (Input.RightMouseButtonClicked())
       {
         string res = UI.GetResult();
       }
+
       for (int i = 0; i < gameObjects.Count; i++)
       {
         GameObject go = gameObjects[i];
@@ -94,8 +100,10 @@ namespace Lindenmayers_Defense
       }
       gameObjects.RemoveAll(go => go.Disposed);
       projectiles.RemoveAll(p => p.Disposed);
-      tm.Update(gt);
+
+      towerManager.Update(gt);
       ParticleManager.Update(gt);
+      enemyManager.Update(gt);
     }
     public void Draw(SpriteBatch sb)
     {

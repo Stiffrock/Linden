@@ -29,7 +29,6 @@ namespace Lindenmayers_Defense
       target = world.baseTower;
       layer = CollisionLayer.ENEMY;
       layerMask = CollisionLayer.TOWER;
-      color = Color.BlanchedAlmond;
     }
     protected virtual void Movement(GameTime gt)
     {

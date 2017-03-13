@@ -11,6 +11,9 @@ namespace Lindenmayers_Defense
   public class Game1 : Game
   {
     public static Random rnd = new Random();
+    public static readonly int ScreenWidth = 1920;
+    public static readonly int ScreenHeight = 1080;
+
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
     TowerManager towerManager;

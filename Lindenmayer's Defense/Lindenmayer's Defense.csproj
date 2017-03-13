@@ -56,6 +56,7 @@
     <Compile Include="AssetManager.cs" />
     <Compile Include="Base.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="EnemyManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GUI\Button.cs" />
