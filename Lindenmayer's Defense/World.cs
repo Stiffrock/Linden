@@ -33,7 +33,7 @@ namespace Lindenmayers_Defense
 
       grammarComponents = new Dictionary<string, LComponent>();
       InitGrammarComponents();
-      UI = new GUI.UserInterface(grammarComponents);
+      UI = new GUI.UserInterface(grammarComponents, this);
 
       baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
       AddGameObject(baseTower);
@@ -96,7 +96,6 @@ namespace Lindenmayers_Defense
         {
           if(p.CollidesWith(go))
           {
-            p.owner.towerDamage += p.damage;
             p.DoCollision(go);
           }
         }
@@ -120,18 +119,6 @@ namespace Lindenmayers_Defense
       }
       ParticleManager.Draw(sb);
       UI.Draw(sb);
-
-      for (int i = 0; i < gameObjects.Count; i++)
-      {
-        if (gameObjects[i] is Tower)
-        {
-          Tower t = (Tower)gameObjects[i];
-          sb.DrawString(AssetManager.GetFont("font1"), t.towerDamage.ToString(), new Vector2(1200, 50 + i * 5), Color.Black);
-
-        }
-      }
-
-
     }
     public void AddGameObject(GameObject go)
     {

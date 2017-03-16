@@ -19,9 +19,10 @@ namespace Lindenmayers_Defense.GUI
     private List<LComponent> componentList;
     public List<LComponent> result;
     private Dictionary<string, LComponent> grammarComponenets;
+    private World world;
 
 
-    public UserInterface(Dictionary<string, LComponent> grammarComponenets)
+    public UserInterface(Dictionary<string, LComponent> grammarComponenets, World world)
     {
       containerList = new List<Container>();    
       inventoryArray = new Container[3, 6];
@@ -29,6 +30,7 @@ namespace Lindenmayers_Defense.GUI
       this.grammarComponenets = grammarComponenets;
       componentList = new List<LComponent>();
       result = new List<LComponent>();
+      this.world = world;
       InitInventoryArray();
       InitComponentArray();
       InitTowerBox();
@@ -84,6 +86,19 @@ namespace Lindenmayers_Defense.GUI
       }
     }
 
+    private void CheckforTowerClick()
+    {
+      List<GameObject> golist = world.GetGameObjects();
+      foreach (GameObject t in golist)
+      {
+
+        if (t is Tower && MouseIntersect(t.hitbox))
+        {
+
+        }
+      }
+    }
+
     public bool MouseIntersect(Rectangle uiObject)
     {
       if (uiObject.Contains(Input.GetMousePoint()))
@@ -119,7 +134,7 @@ namespace Lindenmayers_Defense.GUI
       }
     }
 
-    private void RemoveComponent()
+    private void CheckforRemoveComponent()
     {
       for (int i = 0; i < componentArray.GetLength(0); i++)
       {
@@ -147,7 +162,10 @@ namespace Lindenmayers_Defense.GUI
           HandleComponent(i);
       }
       if (Input.LeftMouseButtonClicked())
-        RemoveComponent();
+      {
+        CheckforRemoveComponent();
+        CheckforTowerClick();
+      }
 
 
     }

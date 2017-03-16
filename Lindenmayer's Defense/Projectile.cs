@@ -41,7 +41,6 @@ namespace Lindenmayers_Defense
       this.Damage = damage;
       this.bIsTargetSeeking = targetSeeking;
       this.owner = owner;
-      damage = owner.towerDamage;
       color = Color.Purple;
       Lifetime = 15.0f;
       aggroRadius = tex.Width * 2;

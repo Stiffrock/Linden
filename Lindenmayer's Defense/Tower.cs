@@ -19,7 +19,10 @@ namespace Lindenmayers_Defense
     protected double shootTimer;
     protected World world;
     public string towerGrammar;
-    public float towerDamage;
+    private float damage, firerate, turnspeed, speed, size, health;
+    public int damageLvl, firerateLvl, turnspeedLvl, speedLvl, sizeLvl, healthLvl;
+    private float damageFactor, firerateFactor, turnspeedFactor, speedFactor, sizeFactor, healthFactor;
+    private int generations;
 
     public Tower(World world, Texture2D tex, Vector2 pos) : base(tex, pos)
     {
@@ -38,7 +41,71 @@ namespace Lindenmayers_Defense
       LayerMask = CollisionLayer.NONE;
       color = Color.BlueViolet;
       color = new Color(Game1.rnd.Next(255), Game1.rnd.Next(255), Game1.rnd.Next(255));
+      damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = 1;
+      generations = 2;
+      InitStats();     
     }
+    //private float damage, firerate, turnspeed, speed, size, health, generations;
+
+    private void InitStats()
+    {
+      damage = 10.0f;
+      damageFactor = 1.2f;
+
+      firerate = 1.0f;
+      firerateFactor = 1.2f;
+
+      turnspeed = 1.0f;
+      turnspeedFactor = 1.2f;
+
+      speed = 1.0f;
+      speedFactor = 1.2f;
+
+      size = 1.0f;
+      sizeFactor = 1.1f;
+
+      health = 100.0f;
+      healthFactor = 1.2f;
+    }
+
+    public void IncreaseLevel_Damage(int x)
+    {
+      damageLvl += x;
+      damage = damageLvl * damageFactor;
+    }
+
+    public void IncreaseLevel_Firerate(int x)
+    {
+      firerateLvl += x;
+      firerate = firerateLvl * firerateFactor;
+    }
+    public void IncreaseLevel_TurnSpeed(int x)
+    {
+      turnspeed += x;
+      turnspeed = turnspeedLvl * turnspeedFactor;
+    }
+    public void IncreaseLevel_Speed(int x)
+    {
+      speedLvl += x;
+      speed = speedLvl * speedFactor;
+
+    }
+    public void IncreaseLevel_Size(int x)
+    {
+      size += x;
+      size = sizeLvl * sizeFactor;
+    }
+    public void IncreaseLevel_Health(int x)
+    {
+      healthLvl += x;
+      health = healthLvl * healthFactor;
+    }
+
+    public void IncreaseLevel_Generations(int x)
+    {
+      generations += x;
+    }
+
 
     /// <summary>
     /// Sets the target. Target is null if no valid targets can be found.
@@ -61,6 +128,8 @@ namespace Lindenmayers_Defense
         }
       }
     }
+
+    
 
     protected virtual void ShootProjectile()
     {
