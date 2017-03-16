@@ -17,7 +17,7 @@ namespace Lindenmayers_Defense
       particles = new List<Particle>();
     }
 
-    public void GenerateParticle(Vector2 pos, float lifeTime, float speed, float scale = 1.0f, Color? color = null)
+    public void GenerateParticle(Texture2D tex, Vector2 pos, float lifeTime, float speed, float scale = 1.0f, Color? color = null)
     {
       float lt = lifeTime * (float)(1 + Game1.rnd.NextDouble() * 0.4f - 0.2f);
       if(color == null)
@@ -26,7 +26,7 @@ namespace Lindenmayers_Defense
       float sp = speed * (float)(1 + Game1.rnd.NextDouble() * 0.4f - 0.2f);
       float sc = scale * (float)(1 + Game1.rnd.NextDouble() * 0.4f - 0.2f);
 
-      Particle p = new Particle(AssetManager.GetTexture("particle04"), pos, lt, (Color)color, sc, dir*sp, 0.0f, 1.0f, true);
+      Particle p = new Particle(tex, pos, lt, (Color)color, sc, dir*sp, 0.0f, 1.0f, true);
       particles.Add(p);
     }
     public void CreateParticle(Texture2D tex, Vector2 pos, float lifeTime, Color color, float scale, Vector2 velocity, float rotationalSpeed, float alpha, bool fades)

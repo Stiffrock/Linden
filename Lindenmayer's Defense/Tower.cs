@@ -12,11 +12,11 @@ namespace Lindenmayers_Defense
 {
   class Tower : GameObject
   {
-    private Enemy target;
+    public Enemy target;
     protected Vector2 muzzlePos;
     protected float aggroRadius;
     protected float shootCooldown;
-    private double shootTimer;
+    protected double shootTimer;
     protected World world;
     public string towerGrammar;
     public float towerDamage;
@@ -27,8 +27,9 @@ namespace Lindenmayers_Defense
       this.world = world;
       muzzlePos = new Vector2(0, -35);
       origin += new Vector2(0, 15);
-      aggroRadius = tex.Width * 2;   // send as parameter instead?
-      shootCooldown = 200.0f;
+      //aggroRadius = tex.Width * 2;   // send as parameter instead?
+      aggroRadius = 5000.0f;
+      shootCooldown = 1000.0f;
       shootTimer = shootCooldown;
       //Scale = 0.1f;
       target = null;
@@ -61,15 +62,17 @@ namespace Lindenmayers_Defense
       }
     }
 
-    protected void ShootProjectile()
+    protected virtual void ShootProjectile()
     {
-      rotation += 0.5f;
+      if (target == null)
+        return;
+      rotation = Utility.Vector2ToAngle(target.pos - pos);
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
-      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "X", towerGrammar, 5, this.Forward(), 150.0f, 10.0f);
+      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "X", towerGrammar, 5, this.Forward(), 150.0f, 10);
       p.color = color;
       world.AddProjectile(p);
-      for (int i = 0; i < 5; i++)
-        world.ParticleManager.GenerateParticle(spawnPos, 0.5f, 200.0f, 0.5f, color);
+      for (int i = 0; i < 3; i++)
+        world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle01"), spawnPos+Forward()*15, 0.3f, 120, 0.5f, Color.White);
     }
 
     public override void Draw(SpriteBatch sb)

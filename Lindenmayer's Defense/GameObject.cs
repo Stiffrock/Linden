@@ -20,7 +20,6 @@ namespace Lindenmayers_Defense
       PROJECTILE = 4
     }
 
-    protected new float scale = 1.0f;
     public float Scale { get { return scale; } set { scale = value; UpdateHitbox(); } }
     public CollisionLayer Layer { get; protected set; }
     public CollisionLayer LayerMask { get; set; }

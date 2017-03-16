@@ -12,11 +12,11 @@ namespace Lindenmayers_Defense
   {
     Texture2D platform;
     float health;
-    public Base(World world, Texture2D tex, Vector2 pos):base(world, tex,pos)
+    public Base(World world, Texture2D tex, Vector2 pos) : base(world, tex, pos)
     {
-      origin = new Vector2(tex.Width/2, tex.Height/2);
+      origin = new Vector2(tex.Width / 2, tex.Height / 2);
       platform = AssetManager.GetTexture("towerplatform");
-      shootCooldown = 100000.0f;
+      shootCooldown = 2000000.0f;
       Scale = 2.0f;
       health = 100;
       color = Color.White;

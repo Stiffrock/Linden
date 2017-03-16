@@ -35,6 +35,7 @@ namespace Lindenmayers_Defense
       {'[', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
         LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage/2, p.Accuracy, p.bIsTargetSeeking);
+        newP.Scale = p.Scale * 0.9f;
         newP.color = p.color;
         p.world.AddProjectile(newP);
       })},
@@ -46,18 +47,20 @@ namespace Lindenmayers_Defense
       })},
       {'S', new PCommand(0.0f, (p, gt)=> {
         p.Speed *= 1.1f;
-        p.world.ParticleManager.CreateExplosion(p.pos, 52, Color.White, 0.1f);
+        p.rotation += (Utility.Vector2ToAngle(p.owner.target.pos - p.pos) - p.rotation) * 0.2f;
+        for (int i = 0; i < 2; i++)
+          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.5f, 200.0f, 0.5f, p.color);
       })}
     };
     static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()
     { {'[', ']' }, {'(', ')'} };
 
     int commandIndex;
-    
+
     LSystem L;
     PCommand currentCommand;
     float currentCommandElapsedTime;
-    
+
 
     public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
       : base(world, owner, tex, pos, direction, speed, damage, accuracy, targetSeeking)
