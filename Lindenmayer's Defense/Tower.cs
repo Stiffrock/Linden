@@ -68,7 +68,7 @@ namespace Lindenmayers_Defense
         return;
       rotation = Utility.Vector2ToAngle(target.pos - pos);
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
-      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "(X)", towerGrammar, 5, this.Forward(), 150.0f, 10);
+      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "(X)", towerGrammar, 3, this.Forward(), 150.0f, 10);
       p.color = color;
       world.AddProjectile(p);
       for (int i = 0; i < 3; i++)

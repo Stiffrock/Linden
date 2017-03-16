@@ -18,7 +18,7 @@ namespace Lindenmayers_Defense
       {'W', "++F----FF++++F--W" }, //wave
       {'V', "--F++++FF----F++V" }, //wave
       {'Y', "X" },
-      {'E', "(f)" }, //explosive
+      {'E', "(f)FE" }, //explosive
       {'H', "hFH" }, //homing
 
       {'X', "S[+FY][-FY][++FY][--FY][FY]" }

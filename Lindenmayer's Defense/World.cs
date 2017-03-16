@@ -46,8 +46,8 @@ namespace Lindenmayers_Defense
     {
       grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("dot"), "LL"));
       grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("dot"), "W"));
-      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "P"));
-      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY]-F"));
+      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "S"));
+      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY]F"));
       grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("dot"), "RR"));
     }
 

@@ -65,7 +65,6 @@
     <Compile Include="IDamageable.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="LComponent.cs" />
-    <Compile Include="LExpProjectile.cs" />
     <Compile Include="LProjectile.cs" />
     <Compile Include="LSystem.cs" />
     <Compile Include="Particle.cs" />
