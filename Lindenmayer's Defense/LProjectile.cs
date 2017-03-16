@@ -41,7 +41,8 @@ namespace Lindenmayers_Defense
       })},
       {'(', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
-        LExpProjectile newP = new LExpProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage, p.Accuracy, p.bIsTargetSeeking);
+        LExpProjectile newP = new LExpProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage, 100.0f, p.Accuracy, p.bIsTargetSeeking);
+        newP.Scale = p.Scale * 0.9f;
         newP.color = p.color;
         p.world.AddProjectile(newP);
       })},
@@ -49,7 +50,7 @@ namespace Lindenmayers_Defense
         p.Speed *= 1.1f;
         p.rotation += (Utility.Vector2ToAngle(p.owner.target.pos - p.pos) - p.rotation) * 0.2f;
         for (int i = 0; i < 2; i++)
-          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.5f, 200.0f, 0.5f, p.color);
+          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 200.0f, 0.5f, p.color);
       })}
     };
     static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()

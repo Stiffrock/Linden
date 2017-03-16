@@ -36,7 +36,8 @@ namespace Lindenmayers_Defense
     }
     public void CreateExplosion(Vector2 pos, float radius, Color color, float duration)
     {
-      Particle exp = new Particle(AssetManager.GetTexture("dot"), pos, duration, color, radius / 512.0f, Vector2.Zero, 0.0f, 0.8f, true);
+      Particle exp = new Particle(AssetManager.GetTexture("particle03"), pos, duration, color, radius/64.0f, Vector2.Zero, 0.0f, 0.8f, true);
+      //Particle exp = new Particle(AssetManager.GetTexture("dot"), pos, duration, color, radius / 512.0f, Vector2.Zero, 0.0f, 0.8f, true);
       particles.Add(exp);
     }
     public void Update(GameTime gt)

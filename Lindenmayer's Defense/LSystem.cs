@@ -14,10 +14,11 @@ namespace Lindenmayers_Defense
       {'F', "Ff" },
       {'L', "L--F" }, //turn left
       {'R', "R++F" }, //turn right
-      {'P', "SFP" },  //arrow
+      {'P', "SFP(f)" },  //arrow
       {'W', "++F----FF++++F--W" }, //wave
       {'V', "--F++++FF----F++V" }, //wave
       {'Y', "X" },
+      {'E', "(f)" }, //explosive
 
       {'X', "S[+FY][-FY][++FY][--FY][FY]" }
       //{'X', "S[+++LRY][---RLY]FF[+FY][-FY]" } //snake + fork
