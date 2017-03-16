@@ -96,7 +96,7 @@ namespace Lindenmayers_Defense
         {
           if(p.CollidesWith(go))
           {
-            p.owner.towerDamage += p.damage;
+            p.Tower.towerDamage += p.Damage;
             p.DoCollision(go);
           }
         }

@@ -34,23 +34,38 @@ namespace Lindenmayers_Defense
       })},
       {'[', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
-        LProjectile newP = new LProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage/2, p.Accuracy, p.bIsTargetSeeking);
+        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage/2);
+        newP.Target = p.Target;
+        newP.TurnRate = p.TurnRate;
         newP.Scale = p.Scale * 0.9f;
         newP.color = p.color;
         p.world.AddProjectile(newP);
       })},
       {'(', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
-        LExpProjectile newP = new LExpProjectile(p.world, p.owner, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage, 100.0f, p.Accuracy, p.bIsTargetSeeking);
+        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage);
+        newP.ExplosionRadius = 100.0f;
+        newP.TurnRate = p.TurnRate;
+        newP.Target = p.Target;
         newP.Scale = p.Scale * 0.9f;
         newP.color = p.color;
         p.world.AddProjectile(newP);
       })},
-      {'S', new PCommand(0.0f, (p, gt)=> {
+      {'s', new PCommand(0.0f, (p, gt)=> {
         p.Speed *= 1.1f;
-        p.rotation += (Utility.Vector2ToAngle(p.owner.target.pos - p.pos) - p.rotation) * 0.2f;
         for (int i = 0; i < 2; i++)
           p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 200.0f, 0.5f, p.color);
+      })},
+      {'h', new PCommand(0.0f, (p, gt)=> {
+        p.rotation = MathHelper.WrapAngle(p.rotation);
+        float targetAngle = Utility.Vector2ToAngle(p.Target.pos - p.pos);
+        targetAngle = MathHelper.WrapAngle(targetAngle);
+        float angleDiff = MathHelper.WrapAngle(targetAngle - p.rotation);
+        if(angleDiff < p.TurnRate)
+          p.rotation += angleDiff;
+        else
+          p.rotation += p.TurnRate * (angleDiff > 0 ? 1 : -1);
+        p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.5f, 50.0f, 1.0f, p.color);
       })}
     };
     static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()
@@ -63,8 +78,8 @@ namespace Lindenmayers_Defense
     float currentCommandElapsedTime;
 
 
-    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false)
-      : base(world, owner, tex, pos, direction, speed, damage, accuracy, targetSeeking)
+    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage)
+      : base(world, owner, tex, pos, direction, speed, damage)
     {
       L = new LSystem(axiom, xRule);
       L.Evolve(generations);
@@ -80,7 +95,7 @@ namespace Lindenmayers_Defense
       {
         if (c == 'S')
         {
-          damage += 0.1f;
+          Damage += 0.1f;
         }
       }
     }

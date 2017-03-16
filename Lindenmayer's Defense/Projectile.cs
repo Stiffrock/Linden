@@ -14,86 +14,41 @@ namespace Lindenmayers_Defense
 
   class Projectile : GameObject
   {
+    public float TurnRate { get; set; }
+    public float Speed { get; set; }
+    public double Lifetime { get; set; }
+    public float ExplosionRadius { get; set; }
     public Vector2 Velocity { get; set; }
-    /// <summary>
-    /// 0 = 45 degree spread in either direction, 100 = 0 degree spread
-    /// </summary>
-    protected float Accuracy { get; set; }
-    protected Vector2 TurnRate { get; set; }
-    protected float Speed { get; set; }
-    protected float Damage { get; set; }
-    protected bool bIsTargetSeeking { get; set; }
-    protected double Lifetime { get; set; }
-    protected float aggroRadius;
+    public float Damage { get; set; }
+    public GameObject Target { get; set; }
+    public Tower Tower { get; protected set; }
+
     protected World world;
-    public Tower owner;
-    public float damage;
 
-
-    public Projectile(World world, Tower owner, Texture2D tex, Vector2 pos, Vector2 direction, float speed, float damage, float accuracy = 100, bool targetSeeking = false) : base(tex, pos)
+    public Projectile(World world, Tower owner, Texture2D tex, Vector2 pos, Vector2 direction, float speed, float damage,
+      float explosionRadius = 0.0f, float turnRate = 0.5f, GameObject target = null)
+      : base(tex, pos)
     {
-      this.pos = pos;
       this.world = world;
-      this.Accuracy = accuracy;
-      this.Velocity = direction * speed;
+      this.Tower = owner;
       rotation = Utility.Vector2ToAngle(direction);
+      this.Velocity = direction * speed;
       this.Speed = speed;
       this.Damage = damage;
-      this.bIsTargetSeeking = targetSeeking;
-      this.owner = owner;
-      damage = owner.towerDamage;
+      this.TurnRate = turnRate;
+      this.Target = target != null ? target : owner.target;
+      this.ExplosionRadius = explosionRadius;
       color = Color.Purple;
       Lifetime = 15.0f;
-      aggroRadius = tex.Width * 2;
-      //Scale = 0.04f;
-      Accuracy = 100;
-      CalculateAccuracy();
       Layer = CollisionLayer.PROJECTILE;
       LayerMask = CollisionLayer.ENEMY;
     }
-
-    /// <summary>
-    /// </summary>
-    protected void CalculateAccuracy()
-    {
-      if (Accuracy >= 100)
-        return;
-      float degrees = 45 - (Accuracy / 100 * 45);
-      float spread = (float)(Game1.rnd.NextDouble() * degrees * 2) - degrees;
-      //int Negative = rand.Next(0, 2);
-      //float acc = rand.Next(85, 100) - 100;
-
-      //if (Negative == 1)
-      //  acc *= -1.0f;
-      rotation = spread * (float)(Math.PI / 180);
-    }
-
-    public override void DoCollision(GameObject other)
-    {
-      if (other is Enemy)
-      {
-        Enemy enemy = (Enemy)other;
-        enemy.TakeDamage(Damage);
-        Die();
-      }
-    }
-
-    protected void SkewVelocity(Vector2 vel, GameTime gt)
-    {
-      Velocity += vel * (float)gt.ElapsedGameTime.TotalSeconds;
-    }
-
-    protected void SkewDirection(float angle, GameTime gt)
-    {
-      rotation += angle * (float)(Math.PI / 180) * (float)gt.ElapsedGameTime.TotalSeconds;
-    }
-
     public override void Update(GameTime gt)
     {
       base.Update(gt);
+      if (Target.Disposed)
+        AcquireTarget();
       Velocity = Forward() * Speed;
-      //SkewVelocity(new Vector2(0.0f, 0.0f), gt);
-      //SkewDirection(-45.0f, gt);
 
       Lifetime -= (float)gt.ElapsedGameTime.TotalSeconds;
       if (Lifetime < 0.5f)
@@ -105,9 +60,54 @@ namespace Lindenmayers_Defense
         Die();
       }
     }
-    public override void Draw(SpriteBatch sb)
+    public override void DoCollision(GameObject other)
     {
-      base.Draw(sb);
+      if (other is Enemy)
+      {
+        Enemy enemy = (Enemy)other;
+        enemy.TakeDamage(Damage);
+        Die();
+      }
+    }
+    protected void AcquireTarget()
+    {
+      List<GameObject> gameObjects = world.GetGameObjects();
+      float closest = 99999;
+      foreach (GameObject go in gameObjects)
+      {
+        if (go is Enemy && !go.Disposed)
+        {
+          float distance = Vector2.Distance(go.pos, pos);
+          if (distance <= closest)
+          {
+            Target = (Enemy)go;
+            closest = distance;
+          }
+        }
+      }
+    }
+    protected void Explode()
+    {
+      ExplosionRadius *= Scale;
+      for (int i = 0; i < 3; i++)
+      {
+        world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle01"), pos, 0.5f, 100.0f, 0.5f * Scale, color);
+      }
+      world.ParticleManager.CreateExplosion(pos, ExplosionRadius, color, 0.25f);
+      List<GameObject> gos = world.GetGameObjects();
+      foreach (var go in gos)
+      {
+        if (go is Enemy && Vector2.DistanceSquared(pos, go.pos) <= ExplosionRadius * ExplosionRadius)
+        {
+          ((Enemy)go).TakeDamage(Damage / 2);
+        }
+      }
+    }
+    public override void Die()
+    {
+      if (ExplosionRadius > 0.1f)
+        Explode();
+      base.Die();
     }
   }
 }
