@@ -34,16 +34,16 @@ namespace Lindenmayers_Defense
     private void SpawnEnemy()
     {
       float X, Y;
-      if(Game1.rnd.NextDouble() < Game1.ScreenWidth / Game1.ScreenHeight)
+      if(Game1.rnd.NextDouble() < (double)Game1.ScreenHeight / (double)Game1.ScreenWidth)
       {
-        X = Game1.rnd.Next(-150, 150);
+        X = Game1.rnd.Next(-200, 100);
         if (X >= -50)
           X += Game1.ScreenWidth + 50;
         Y = Game1.rnd.Next(-150, Game1.ScreenWidth+150);
       }
       else
       {
-        Y = Game1.rnd.Next(-150, 150);
+        Y = Game1.rnd.Next(-200, 100);
         if (Y >= -50)
           Y += Game1.ScreenHeight + 50;
         X = Game1.rnd.Next(-150, Game1.ScreenWidth + 150);
