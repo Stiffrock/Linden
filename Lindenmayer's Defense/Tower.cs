@@ -20,9 +20,10 @@ namespace Lindenmayers_Defense
     protected World world;
     public string towerGrammar;
     private float damage, firerate, turnspeed, speed, size, health;
-    public int damageLvl, firerateLvl, turnspeedLvl, speedLvl, sizeLvl, healthLvl;
+    public int damageLvl, firerateLvl, turnspeedLvl, speedLvl, sizeLvl, healthLvl, generationLvl;
     private float damageFactor, firerateFactor, turnspeedFactor, speedFactor, sizeFactor, healthFactor;
     private int generations;
+    public bool displayStats;
 
     public Tower(World world, Texture2D tex, Vector2 pos) : base(tex, pos)
     {
@@ -41,8 +42,7 @@ namespace Lindenmayers_Defense
       LayerMask = CollisionLayer.NONE;
       color = Color.BlueViolet;
       color = new Color(Game1.rnd.Next(255), Game1.rnd.Next(255), Game1.rnd.Next(255));
-      damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = 1;
-      generations = 2;
+      damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = generations = 1;
       InitStats();
     }
     //private float damage, firerate, turnspeed, speed, size, health, generations;
