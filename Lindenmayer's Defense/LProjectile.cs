@@ -12,10 +12,10 @@ namespace Lindenmayers_Defense
   {
     public static Dictionary<char, PCommand> commands = new Dictionary<char, PCommand>()
     {
-      //{'Y', new PCommand(0.6f, (p, gt)=> {
-      //  p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
-      //})},
-      {'X', new PCommand(0.6f, (p, gt)=> {
+      {'Y', new PCommand(0.5f, (p, gt)=> {
+        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+      })},
+      {'X', new PCommand(0.5f, (p, gt)=> {
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'f', new PCommand(0.05f, (p, gt)=> {
@@ -130,6 +130,8 @@ namespace Lindenmayers_Defense
     {
       base.Update(gt);
       currentCommand.Invoke(this, gt);
+      if(commandIndex == LStr.Length - 1)
+        alpha = 1 - currentCommandElapsedTime / currentCommand.Duration;
       currentCommandElapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
       if (currentCommandElapsedTime >= currentCommand.Duration)
       {

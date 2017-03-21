@@ -338,7 +338,8 @@ namespace Lindenmayers_Defense.GUI
           result += componentList[i].grammar;
         }
       }
-      result += "X";
+      if(!result.Contains('Y'))
+        result += "X";
       return result;
     }
 

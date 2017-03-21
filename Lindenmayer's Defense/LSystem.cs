@@ -20,9 +20,9 @@ namespace Lindenmayers_Defense
       {'V', "--F++++FF----F++V" }, //wave
       {'Y', "X" },
       {'E', "(f)fE" }, //explosive
-      {'H', "hfH" }, //homing
+      {'H', "hfH" } //homing
 
-      {'X', "S[+FY][-FY][++FY][--FY][FY]" }
+      //{'X', "S[+FY][-FY][++FY][--FY][FY]" }
       //{'X', "S[+++LRY][---RLY]FF[+FY][-FY]" } //snake + fork
       //{'X', "f[+FY]-FY" } // fork
       //{'X', "WX" } //wave
@@ -46,7 +46,7 @@ namespace Lindenmayers_Defense
     public double MutationRate { get; set; }
     public int Generations { get; protected set; }
 
-    public LSystem(string axiom, string xRule = "", double mutationRate = 0.03)
+    public LSystem(string axiom, string xRule = "", double mutationRate = 0.0d)
     {
       Str = axiom;
       XRule = xRule;
