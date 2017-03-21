@@ -17,20 +17,36 @@ namespace Lindenmayers_Defense.GUI
   {
     private Container[,] inventoryArray;
     private Container[] componentArray;
-    public Container towerBox;
-    private List<Container> containerList;
+    private Container towerStatContainer;
+    private Container towerBox;
+    private int[] stats;
+    private List<int> statList;
+    private Button statButton;
+    private List<Container> containerList, statContainerList;
     private List<LComponent> componentList;
+    private List<string> statName;
     public List<LComponent> result;
-    private Dictionary<string, LComponent> grammarComponenets;
+    private TowerManager tm;
+    private int statStringOffsetX, statStringOffsetY, statOffsetX, statOffsetY;
+    private Dictionary<string, LComponent> grammarComponents;
     private World world;
 
 
-    public UserInterface(Dictionary<string, LComponent> grammarComponenets, World world)
+    public UserInterface(TowerManager tm, World world)
     {
       containerList = new List<Container>();
+      statContainerList = new List<Container>();
+      statName = new List<string>();
+      statStringOffsetX = 20;
+      statOffsetX = 150;
+      statStringOffsetY = statOffsetY = 30;
       inventoryArray = new Container[3, 6];
       componentArray = new Container[5];
-      this.grammarComponenets = grammarComponenets;
+      statList = new List<int>();
+      stats = new int[6];
+      this.tm = tm;
+      grammarComponents = tm.GetGrammarComponents();
+      //this.grammarComponenets = grammarComponenets;
       componentList = new List<LComponent>();
       result = new List<LComponent>();
       this.world = world;
@@ -38,12 +54,27 @@ namespace Lindenmayers_Defense.GUI
       InitComponentArray();
       InitTowerBox();
       InitComponent();
+      SetStatNames();
     }
 
+    private void SetStatNames()
+    {
+      statName.Add("Damage");
+      statName.Add("Fire rate");
+      statName.Add("Turn Speed");
+      statName.Add("Speed");
+      statName.Add("Size");
+      statName.Add("Tower Health");
+      statName.Add("Generations");
+    }
+    public Container GetTowerCreator()
+    {
+      return towerBox;
+    }
     private void InitComponent()
     {
       int i = 0, j = 0;
-      foreach (KeyValuePair<string, LComponent> entry in grammarComponenets)
+      foreach (KeyValuePair<string, LComponent> entry in grammarComponents)
       {
         inventoryArray[j, i].component = entry.Value;
         inventoryArray[j, i].name = entry.Key;
@@ -94,14 +125,57 @@ namespace Lindenmayers_Defense.GUI
       List<GameObject> golist = world.GetGameObjects();
       foreach (GameObject t in golist)
       {
-
         if (t is Tower && MouseIntersect(t.hitbox))
         {
-
+          Tower temp = (Tower)t;
+          if (temp.displayStats)
+          {
+            RemoveStatWindow(t);
+            temp.displayStats = false;
+          }
+          else
+          {
+            BuildStatWindow(t);
+            temp.displayStats = true;
+          }
         }
       }
     }
 
+    private void RemoveStatWindow(GameObject t)
+    {
+      Tower temp = (Tower)t;
+
+      for (int i = 0; i < statContainerList.Count; i++)
+      {
+        if (statContainerList[i].tower == temp)
+        {
+          
+          statContainerList.Remove(statContainerList[i]);         
+          break;
+        }
+      }
+    }
+    private void BuildStatWindow(GameObject t)
+    {
+      towerStatContainer = new Container(AssetManager.GetTexture("pixel"), t.pos);
+      
+      towerStatContainer.rec.Width = 300;
+      towerStatContainer.rec.Height = 200;
+      Tower temp = (Tower)t;
+      towerStatContainer.tower = temp;
+      towerStatContainer.statList.Add(temp.damageLvl);
+      towerStatContainer.statList.Add(temp.firerateLvl);
+      towerStatContainer.statList.Add(temp.turnspeedLvl);
+      towerStatContainer.statList.Add(temp.speedLvl);
+      towerStatContainer.statList.Add(temp.sizeLvl);
+      towerStatContainer.statList.Add(temp.healthLvl);
+      towerStatContainer.statList.Add(temp.generationLvl);
+      towerStatContainer.mouseOverEffect = false;
+      statContainerList.Add(towerStatContainer);
+
+
+    }
     public bool MouseIntersect(Rectangle uiObject)
     {
       if (uiObject.Contains(Input.GetMousePoint()))
@@ -157,6 +231,10 @@ namespace Lindenmayers_Defense.GUI
 
     public virtual void Update(GameTime gt)
     {
+      for (int i = 0; i < statContainerList.Count; i++)
+      {
+        statContainerList[i].Update(gt);
+      }
       for (int i = 0; i < containerList.Count; i++)
       {
         containerList[i].Update(gt);
@@ -188,10 +266,21 @@ namespace Lindenmayers_Defense.GUI
 
     public virtual void Draw(SpriteBatch sb)
     {
+      for (int i = 0; i < statContainerList.Count; i++)
+      {
+        statContainerList[i].Draw(sb);
+
+        for (int j = 0; j < statContainerList[i].statList.Count; j++)
+        {
+          sb.DrawString(AssetManager.GetFont("font1"), statName[j], new Vector2(statContainerList[i].pos.X + statStringOffsetX/*offset*/, statContainerList[i].pos.Y + statStringOffsetY * j), Color.Black);
+          sb.DrawString(AssetManager.GetFont("font1"), statContainerList[i].statList[j].ToString(), new Vector2(statContainerList[i].pos.X + statOffsetX/*offset*/, statContainerList[i].pos.Y + statOffsetY * j), Color.Black);
+        }
+      }
       for (int i = 0; i < containerList.Count; i++)
       {
         containerList[i].Draw(sb);
       }
+  
       for (int i = 0; i < componentList.Count; i++)
       {
         componentList[i].Draw(sb);

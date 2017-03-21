@@ -35,10 +35,8 @@ namespace Lindenmayers_Defense
       towerManager = new TowerManager(this);
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
-
       grammarComponents = new Dictionary<string, LComponent>();
-      InitGrammarComponents();
-      UI = new GUI.UserInterface(grammarComponents, this);
+      UI = new GUI.UserInterface(towerManager, this);
 
       baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
       AddGameObject(baseTower);
@@ -46,18 +44,6 @@ namespace Lindenmayers_Defense
       AddGameObject(testTower);
     }
 
-    private void InitGrammarComponents()
-    {
-      grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("dot"), "LL"));
-      grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("dot"), "W"));
-      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "SF"));
-      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+fY][-fY]F"));
-      //grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY][-FY]"));
-      grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("dot"), "RR"));
-      grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("dot"), "EF"));
-      grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("dot"), "HF"));
-      grammarComponents.Add("slow", new LComponent(AssetManager.GetTexture("dot"), "ZF"));
-    }
     public string GetGrammar()
     {
       return UI.GetResult();
@@ -65,7 +51,7 @@ namespace Lindenmayers_Defense
     public void Update(GameTime gt)
     {
       UI.Update(gt);
-      if (UI.towerBox.rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
+      if (UI.GetTowerCreator().rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
       {
         towerManager.CreateTower(Input.GetMousePos());
       }

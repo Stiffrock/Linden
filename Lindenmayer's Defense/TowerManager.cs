@@ -15,49 +15,56 @@ namespace Lindenmayers_Defense
   {
     protected World world;
     private Tower t;
-    public bool hasTower;
+    private Dictionary<string, LComponent> grammarComponents;    
+    private bool towerOnMouse;
+
     public TowerManager(World world)
     {
       this.world = world;
       t = null;
+      grammarComponents = new Dictionary<string, LComponent>();
+      InitGrammarComponents();
+    }
+
+    public Dictionary<string, LComponent> GetGrammarComponents()
+    {
+      return grammarComponents;
+    }
+    private void InitGrammarComponents()
+    {
+      grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("dot"), "LL"));
+      grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("dot"), "W"));
+      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "SF"));
+      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+fY][-fY]F"));
+      //grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY][-FY]"));
+      grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("dot"), "RR"));
+      grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("dot"), "EF"));
+      grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("dot"), "HF"));
+      grammarComponents.Add("slow", new LComponent(AssetManager.GetTexture("dot"), "ZF"));
     }
     public void SetTowerType(Tower t)
     {
     }
     public void CreateTower(Vector2 pos)
     {
-      if (!hasTower)
+      if (!towerOnMouse)
       {
         string g = world.GetGrammar();
         t = new Tower(world, AssetManager.GetTexture("tower01"), pos, g, 5);
-        hasTower = true;
+        towerOnMouse = true;
         world.AddGameObject(t);
-
       }
-
     }
     public void Update(GameTime gt)
-    {
-   
-      if (t != null && hasTower)
-      {
-        t.pos = Input.GetMousePos();
-        
-      }
+    { 
+      if (t != null && towerOnMouse)
+        t.pos = Input.GetMousePos();        
 
-      if (hasTower && Input.RightMouseButtonClicked())
-      {
-        hasTower = false;
-
-      }
-      //if (Input.LeftMouseButtonClicked())
-      //{
-      //  CreateTower(Input.GetMousePos());
-      //}
+      if (towerOnMouse && Input.RightMouseButtonClicked())
+        towerOnMouse = false;
     }
     public void Draw(SpriteBatch sb)
     {
-
     }
   }
 }

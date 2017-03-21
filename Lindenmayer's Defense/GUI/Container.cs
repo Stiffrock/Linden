@@ -21,8 +21,11 @@ namespace Lindenmayers_Defense.GUI
     private Color color, defaultColor, highlightColor;
     public LComponent component;
     public string name;
+    public Tower tower;
+    public List<int> statList;
     private bool showComponentInfo;
-    public bool ComponentArray;
+    public bool ComponentArray, mouseOverEffect;
+    
 
     public Container(Texture2D tex, Vector2 pos)
     {
@@ -30,7 +33,10 @@ namespace Lindenmayers_Defense.GUI
       this.pos = pos;
       this.rec = new Rectangle((int)pos.X, (int)pos.Y, 50, 50);
       component = new LComponent(null, null);
+      statList = new List<int>();
       name = null;
+      mouseOverEffect = true;
+      color = Color.White;
       defaultColor = Color.Blue;
       highlightColor = Color.White;
     }
@@ -42,16 +48,20 @@ namespace Lindenmayers_Defense.GUI
 
     public void Update(GameTime gt)
     {
-      if (rec.Contains(Input.GetMousePoint()))
+      if (mouseOverEffect)
       {
-        color = highlightColor;
-        showComponentInfo = true;
+        if (rec.Contains(Input.GetMousePoint()))
+        {
+          color = highlightColor;
+          showComponentInfo = true;
+        }
+        else
+        {
+          showComponentInfo = false;
+          color = defaultColor;
+        }
       }
-      else
-      {
-        showComponentInfo = false;
-        color = defaultColor;
-      }
+     
     }
 
     public  void Draw(SpriteBatch sb)
