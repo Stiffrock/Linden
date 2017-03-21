@@ -16,9 +16,11 @@ namespace Lindenmayers_Defense
     {
       origin = new Vector2(tex.Width / 2, tex.Height / 2);
       platform = AssetManager.GetTexture("towerplatform");
-      shootCooldown = 2000000.0f;
+      shootCooldown = 200.0f;
+      L = new LSystem("(--fff++ssFhFhFhFhFhFhFhFhFhF)(++fff--ssFhFhFhFhFhFhFhFhFhF)", "", 0.0f);
+      L.Evolve(5);
       Scale = 2.0f;
-      health = 100;
+      health = 1000;
       color = Color.White;
     }
     public override void Update(GameTime gt)

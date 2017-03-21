@@ -10,20 +10,18 @@ namespace Lindenmayers_Defense
 {
   class LProjectile : Projectile
   {
-    static Dictionary<char, PCommand> commands = new Dictionary<char, PCommand>()
+    public static Dictionary<char, PCommand> commands = new Dictionary<char, PCommand>()
     {
-      {'Y', new PCommand(0.6f, (p, gt)=> {
-        p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
-        p.alpha = 1 - (p.currentCommandElapsedTime/p.currentCommand.Duration);
-      })},
+      //{'Y', new PCommand(0.6f, (p, gt)=> {
+      //  p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+      //})},
       {'X', new PCommand(0.6f, (p, gt)=> {
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
-        p.alpha = 1 - (p.currentCommandElapsedTime/p.currentCommand.Duration);
       })},
       {'f', new PCommand(0.05f, (p, gt)=> {
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
-      {'F', new PCommand(0.2f, (p, gt)=> {
+      {'F', new PCommand(0.1f, (p, gt)=> {
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'-', new PCommand(0.0f, (p, gt)=> {
@@ -33,8 +31,8 @@ namespace Lindenmayers_Defense
         p.rotation += (float)Math.PI/8f;
       })},
       {'[', new PCommand(0.0f, (p, gt)=> {
-        string axiom = p.BracketSubstring(p.commandIndex);
-        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage/2);
+        string lstr = p.BracketSubstring(p.commandIndex);
+        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, lstr, p.Forward(), p.Speed, p.Damage/2);
         p.Damage *= 0.5f;
         newP.Lifetime = p.Lifetime*Game1.rnd.NextDouble()*0.5f+0.5f;
         newP.Target = p.Target;
@@ -44,8 +42,8 @@ namespace Lindenmayers_Defense
         p.world.AddProjectile(newP);
       })},
       {'(', new PCommand(0.0f, (p, gt)=> {
-        string axiom = p.BracketSubstring(p.commandIndex);
-        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage);
+        string lstr = p.BracketSubstring(p.commandIndex);
+        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, lstr, p.Forward(), p.Speed, p.Damage);
         newP.ExplosionRadius = 100.0f;
         newP.TurnRate = p.TurnRate;
         newP.Target = p.Target;
@@ -58,6 +56,11 @@ namespace Lindenmayers_Defense
         for (int i = 0; i < 2; i++)
           p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 200.0f, 0.5f, p.color);
       })},
+      {'z', new PCommand(0.0f, (p, gt)=> {
+        p.Speed *= 0.9f;
+        for (int i = 0; i < 2; i++)
+          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle02"), p.pos, 0.35f, 200.0f, 0.5f, p.color);
+      })},
       {'h', new PCommand(0.0f, (p, gt)=> {
         p.rotation = MathHelper.WrapAngle(p.rotation);
         float targetAngle = Utility.Vector2ToAngle(p.Target.pos - p.pos);
@@ -67,7 +70,7 @@ namespace Lindenmayers_Defense
         //  p.rotation += angleDiff;
         //else
         p.rotation += p.TurnRate * (angleDiff > 0 ? 1 : -1);
-        p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.5f, 50.0f, 1.0f, p.color);
+        p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 50.0f, 1.0f, p.color);
       })}
     };
     static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()
@@ -75,39 +78,27 @@ namespace Lindenmayers_Defense
 
     int commandIndex;
 
-    LSystem L;
+    string LStr;
     PCommand currentCommand;
     float currentCommandElapsedTime;
 
-    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage)
+    public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string LStr, Vector2 direction, float speed, float damage)
       : base(world, owner, tex, pos, direction, speed, damage)
     {
-      L = new LSystem(axiom, xRule);
-      L.Evolve(generations);
+      this.LStr = LStr;
       currentCommandElapsedTime = 0.0f;
       commandIndex = -1;
-      CalculateStats();
       GotoNextCommand();
     }
 
-    private void CalculateStats()
-    {
-      foreach (char c in L.Str)
-      {
-        if (c == 'S')
-        {
-          Damage += 0.1f;
-        }
-      }
-    }
     private void GotoNextCommand()
     {
-      for (int i = commandIndex + 1; i < L.Str.Length; i++)
+      for (int i = commandIndex + 1; i < LStr.Length; i++)
       {
-        if (commands.ContainsKey(L.Str[i]))
+        if (commands.ContainsKey(LStr[i]))
         {
           commandIndex = i;
-          currentCommand = commands[L.Str[i]];
+          currentCommand = commands[LStr[i]];
           currentCommandElapsedTime = 0.0f;
           return;
         }
@@ -119,17 +110,17 @@ namespace Lindenmayers_Defense
     private string BracketSubstring(int bracketIndex)
     {
       Stack<char> brackets = new Stack<char>();
-      for (int i = bracketIndex; i < L.Str.Length; i++)
+      for (int i = bracketIndex; i < LStr.Length; i++)
       {
-        if (bracketPairs.ContainsKey(L.Str[i]))
-          brackets.Push(L.Str[i]);
-        else if (L.Str[i] == bracketPairs[brackets.Peek()])
+        if (bracketPairs.ContainsKey(LStr[i]))
+          brackets.Push(LStr[i]);
+        else if (LStr[i] == bracketPairs[brackets.Peek()])
         {
           brackets.Pop();
           if (brackets.Count == 0)
           {
             commandIndex = i;
-            return L.Str.Substring(bracketIndex + 1, i - (bracketIndex + 1));
+            return LStr.Substring(bracketIndex + 1, i - (bracketIndex + 1));
           }
         }
       }

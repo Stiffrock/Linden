@@ -15,6 +15,7 @@ namespace Lindenmayers_Defense
       {'L', "L--F" }, //turn left
       {'R', "R++F" }, //turn right
       {'S', "sfS" },  //arrow
+      {'Z', "zfZ" },  //arrow
       {'W', "++F----FF++++F--W" }, //wave
       {'V', "--F++++FF----F++V" }, //wave
       {'Y', "X" },
@@ -42,11 +43,15 @@ namespace Lindenmayers_Defense
 
     public string Str { get; protected set; }
     public string XRule { get; protected set; }
+    public double MutationRate { get; set; }
+    public int Generations { get; protected set; }
 
-    public LSystem(string axiom, string x = "")
+    public LSystem(string axiom, string xRule = "", double mutationRate = 0.03)
     {
       Str = axiom;
-      XRule = x;
+      XRule = xRule;
+      MutationRate = mutationRate;
+      Generations = 0;
     }
     public void Evolve(int generations)
     {
@@ -55,6 +60,16 @@ namespace Lindenmayers_Defense
         string result = "";
         foreach (char c in Str)
         {
+          if (Game1.rnd.NextDouble() < MutationRate)
+          {
+            IEnumerable<char> l = LProjectile.commands.Keys;
+            int j = Game1.rnd.Next(0, l.Count());
+            char ch = l.ElementAt(j);
+            if (ch != '(' && ch != '[')
+              result += ch;
+            else if (ch == '(')
+              result += "(f)";
+          }
           if (c == 'X')
             result += XRule;
           else if (grammar.ContainsKey(c))
@@ -64,6 +79,7 @@ namespace Lindenmayers_Defense
         }
         Str = result;
       }
+      Generations += generations;
     }
   }
 }
