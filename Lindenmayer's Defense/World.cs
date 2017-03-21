@@ -10,6 +10,11 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Lindenmayers_Defense
 {
+  /// TO DO!!
+  /// Move grammarcomponents to towermanager
+  /// Towermanager communicates with Userinterface
+  /// 
+
   class World
   {
     public ParticleManager ParticleManager { get; private set; }
@@ -37,7 +42,6 @@ namespace Lindenmayers_Defense
 
       baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
       AddGameObject(baseTower);
-      SpawnTestEnemies(5);
       testTower = new Tower(this, AssetManager.GetTexture("tower01"), new Vector2(600, 500));
       AddGameObject(testTower);
     }
@@ -46,22 +50,12 @@ namespace Lindenmayers_Defense
     {
       grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("dot"), "LL"));
       grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("dot"), "W"));
-      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "S"));
-      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY]F"));
+      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "SF"));
+      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY][-FY]"));
       grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("dot"), "RR"));
+      grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("dot"), "EF"));
+      grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("dot"), "HF"));
     }
-
-    private void SpawnTestEnemies(int nrToSpawn)
-    {
-      for (int i = 0; i < nrToSpawn; i++)
-      {
-        Vector2 pos = new Vector2(100, 200 + i * 100);
-        Enemy spawn = new Enemy(this, AssetManager.GetTexture("enemy01"), pos, 10, 50, 20);
-        //spawn.Scale = 100;
-        AddGameObject(spawn);
-      }
-    }
-
     public string GetGrammar()
     {
       return UI.GetResult();

@@ -43,7 +43,7 @@ namespace Lindenmayers_Defense
       color = new Color(Game1.rnd.Next(255), Game1.rnd.Next(255), Game1.rnd.Next(255));
       damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = 1;
       generations = 2;
-      InitStats();     
+      InitStats();
     }
     //private float damage, firerate, turnspeed, speed, size, health, generations;
 
@@ -117,7 +117,7 @@ namespace Lindenmayers_Defense
       float closest = aggroRadius;
       foreach (GameObject go in gameObjects)
       {
-        if(go is Enemy && !go.Disposed)
+        if (go is Enemy && !go.Disposed)
         {
           float distance = Vector2.Distance(go.pos, pos);
           if (distance <= closest)
@@ -129,19 +129,17 @@ namespace Lindenmayers_Defense
       }
     }
 
-    
-
     protected virtual void ShootProjectile()
     {
       if (target == null)
         return;
       rotation = Utility.Vector2ToAngle(target.pos - pos);
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
-      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "(X)", towerGrammar, 3, this.Forward(), 150.0f, 10);
+      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, "(X)", towerGrammar, 5, this.Forward(), 150.0f, 10);
       p.color = color;
       world.AddProjectile(p);
       for (int i = 0; i < 3; i++)
-        world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle01"), spawnPos+Forward()*15, 0.3f, 120, 0.5f, Color.White);
+        world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle01"), spawnPos + Forward() * 15, 0.3f, 120, 0.5f, Color.White);
     }
 
     public override void Draw(SpriteBatch sb)

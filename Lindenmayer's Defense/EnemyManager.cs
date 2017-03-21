@@ -18,8 +18,8 @@ namespace Lindenmayers_Defense
     public EnemyManager(World world)
     {
       this.world = world;
-      spawnMin = 0.5f;
-      spawnMax = 2.0f;
+      spawnMin = 0.1f;
+      spawnMax = 0.8f;
     }
     public void Update(GameTime gt)
     {
@@ -50,8 +50,8 @@ namespace Lindenmayers_Defense
       }
       Vector2 spawnPos = new Vector2(X, Y);
 
-      int stats = 350;
-      int speed = Game1.rnd.Next(10, 100);
+      int stats = 500;//350;
+      int speed = Game1.rnd.Next(30, 100);
       stats -= speed * 2;
       int damage = Game1.rnd.Next(10, (stats - 20) / 3);
       stats -= damage * 3;

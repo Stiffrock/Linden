@@ -35,6 +35,8 @@ namespace Lindenmayers_Defense
       {'[', new PCommand(0.0f, (p, gt)=> {
         string axiom = p.BracketSubstring(p.commandIndex);
         LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, axiom, p.L.XRule, 0, p.Forward(), p.Speed, p.Damage/2);
+        p.Damage *= 0.5f;
+        newP.Lifetime = p.Lifetime*Game1.rnd.NextDouble()*0.5f+0.5f;
         newP.Target = p.Target;
         newP.TurnRate = p.TurnRate;
         newP.Scale = p.Scale * 0.9f;
@@ -61,10 +63,10 @@ namespace Lindenmayers_Defense
         float targetAngle = Utility.Vector2ToAngle(p.Target.pos - p.pos);
         targetAngle = MathHelper.WrapAngle(targetAngle);
         float angleDiff = MathHelper.WrapAngle(targetAngle - p.rotation);
-        if(angleDiff < p.TurnRate)
-          p.rotation += angleDiff;
-        else
-          p.rotation += p.TurnRate * (angleDiff > 0 ? 1 : -1);
+        //if(angleDiff < p.TurnRate)
+        //  p.rotation += angleDiff;
+        //else
+        p.rotation += p.TurnRate * (angleDiff > 0 ? 1 : -1);
         p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.5f, 50.0f, 1.0f, p.color);
       })}
     };
@@ -76,7 +78,6 @@ namespace Lindenmayers_Defense
     LSystem L;
     PCommand currentCommand;
     float currentCommandElapsedTime;
-
 
     public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string axiom, string xRule, int generations, Vector2 direction, float speed, float damage)
       : base(world, owner, tex, pos, direction, speed, damage)

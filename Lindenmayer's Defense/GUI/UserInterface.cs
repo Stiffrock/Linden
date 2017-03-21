@@ -10,6 +10,9 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Lindenmayers_Defense.GUI
 {
+  /// TO DO
+  /// Switch to arrays instead of lists
+  /// 
   class UserInterface
   {
     private Container[,] inventoryArray;
@@ -24,7 +27,7 @@ namespace Lindenmayers_Defense.GUI
 
     public UserInterface(Dictionary<string, LComponent> grammarComponenets, World world)
     {
-      containerList = new List<Container>();    
+      containerList = new List<Container>();
       inventoryArray = new Container[3, 6];
       componentArray = new Container[5];
       this.grammarComponenets = grammarComponenets;
@@ -41,7 +44,7 @@ namespace Lindenmayers_Defense.GUI
     {
       int i = 0, j = 0;
       foreach (KeyValuePair<string, LComponent> entry in grammarComponenets)
-      {      
+      {
         inventoryArray[j, i].component = entry.Value;
         inventoryArray[j, i].name = entry.Key;
         inventoryArray[j, i].component.pos = inventoryArray[j, i].pos;
@@ -107,28 +110,27 @@ namespace Lindenmayers_Defense.GUI
       }
       return false;
     }
-    
+
     private void HandleComponent(int i)
     {
-      if (containerList[i].name != null)
+      if (containerList[i].name == null)
+        return;
+      if (MouseIntersect(containerList[i].rec))
       {
-        if (MouseIntersect(containerList[i].rec))
+        for (int j = 0; j < componentArray.GetLength(0); j++)
         {
-          for (int j = 0; j < componentArray.GetLength(0); j++)
+          if (componentArray[j].name == null && !containerList[i].ComponentArray)
           {
-            if (componentArray[j].name == null && !containerList[i].ComponentArray)
-            {
-              componentArray[j].component = componentList[i];
-              componentArray[j].name = containerList[i].name;
+            componentArray[j].component = componentList[i];
+            componentArray[j].name = containerList[i].name;
 
-              LComponent temp = new LComponent(componentList[i].tex, componentList[i].grammar);
-              temp.pos = componentArray[j].pos;
-              temp.rec = new Rectangle(100, 100, 20, 20);
-              temp.chosen = true;
-              result.Add(temp);
-              componentList.Add(temp);
-              break;
-            }
+            LComponent temp = new LComponent(componentList[i].tex, componentList[i].grammar);
+            temp.pos = componentArray[j].pos;
+            temp.rec = new Rectangle(100, 100, 20, 20);
+            temp.chosen = true;
+            result.Add(temp);
+            componentList.Add(temp);
+            break;
           }
         }
       }
@@ -177,7 +179,7 @@ namespace Lindenmayers_Defense.GUI
       {
         if (componentList[i].chosen)
         {
-          result += componentList[i].grammar;      
+          result += componentList[i].grammar;
         }
       }
       result += "X";
