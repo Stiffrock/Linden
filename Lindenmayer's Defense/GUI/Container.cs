@@ -23,6 +23,7 @@ namespace Lindenmayers_Defense.GUI
     public string name;
     public Tower tower;
     public List<int> statList;
+    public List<Button> statButtonList;
     private bool showComponentInfo;
     public bool ComponentArray, mouseOverEffect;
     
@@ -34,6 +35,7 @@ namespace Lindenmayers_Defense.GUI
       this.rec = new Rectangle((int)pos.X, (int)pos.Y, 50, 50);
       component = new LComponent(null, null);
       statList = new List<int>();
+      statButtonList = new List<Button>();
       name = null;
       mouseOverEffect = true;
       color = Color.White;

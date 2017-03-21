@@ -21,7 +21,6 @@ namespace Lindenmayers_Defense.GUI
     private Container towerBox;
     private int[] stats;
     private List<int> statList;
-    private Button statButton;
     private List<Container> containerList, statContainerList;
     private List<LComponent> componentList;
     private List<string> statName;
@@ -30,12 +29,15 @@ namespace Lindenmayers_Defense.GUI
     private int statStringOffsetX, statStringOffsetY, statOffsetX, statOffsetY;
     private Dictionary<string, LComponent> grammarComponents;
     private World world;
+    private Button statButton;
+    private List<Button> statButtonList;
 
 
     public UserInterface(TowerManager tm, World world)
     {
       containerList = new List<Container>();
       statContainerList = new List<Container>();
+      statButtonList = new List<Button>();
       statName = new List<string>();
       statStringOffsetX = 20;
       statOffsetX = 150;
@@ -142,6 +144,69 @@ namespace Lindenmayers_Defense.GUI
       }
     }
 
+    private void StatButtonClick()
+    {
+      if (Input.LeftMouseButtonClicked())
+      {
+        foreach (Container c in statContainerList)
+        {
+          foreach (Button b in c.statButtonList)
+          {
+            if (MouseIntersect(b.GetHitbox()))
+            {
+              switch (b.statID)
+              {
+                case "damage":
+                  {
+                    c.tower.IncreaseLevel_Damage(1);
+                    c.statList[0] = c.tower.damageLvl;
+                    break;
+                  }
+                case "firerate":
+                  {
+                    c.tower.IncreaseLevel_Firerate(1);
+                    c.statList[1] = c.tower.firerateLvl;
+                    break;
+                  }
+                case "turnspeed":
+                  {
+                    c.tower.IncreaseLevel_TurnSpeed(1);
+                    c.statList[2] = c.tower.turnspeedLvl;
+                    break;
+                  }
+                case "speed":
+                  {
+                    c.tower.IncreaseLevel_Speed(1);
+                    c.statList[3] = c.tower.speedLvl;
+                    break;
+                  }
+                case "size":
+                  {
+                    c.tower.IncreaseLevel_Size(1);
+                    c.statList[4] = c.tower.sizeLvl;
+                    break;
+                  }
+                case "towerhealth":
+                  {
+                    c.tower.IncreaseLevel_Health(1);
+                    c.statList[5] = c.tower.healthLvl;
+                    break;
+                  }
+                case "generation":
+                  {
+                    c.tower.IncreaseLevel_Generations(1);
+                    c.statList[6] = c.tower.generationLvl;
+                    break;
+                  }
+                default:
+                  break;
+              }
+            }
+          }
+        }     
+      }
+    }
+
     private void RemoveStatWindow(GameObject t)
     {
       Tower temp = (Tower)t;
@@ -149,32 +214,44 @@ namespace Lindenmayers_Defense.GUI
       for (int i = 0; i < statContainerList.Count; i++)
       {
         if (statContainerList[i].tower == temp)
-        {
-          
+        {       
           statContainerList.Remove(statContainerList[i]);         
           break;
         }
       }
     }
+
     private void BuildStatWindow(GameObject t)
     {
-      towerStatContainer = new Container(AssetManager.GetTexture("pixel"), t.pos);
-      
+      towerStatContainer = new Container(AssetManager.GetTexture("pixel"), t.pos);     
       towerStatContainer.rec.Width = 300;
       towerStatContainer.rec.Height = 200;
       Tower temp = (Tower)t;
       towerStatContainer.tower = temp;
+
       towerStatContainer.statList.Add(temp.damageLvl);
+      towerStatContainer.statButtonList.Add(new Button(AssetManager.GetTexture("dot"), new Vector2(temp.pos.X + 250, temp.pos.Y), "damage"));
+
       towerStatContainer.statList.Add(temp.firerateLvl);
+      towerStatContainer.statButtonList.Add(new Button(AssetManager.GetTexture("dot"), new Vector2(temp.pos.X + 250, temp.pos.Y + 30), "firerate"));
+
       towerStatContainer.statList.Add(temp.turnspeedLvl);
+      towerStatContainer.statButtonList.Add(new Button(AssetManager.GetTexture("dot"), new Vector2(temp.pos.X + 250, temp.pos.Y + 60), "turnspeed"));
+
       towerStatContainer.statList.Add(temp.speedLvl);
+      towerStatContainer.statButtonList.Add(new Button(AssetManager.GetTexture("dot"), new Vector2(temp.pos.X + 250, temp.pos.Y + 90), "speed"));
+
       towerStatContainer.statList.Add(temp.sizeLvl);
+      towerStatContainer.statButtonList.Add(new Button(AssetManager.GetTexture("dot"), new Vector2(temp.pos.X + 250, temp.pos.Y + 120), "size"));
+
       towerStatContainer.statList.Add(temp.healthLvl);
+      towerStatContainer.statButtonList.Add(new Button(AssetManager.GetTexture("dot"), new Vector2(temp.pos.X + 250, temp.pos.Y + 150), "health"));
+
       towerStatContainer.statList.Add(temp.generationLvl);
+      towerStatContainer.statButtonList.Add(new Button(AssetManager.GetTexture("dot"), new Vector2(temp.pos.X + 250, temp.pos.Y + 180), "generation"));
+
       towerStatContainer.mouseOverEffect = false;
       statContainerList.Add(towerStatContainer);
-
-
     }
     public bool MouseIntersect(Rectangle uiObject)
     {
@@ -246,6 +323,7 @@ namespace Lindenmayers_Defense.GUI
         CheckforRemoveComponent();
         CheckforTowerClick();
       }
+      StatButtonClick();
 
 
     }
@@ -266,16 +344,22 @@ namespace Lindenmayers_Defense.GUI
 
     public virtual void Draw(SpriteBatch sb)
     {
+     
       for (int i = 0; i < statContainerList.Count; i++)
       {
         statContainerList[i].Draw(sb);
-
         for (int j = 0; j < statContainerList[i].statList.Count; j++)
         {
           sb.DrawString(AssetManager.GetFont("font1"), statName[j], new Vector2(statContainerList[i].pos.X + statStringOffsetX/*offset*/, statContainerList[i].pos.Y + statStringOffsetY * j), Color.Black);
           sb.DrawString(AssetManager.GetFont("font1"), statContainerList[i].statList[j].ToString(), new Vector2(statContainerList[i].pos.X + statOffsetX/*offset*/, statContainerList[i].pos.Y + statOffsetY * j), Color.Black);
         }
-      }
+        for (int j = 0; j < statContainerList[i].statButtonList.Count; j++)
+        {
+          //sb.Draw(statContainerList[i].statButtonList[j].tex, new Rectangle((int)statContainerList[i].statButtonList[j].pos.X, (int)statContainerList[i].statButtonList[j].pos.Y, 20, 20), Color.Red);
+          sb.Draw(statContainerList[i].statButtonList[j].tex, statContainerList[i].statButtonList[j].GetHitbox(), Color.Red);
+        }
+      }    
+
       for (int i = 0; i < containerList.Count; i++)
       {
         containerList[i].Draw(sb);
@@ -285,6 +369,7 @@ namespace Lindenmayers_Defense.GUI
       {
         componentList[i].Draw(sb);
       }
+     
     }
 
   }
