@@ -62,6 +62,7 @@
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Container.cs" />
     <Compile Include="GUI\UserInterface.cs" />
+    <Compile Include="ValueBar.cs" />
     <Compile Include="IDamageable.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="LComponent.cs" />

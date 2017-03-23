@@ -12,9 +12,11 @@ namespace Lindenmayers_Defense
 {
   class Enemy : GameObject, IDamageable
   {
+    Texture2D pixel;
     World world;
     GameObject target;
     float damage;
+    ValueBar healthBar;
     float health;
     float speed = 100;
 
@@ -27,8 +29,19 @@ namespace Lindenmayers_Defense
       this.health = health;
       this.speed = speed;
       target = world.baseTower;
+      healthBar = new ValueBar(new Rectangle((int)pos.X, (int)pos.Y, 30, 5), health, health, Color.Green * 0.7f, Color.Red * 0.5f);
+      pixel = AssetManager.GetTexture("pixel");
       Layer = CollisionLayer.ENEMY;
       LayerMask = CollisionLayer.TOWER;
+    }
+    public override void Update(GameTime gt)
+    {
+      base.Update(gt);
+      healthBar.SetPos(pos + new Vector2(0, 20));
+      if (target != null && target != this)
+      {
+        Movement(gt);
+      }
     }
     protected virtual void Movement(GameTime gt)
     {
@@ -40,25 +53,22 @@ namespace Lindenmayers_Defense
     public void TakeDamage(float damage)
     {
       health -= damage;
+      healthBar.Value = health;
       if (health <= 0)
         Die();
     }
     public override void DoCollision(GameObject other)
     {
-      if(other == target && target is Base)
+      if (other == target && target is Base)
       {
         ((Base)target).TakeDamage(damage);
         Die();
       }
     }
-    public override void Update(GameTime gt)
+    public override void Draw(SpriteBatch sb)
     {
-      base.Update(gt);
-
-      if (target != null && target != this)
-      {
-        Movement(gt);
-      }
+      base.Draw(sb);
+      healthBar.Draw(sb);
     }
   }
 }
