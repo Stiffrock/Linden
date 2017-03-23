@@ -23,6 +23,7 @@ namespace Lindenmayers_Defense.GUI
     private List<int> statList;
     private List<Container> containerList, statContainerList;
     private List<LComponent> componentList;
+    private List<Rectangle> statRecList;
     private List<string> statName;
     public List<LComponent> result;
     private TowerManager tm;
@@ -31,12 +32,13 @@ namespace Lindenmayers_Defense.GUI
     private World world;
     private Button statButton;
     private List<Button> statButtonList;
-
+    private bool statOnDisplay;
 
     public UserInterface(TowerManager tm, World world)
     {
       containerList = new List<Container>();
       statContainerList = new List<Container>();
+      statRecList = new List<Rectangle>();
       statButtonList = new List<Button>();
       statName = new List<string>();
       statStringOffsetX = 20;
@@ -122,25 +124,29 @@ namespace Lindenmayers_Defense.GUI
       }
     }
 
-    private void CheckforTowerClick()
+    private void HandleStatDisplay()
     {
       List<GameObject> golist = world.GetGameObjects();
       foreach (GameObject t in golist)
       {
-        if (t is Tower && MouseIntersect(t.hitbox))
+        if (t is Tower)
         {
           Tower temp = (Tower)t;
-          if (temp.displayStats)
+        
+          if (statContainerList.Count > 0 && !MouseIntersect(statContainerList[0].rec))
           {
             RemoveStatWindow(t);
             temp.displayStats = false;
+            statOnDisplay = false;
           }
-          else
+        
+          if (MouseIntersect(temp.hitbox) && !statOnDisplay)
           {
             BuildStatWindow(t);
             temp.displayStats = true;
-          }
-        }
+            statOnDisplay = true;
+          }          
+        }       
       }
     }
 
@@ -321,7 +327,7 @@ namespace Lindenmayers_Defense.GUI
       if (Input.LeftMouseButtonClicked())
       {
         CheckforRemoveComponent();
-        CheckforTowerClick();
+        HandleStatDisplay();
       }
       StatButtonClick();
 
