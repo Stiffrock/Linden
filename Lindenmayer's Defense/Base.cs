@@ -35,7 +35,7 @@ namespace Lindenmayers_Defense
     }
     public override void Draw(SpriteBatch sb)
     {
-      sb.Draw(platform, pos, spriteRec, color * alpha, rotation, origin, Scale, SpriteEffects.None, layerDepth);
+      sb.Draw(platform, pos, spriteRec, color * alpha, 0.0f, origin, Scale, SpriteEffects.None, layerDepth);
       base.Draw(sb);
     }
   }

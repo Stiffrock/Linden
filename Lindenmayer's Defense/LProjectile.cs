@@ -62,14 +62,8 @@ namespace Lindenmayers_Defense
           p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle02"), p.pos, 0.35f, 200.0f, 0.5f, p.color);
       })},
       {'h', new PCommand(0.0f, (p, gt)=> {
-        p.rotation = MathHelper.WrapAngle(p.rotation);
         float targetAngle = Utility.Vector2ToAngle(p.Target.pos - p.pos);
-        targetAngle = MathHelper.WrapAngle(targetAngle);
-        float angleDiff = MathHelper.WrapAngle(targetAngle - p.rotation);
-        //if(angleDiff < p.TurnRate)
-        //  p.rotation += angleDiff;
-        //else
-        p.rotation += p.TurnRate * (angleDiff > 0 ? 1 : -1);
+        p.rotation += Utility.TurnAngle(p.rotation, targetAngle, p.TurnRate);
         p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 50.0f, 1.0f, p.color);
       })}
     };

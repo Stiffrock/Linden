@@ -133,7 +133,6 @@ namespace Lindenmayers_Defense
     {
       if (target == null)
         return;
-      rotation = Utility.Vector2ToAngle(target.pos - pos);
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
       LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, L.Str, this.Forward(), 150.0f, 10);
       p.color = color;
@@ -151,9 +150,13 @@ namespace Lindenmayers_Defense
       base.Update(gt);
 
       AcquireTarget();
-
+      if (target != null)
+      {
+        float targetAngle = Utility.Vector2ToAngle(target.pos - pos);
+        rotation += Utility.TurnAngle(rotation, targetAngle, (float)Math.PI, gt);
+      }
       shootTimer += gt.ElapsedGameTime.Milliseconds;
-      if (/*target != null &&*/ shootTimer >= shootCooldown)
+      if (target != null && shootTimer >= shootCooldown)
       {
         ShootProjectile();
         shootTimer = 0;

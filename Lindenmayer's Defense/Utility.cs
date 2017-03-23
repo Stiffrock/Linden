@@ -28,5 +28,26 @@ namespace Lindenmayers_Defense
     {
       return (float)Math.Atan2(v.Y, v.X) + (float)Math.PI / 2f; ;
     }
+    /// <summary>
+    /// Returns a delta rotation up to a specified amount.
+    /// </summary>
+    /// <param name="rotation">Starting rotation</param>
+    /// <param name="targetAngle">Target rotation</param>
+    /// <param name="amount">Maximum amount to rotate by</param>
+    /// <returns>The amount actually rotated and direction of the rotation</returns>
+    public static float TurnAngle(float rotation, float targetAngle, float amount, GameTime gt = null)
+    {
+      if (gt != null)
+        amount *= (float)gt.ElapsedGameTime.TotalSeconds;
+      rotation = MathHelper.WrapAngle(rotation);
+      targetAngle = MathHelper.WrapAngle(targetAngle);
+      float angleDiff = MathHelper.WrapAngle(targetAngle - rotation);
+      float turnAmount;
+      if (Math.Abs(angleDiff) < amount)
+        turnAmount = angleDiff;
+      else
+        turnAmount = amount * (angleDiff > 0 ? 1 : -1);
+      return turnAmount;
+    }
   }
 }
