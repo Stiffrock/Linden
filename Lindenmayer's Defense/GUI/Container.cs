@@ -22,7 +22,7 @@ namespace Lindenmayers_Defense.GUI
     protected bool showComponentInfo;
     protected Color color, defaultColor, highlightColor;
     public bool mouseOverEffect;
-    
+
 
     public Container(Texture2D tex, Vector2 pos)
     {
@@ -30,7 +30,7 @@ namespace Lindenmayers_Defense.GUI
       this.pos = pos;
       this.rec = new Rectangle((int)pos.X, (int)pos.Y, 50, 50);
 
-    
+
       mouseOverEffect = true;
       color = Color.White;
       defaultColor = Color.Blue;
@@ -56,8 +56,8 @@ namespace Lindenmayers_Defense.GUI
 
     public virtual void Draw(SpriteBatch sb)
     {
-      sb.Draw(tex, pos, rec, color);
-    
+      //sb.Draw(tex, rec, Color.Blue * 0.5f);
+      sb.Draw(tex, rec, color);
     }
   }
 }

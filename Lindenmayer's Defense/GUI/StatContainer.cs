@@ -12,6 +12,7 @@ namespace Lindenmayers_Defense.GUI
 {
   class StatContainer : Container
   {
+    private SpriteFont font;
     public Tower tower;
     public List<int> statList;
     private List<string> statName;
@@ -21,6 +22,7 @@ namespace Lindenmayers_Defense.GUI
 
     public StatContainer(Texture2D tex, Vector2 pos, Tower tower) : base(tex, pos)
     {
+      font = AssetManager.GetFont("font1");
       this.tower = tower;
       statList = new List<int>();
       rec.Width = 300;
@@ -155,8 +157,8 @@ namespace Lindenmayers_Defense.GUI
       }
       for (int j = 0; j < statList.Count; j++)
       {
-        sb.DrawString(AssetManager.GetFont("font1"), statName[j], new Vector2(pos.X + statStringOffsetX,  pos.Y + OffsetY * j), Color.Black);
-        sb.DrawString(AssetManager.GetFont("font1"), statList[j].ToString(), new Vector2(pos.X + statOffsetX, pos.Y + OffsetY * j), Color.Black);
+        sb.DrawString(font, statName[j], new Vector2(pos.X + statStringOffsetX,  pos.Y + OffsetY * j + 20), Color.Black);
+        sb.DrawString(font, statList[j].ToString(), new Vector2(pos.X + statOffsetX, pos.Y + OffsetY * j + 20), Color.Black);
       }
   
     }

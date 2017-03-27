@@ -70,11 +70,11 @@ namespace Lindenmayers_Defense
     static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()
     { {'[', ']' }, {'(', ')'} };
 
-    int commandIndex;
+    protected int commandIndex;
 
-    string LStr;
-    PCommand currentCommand;
-    float currentCommandElapsedTime;
+    protected string LStr;
+    protected PCommand currentCommand;
+    protected float currentCommandElapsedTime;
 
     public LProjectile(World world, Tower owner, Texture2D tex, Vector2 pos, string LStr, Vector2 direction, float speed, float damage)
       : base(world, owner, tex, pos, direction, speed, damage)
@@ -85,7 +85,7 @@ namespace Lindenmayers_Defense
       GotoNextCommand();
     }
 
-    private void GotoNextCommand()
+    protected void GotoNextCommand()
     {
       for (int i = commandIndex + 1; i < LStr.Length; i++)
       {
@@ -101,7 +101,7 @@ namespace Lindenmayers_Defense
       currentCommand = commands['F'];
       Die();
     }
-    private string BracketSubstring(int bracketIndex)
+    protected string BracketSubstring(int bracketIndex)
     {
       Stack<char> brackets = new Stack<char>();
       for (int i = bracketIndex; i < LStr.Length; i++)
