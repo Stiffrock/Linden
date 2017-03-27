@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using Lindenmayers_Defense.GUI;
 
 namespace Lindenmayers_Defense
 {
@@ -16,7 +17,7 @@ namespace Lindenmayers_Defense
 
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
-    TowerManager towerManager;
+    UserInterface ui;
     World world;
     public Game1()
     {
@@ -36,7 +37,6 @@ namespace Lindenmayers_Defense
     /// </summary>
     protected override void Initialize()
     {
-      // TODO: Add your initialization logic here
       this.IsMouseVisible = true;
       base.Initialize();
     }
@@ -49,22 +49,11 @@ namespace Lindenmayers_Defense
     {
       // Create a new SpriteBatch, which can be used to draw textures.
       spriteBatch = new SpriteBatch(GraphicsDevice);
-      AssetManager.AddTexture("dot", Content.Load<Texture2D>("dot"));
-      AssetManager.AddTexture("bullet01", Content.Load<Texture2D>("bullet01"));
-      AssetManager.AddTexture("tower01", Content.Load<Texture2D>("tower01"));
-      AssetManager.AddTexture("tower02", Content.Load<Texture2D>("tower02"));
-      AssetManager.AddTexture("towerplatform", Content.Load<Texture2D>("towerplatform"));
-      AssetManager.AddTexture("enemy01", Content.Load<Texture2D>("enemy01"));
-      AssetManager.AddTexture("particle01", Content.Load<Texture2D>("particle01"));
-      AssetManager.AddTexture("particle02", Content.Load<Texture2D>("particle02"));
-      AssetManager.AddTexture("particle03", Content.Load<Texture2D>("particle03"));
-      AssetManager.AddTexture("particle04", Content.Load<Texture2D>("particle04"));
-      AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
-      AssetManager.AddFont("font1", Content.Load<SpriteFont>("Font"));
+      AssetManager.LoadContent(Content);
 
       //world måste vara sist om den ska anväda inladdade texturer
       world = new World();
-      towerManager = new TowerManager(world);
+      ui = new UserInterface(world.TowerManager, world);
     }
 
     /// <summary>
@@ -87,8 +76,15 @@ namespace Lindenmayers_Defense
         Input.Update();
       if (Input.KeyDown(Keys.Escape))
         Exit();
+
       world.Update(gameTime);
-      towerManager.Update(gameTime);
+      ui.Update(gameTime);
+
+      if (ui.GetTowerCreator().ClickedOn())
+      {
+        world.TowerManager.CreateTower(Input.GetMousePos(), ui.GenerateGrammar());
+      }
+
       base.Update(gameTime);
     }
 
@@ -99,9 +95,12 @@ namespace Lindenmayers_Defense
     protected override void Draw(GameTime gameTime)
     {
       GraphicsDevice.Clear(Color.CornflowerBlue);
-      // TODO: Add your drawing code here
       spriteBatch.Begin();
       world.Draw(spriteBatch);
+      ui.Draw(spriteBatch);
+      //show mouse position
+      //Texture2D dot = AssetManager.GetTexture("dot");
+      //spriteBatch.Draw(dot, Input.GetMousePos(), null, Color.Purple, 0.0f, new Vector2((float)dot.Width / 2, (float)dot.Height / 2), 0.025f, SpriteEffects.None, 0.0f);
       spriteBatch.End();
       base.Draw(gameTime);
     }

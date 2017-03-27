@@ -36,7 +36,10 @@ namespace Lindenmayers_Defense.GUI
       defaultColor = Color.Blue;
       highlightColor = Color.White;
     }
-
+    public bool ClickedOn()
+    {
+      return Input.LeftMouseButtonClicked() && rec.Contains(Input.GetMousePoint());
+    }
     public virtual void Update(GameTime gt)
     {
       if (mouseOverEffect)

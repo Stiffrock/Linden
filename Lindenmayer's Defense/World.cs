@@ -10,20 +10,15 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Lindenmayers_Defense
 {
-  /// TO DO!!
-  /// Move grammarcomponents to towermanager
-  /// Towermanager communicates with Userinterface
-  /// 
 
   class World
   {
     public ParticleManager ParticleManager { get; private set; }
-    TowerManager towerManager;
+    public TowerManager TowerManager { get; private set; }
     EnemyManager enemyManager;
     List<GameObject> gameObjects;
     List<Projectile> projectiles;
 
-    GUI.UserInterface UI;
     Dictionary<string, LComponent> grammarComponents;
     public Base baseTower;
     Tower testTower;
@@ -32,34 +27,18 @@ namespace Lindenmayers_Defense
     {
       ParticleManager = new ParticleManager();
       enemyManager = new EnemyManager(this);
-      towerManager = new TowerManager(this);
+      TowerManager = new TowerManager(this);
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
       grammarComponents = new Dictionary<string, LComponent>();
-      UI = new GUI.UserInterface(towerManager, this);
 
       baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
       AddGameObject(baseTower);
       testTower = new Tower(this, AssetManager.GetTexture("tower01"), new Vector2(600, 500));
       AddGameObject(testTower);
     }
-
-    public string GetGrammar()
-    {
-      return UI.GetResult();
-    }
     public void Update(GameTime gt)
     {
-      UI.Update(gt);
-      if (UI.GetTowerCreator().rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
-      {
-        towerManager.CreateTower(Input.GetMousePos());
-      }
-      if (Input.RightMouseButtonClicked())
-      {
-        string res = UI.GetResult();
-      }
-
       for (int i = 0; i < gameObjects.Count; i++)
       {
         GameObject go = gameObjects[i];
@@ -85,7 +64,7 @@ namespace Lindenmayers_Defense
       gameObjects.RemoveAll(go => go.Disposed);
       projectiles.RemoveAll(p => p.Disposed);
 
-      towerManager.Update(gt);
+      TowerManager.Update(gt);
       ParticleManager.Update(gt);
       enemyManager.Update(gt);
     }
@@ -99,8 +78,8 @@ namespace Lindenmayers_Defense
       {
         p.Draw(sb);
       }
+      TowerManager.Draw(sb);
       ParticleManager.Draw(sb);
-      UI.Draw(sb);
     }
     public void AddGameObject(GameObject go)
     {

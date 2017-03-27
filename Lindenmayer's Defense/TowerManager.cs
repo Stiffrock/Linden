@@ -36,7 +36,6 @@ namespace Lindenmayers_Defense
       grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("dot"), "W"));
       grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "SF"));
       grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "f[+FY][-FY]"));
-      //grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY][-FY]"));
       grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("dot"), "RR"));
       grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("dot"), "EF"));
       grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("dot"), "HF"));
@@ -45,26 +44,29 @@ namespace Lindenmayers_Defense
     public void SetTowerType(Tower t)
     {
     }
-    public void CreateTower(Vector2 pos)
+    public void CreateTower(Vector2 pos, string grammar)
     {
       if (!towerOnMouse)
       {
-        string g = world.GetGrammar();
-        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, g, 5);
+        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 5);
         towerOnMouse = true;
-        world.AddGameObject(t);
       }
     }
     public void Update(GameTime gt)
     { 
       if (t != null && towerOnMouse)
-        t.pos = Input.GetMousePos();        
+        t.pos = Input.GetMousePos();
 
       if (towerOnMouse && Input.RightMouseButtonClicked())
+      {
+        world.AddGameObject(t);
         towerOnMouse = false;
+      }
     }
     public void Draw(SpriteBatch sb)
     {
+      if (t != null && towerOnMouse)
+        t.Draw(sb);
     }
   }
 }

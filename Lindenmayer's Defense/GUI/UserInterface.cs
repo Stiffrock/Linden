@@ -10,9 +10,6 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Lindenmayers_Defense.GUI
 {
-  /// TO DO
-  /// Switch to arrays instead of lists
-  /// 
   class UserInterface
   {
     private ComponentContainer[,] inventoryArray;
@@ -46,7 +43,6 @@ namespace Lindenmayers_Defense.GUI
       InitTowerBox();
       InitComponent();
     }
-
 
     public Container GetTowerCreator()
     {
@@ -135,10 +131,8 @@ namespace Lindenmayers_Defense.GUI
 
     private void StatButtonClick()
     {
-
       if (displayedStatContainer != null)
         displayedStatContainer.StatButtonClick();     
-      
     }
 
     private void BuildStatWindow(GameObject t)
@@ -150,11 +144,7 @@ namespace Lindenmayers_Defense.GUI
 
     public bool MouseIntersect(Rectangle uiObject)
     {
-      if (uiObject.Contains(Input.GetMousePoint()))
-      {
-        return true;
-      }
-      return false;
+      return uiObject.Contains(Input.GetMousePoint());
     }
 
     private void HandleComponent(int i)
@@ -218,7 +208,7 @@ namespace Lindenmayers_Defense.GUI
       }
     }
 
-    public string GetResult()
+    public string GenerateGrammar()
     {
       string result = "";
       for (int i = 0; i < componentList.Count; i++)
