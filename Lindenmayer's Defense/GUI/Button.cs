@@ -21,7 +21,7 @@ namespace Lindenmayers_Defense.GUI
     public Button(Texture2D tex, Vector2 pos, string statID) : base(tex, pos)
     {
       this.statID = statID;
-      scale = 0.05f;
+      scale = 0.5f;
       color = Color.Red;
       hitbox.Width = (int)(tex.Width * scale);
       hitbox.Height = (int)(tex.Height * scale);

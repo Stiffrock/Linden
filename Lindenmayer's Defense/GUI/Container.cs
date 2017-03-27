@@ -13,7 +13,7 @@ namespace Lindenmayers_Defense.GUI
   /// <summary>
   /// Clickable container that should hold a component.
   /// </summary>
-  class Container
+  class Container : GameObject
   {
     protected Texture2D tex;
     public Vector2 pos;
@@ -24,20 +24,19 @@ namespace Lindenmayers_Defense.GUI
     public bool mouseOverEffect;
 
 
-    public Container(Texture2D tex, Vector2 pos)
+    public Container(Texture2D tex, Vector2 pos) : base(tex,pos)
     {
       this.tex = tex;
       this.pos = pos;
       this.rec = new Rectangle((int)pos.X, (int)pos.Y, 50, 50);
-
-
+      origin = Vector2.Zero;
       mouseOverEffect = true;
       color = Color.White;
       defaultColor = Color.Blue;
       highlightColor = Color.White;
     }
 
-    public virtual void Update(GameTime gt)
+    public override void Update(GameTime gt)
     {
       if (mouseOverEffect)
       {
@@ -50,14 +49,16 @@ namespace Lindenmayers_Defense.GUI
         {
           showComponentInfo = false;
           color = defaultColor;
+          
         }
       }
     }
 
-    public virtual void Draw(SpriteBatch sb)
+    public override void Draw(SpriteBatch sb)
     {
+      base.Draw(sb);
       //sb.Draw(tex, rec, Color.Blue * 0.5f);
-      sb.Draw(tex, rec, color);
+      //sb.Draw(tex, rec, color);
     }
   }
 }

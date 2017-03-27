@@ -59,6 +59,10 @@ namespace Lindenmayers_Defense
       AssetManager.AddTexture("particle02", Content.Load<Texture2D>("particle02"));
       AssetManager.AddTexture("particle03", Content.Load<Texture2D>("particle03"));
       AssetManager.AddTexture("particle04", Content.Load<Texture2D>("particle04"));
+      AssetManager.AddTexture("button", Content.Load<Texture2D>("button"));
+      AssetManager.AddTexture("container1", Content.Load<Texture2D>("container1"));
+      AssetManager.AddTexture("container2", Content.Load<Texture2D>("container2"));
+      AssetManager.AddTexture("panel", Content.Load<Texture2D>("panel"));
       AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
       AssetManager.AddFont("font1", Content.Load<SpriteFont>("Font"));
 
@@ -102,7 +106,9 @@ namespace Lindenmayers_Defense
       // TODO: Add your drawing code here
       spriteBatch.Begin();
       world.Draw(spriteBatch);
+
       spriteBatch.End();
+
       base.Draw(gameTime);
     }
   }

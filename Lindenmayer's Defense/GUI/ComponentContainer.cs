@@ -32,7 +32,8 @@ namespace Lindenmayers_Defense.GUI
 
     public override void Draw(SpriteBatch sb)
     {
-      sb.Draw(tex, pos, rec, color);
+      base.Draw(sb);
+      //sb.Draw(tex, pos, rec, color);
       if (showComponentInfo && name != null)
       {
         sb.DrawString(AssetManager.GetFont("font1"), name, new Vector2(100, 580), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
