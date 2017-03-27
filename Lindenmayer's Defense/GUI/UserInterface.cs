@@ -118,8 +118,16 @@ namespace Lindenmayers_Defense.GUI
           }
           if (displayedStatContainer != null && !MouseIntersect(displayedStatContainer.rec))
           {
-            RemoveStatWindow(t);
-            temp.displayStats = false;
+            for (int i = 0; i < displayedStatContainer.statButtonList.Count; i++)
+            {
+              if (!MouseIntersect(displayedStatContainer.statButtonList[i].hitbox))
+              {
+                temp.displayStats = false;
+                displayedStatContainer = null;
+                break;
+              }
+            }
+     
           }
         }    
       }          
@@ -127,17 +135,10 @@ namespace Lindenmayers_Defense.GUI
 
     private void StatButtonClick()
     {
-      if (Input.LeftMouseButtonClicked())
-      {
-        if (displayedStatContainer != null)
-          displayedStatContainer.StatButtonClick();     
-      }
-    }
 
-    private void RemoveStatWindow(GameObject t)
-    {
-      Tower temp = (Tower)t;
-      displayedStatContainer = null;      
+      if (displayedStatContainer != null)
+        displayedStatContainer.StatButtonClick();     
+      
     }
 
     private void BuildStatWindow(GameObject t)

@@ -13,23 +13,20 @@ namespace Lindenmayers_Defense.GUI
   /// <summary>
   /// Clickable button, triggers an action
   /// </summary>
-  class Button
+  class Button : GameObject
   {
-    private Rectangle hitBox;
-    public Texture2D tex;
-    public Vector2 pos;
+    //public Vector2 pos;
     public string statID;
-    public Button(Texture2D tex, Vector2 pos, string statID)
+    public Button(Texture2D tex, Vector2 pos, string statID) : base(tex, pos)
     {
       this.statID = statID;
-      this.tex = tex;
-      this.pos = new Vector2(pos.X, pos.Y);
-      hitBox = new Rectangle((int)pos.X, (int)pos.Y, 20, 20);
+      Scale = 0.05f;
+      color = Color.Red;
 
     }
-    public Rectangle GetHitbox()
+    public override void Draw(SpriteBatch sb)
     {
-      return hitBox;
+      base.Draw(sb);
     }
   }
 }

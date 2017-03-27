@@ -81,7 +81,7 @@ namespace Lindenmayers_Defense
     }
     public void IncreaseLevel_TurnSpeed(int x)
     {
-      turnspeed += x;
+      turnspeedLvl += x;
       turnspeed = turnspeedLvl * turnspeedFactor;
     }
     public void IncreaseLevel_Speed(int x)
@@ -92,7 +92,7 @@ namespace Lindenmayers_Defense
     }
     public void IncreaseLevel_Size(int x)
     {
-      size += x;
+      sizeLvl += x;
       size = sizeLvl * sizeFactor;
     }
     public void IncreaseLevel_Health(int x)
@@ -103,7 +103,7 @@ namespace Lindenmayers_Defense
 
     public void IncreaseLevel_Generations(int x)
     {
-      generations += x;
+      generationLvl = generations += x;
     }
 
 
