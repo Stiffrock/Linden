@@ -102,6 +102,7 @@ namespace Lindenmayers_Defense
       //Texture2D dot = AssetManager.GetTexture("dot");
       //spriteBatch.Draw(dot, Input.GetMousePos(), null, Color.Purple, 0.0f, new Vector2((float)dot.Width / 2, (float)dot.Height / 2), 0.025f, SpriteEffects.None, 0.0f);
       spriteBatch.End();
+
       base.Draw(gameTime);
     }
   }

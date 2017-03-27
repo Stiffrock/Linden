@@ -71,7 +71,7 @@ namespace Lindenmayers_Defense.GUI
 
     private void InitTowerBox()
     {
-      towerBox = new ComponentContainer(AssetManager.GetTexture("pixel"), new Vector2(950, 655));
+      towerBox = new ComponentContainer(AssetManager.GetTexture("container1"), new Vector2(950, 655));
       towerBox.rec.Size = new Point(100, 100);
       compContainerList.Add(towerBox);
     }
@@ -82,7 +82,7 @@ namespace Lindenmayers_Defense.GUI
       {
         for (int j = 0; j < inventoryArray.GetLength(1); j++)
         {
-          inventoryArray[i, j] = new ComponentContainer(AssetManager.GetTexture("pixel"), new Vector2(100 + 55 * j, 600 + 55 * i));
+          inventoryArray[i, j] = new ComponentContainer(AssetManager.GetTexture("container1"), new Vector2(100 + 55 * j, 600 + 55 * i));
           compContainerList.Add(inventoryArray[i, j]);
         }
       }
@@ -92,7 +92,7 @@ namespace Lindenmayers_Defense.GUI
     {
       for (int i = 0; i < componentArray.GetLength(0); i++)
       {
-        componentArray[i] = new ComponentContainer(AssetManager.GetTexture("pixel"), new Vector2(550 + 55 * i, 705));
+        componentArray[i] = new ComponentContainer(AssetManager.GetTexture("container1"), new Vector2(550 + 55 * i, 705));
         componentArray[i].ComponentArray = true;
         compContainerList.Add(componentArray[i]);
       }
@@ -138,7 +138,7 @@ namespace Lindenmayers_Defense.GUI
     private void BuildStatWindow(GameObject t)
     {
       Tower temp = (Tower)t;    
-      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("pixel"), t.pos, temp);  
+      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp);  
       displayedStatContainer = towerStatContainer;
     }
 
@@ -225,8 +225,7 @@ namespace Lindenmayers_Defense.GUI
 
     public virtual void Draw(SpriteBatch sb)
     {
-      if (displayedStatContainer!= null)      
-        displayedStatContainer.Draw(sb);   
+ 
 
       for (int i = 0; i < compContainerList.Count; i++)
         compContainerList[i].Draw(sb);
@@ -236,6 +235,9 @@ namespace Lindenmayers_Defense.GUI
 
       for (int i = 0; i < towerContainerList.Count; i++)
         towerContainerList[i].Draw(sb);
+
+      if (displayedStatContainer != null)
+        displayedStatContainer.Draw(sb);
     }
 
   }
