@@ -10,9 +10,6 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Lindenmayers_Defense.GUI
 {
-  /// TO DO
-  /// Switch to arrays instead of lists
-  /// 
   #region Class definition
   class UserInterface
   {
@@ -37,7 +34,7 @@ namespace Lindenmayers_Defense.GUI
       statContainerList = new List<StatContainer>();
       inventoryArray = new ComponentContainer[3, 6];
       componentArray = new ComponentContainer[5];
-      compOffset = new Vector2(14, 10);
+      compOffset = new Vector2(12, 8);
       displayedStatContainer = null;
       TowerBoxRecSize = new Point(100, 100);
       this.tm = tm;
@@ -57,21 +54,25 @@ namespace Lindenmayers_Defense.GUI
     {
       return towerBox;
     }
+    public bool MouseIntersect(Rectangle uiObject)
+    {
+      return uiObject.Contains(Input.GetMousePoint());
+    }
 
-    //public string GetResult()
-    //{
-    //  string result = "";
-    //  for (int i = 0; i < componentList.Count; i++)
-    //  {
-    //    if (componentList[i].chosen)
-    //    {
-    //      result += componentList[i].grammar;
-    //    }
-    //  }
-    //  if (!result.Contains('Y'))
-    //    result += "X";
-    //  return result;
-    //}
+    public string GenerateGrammar()
+    {
+      string result = "";
+      for (int i = 0; i < componentList.Count; i++)
+      {
+        if (componentList[i].chosen)
+        {
+          result += componentList[i].grammar;
+        }
+      }
+      if (!result.Contains('Y'))
+        result += "X";
+      return result;
+    }
 
     public Texture2D[] GetTextures()
     {
@@ -97,8 +98,7 @@ namespace Lindenmayers_Defense.GUI
       {
         inventoryArray[j, i].component = entry.Value;
         inventoryArray[j, i].name = entry.Key;
-        inventoryArray[j, i].component.pos.X = inventoryArray[j, i].pos.X + 14;
-        inventoryArray[j, i].component.pos.Y = inventoryArray[j, i].pos.Y + 10;
+        inventoryArray[j, i].component.pos = inventoryArray[j, i].pos + compOffset;
         componentList.Add(inventoryArray[j, i].component);
 
         ++i;
@@ -173,8 +173,7 @@ namespace Lindenmayers_Defense.GUI
               }
             }     
           }
-        }
-         
+        }       
       }          
     }
 
@@ -183,24 +182,8 @@ namespace Lindenmayers_Defense.GUI
       if (displayedStatContainer != null)
         displayedStatContainer.StatButtonClick();        
     }
-//    private void HandleAddComponent(int i)
-//=======
-//        displayedStatContainer.StatButtonClick();     
-//    }
 
-    //private void BuildStatWindow(GameObject t)
-    //{
-    //  Tower temp = (Tower)t;    
-    //  StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp);  
-    //  displayedStatContainer = towerStatContainer;
-    //}
-
-    public bool MouseIntersect(Rectangle uiObject)
-    {
-      return uiObject.Contains(Input.GetMousePoint());
-    }
-
-    private void HandleComponent(int i)
+    private void HandleAddComponent(int i)
     {
       if (compContainerList[i].name == null)
         return;
@@ -254,7 +237,7 @@ namespace Lindenmayers_Defense.GUI
       {
         compContainerList[i].Update(gt);
         if (Input.LeftMouseButtonClicked())
-          HandleComponent(i);
+          HandleAddComponent(i);
       }
       if (Input.LeftMouseButtonClicked())
       {
@@ -262,21 +245,6 @@ namespace Lindenmayers_Defense.GUI
         HandleStatDisplay();
         StatButtonClick();
       }
-    }
-
-    public string GenerateGrammar()
-    {
-      string result = "";
-      for (int i = 0; i < componentList.Count; i++)
-      {
-        if (componentList[i].chosen)
-        {
-          result += componentList[i].grammar;
-        }
-      }
-      if(!result.Contains('Y'))
-        result += "X";
-      return result;
     }
 
     public virtual void Draw(SpriteBatch sb)

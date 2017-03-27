@@ -29,7 +29,7 @@ namespace Lindenmayers_Defense
       AddTexture("particle03", Content.Load<Texture2D>("particle03"));
       AddTexture("particle04", Content.Load<Texture2D>("particle04"));
       AddTexture("pixel", Content.Load<Texture2D>("pixel"));
-      AddTexture("button", Content.Load<Texture2D>("button"));
+      AddTexture("button", Content.Load<Texture2D>("arrow"));
       AddTexture("container1", Content.Load<Texture2D>("container1"));
       AddTexture("container2", Content.Load<Texture2D>("container2"));
       AddTexture("panel", Content.Load<Texture2D>("panel"));
