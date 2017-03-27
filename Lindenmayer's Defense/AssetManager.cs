@@ -16,6 +16,37 @@ namespace Lindenmayers_Defense
     public static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
     public static Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
 
+    public static void LoadContent(ContentManager Content)
+    {
+      AddTexture("dot", Content.Load<Texture2D>("dot"));
+      AddTexture("bullet01", Content.Load<Texture2D>("bullet01"));
+      AddTexture("tower01", Content.Load<Texture2D>("tower01"));
+      AddTexture("tower02", Content.Load<Texture2D>("tower02"));
+      AddTexture("towerplatform", Content.Load<Texture2D>("towerplatform"));
+      AddTexture("enemy01", Content.Load<Texture2D>("enemy01"));
+      AddTexture("particle01", Content.Load<Texture2D>("particle01"));
+      AddTexture("particle02", Content.Load<Texture2D>("particle02"));
+      AddTexture("particle03", Content.Load<Texture2D>("particle03"));
+      AddTexture("particle04", Content.Load<Texture2D>("particle04"));
+      AddTexture("pixel", Content.Load<Texture2D>("pixel"));
+      AddTexture("button", Content.Load<Texture2D>("button"));
+      AddTexture("container1", Content.Load<Texture2D>("container1"));
+      AddTexture("container2", Content.Load<Texture2D>("container2"));
+      AddTexture("panel", Content.Load<Texture2D>("panel"));
+      AddTexture("rune1", Content.Load<Texture2D>("rune1"));
+      AddTexture("rune2", Content.Load<Texture2D>("rune2"));
+      AddTexture("rune3", Content.Load<Texture2D>("rune3"));
+      AddTexture("rune4", Content.Load<Texture2D>("rune4"));
+      AddTexture("rune5", Content.Load<Texture2D>("rune5"));
+      AddTexture("rune6", Content.Load<Texture2D>("rune6"));
+      AddTexture("rune7", Content.Load<Texture2D>("rune7"));
+      AddTexture("rune8", Content.Load<Texture2D>("rune8"));
+      AddTexture("rune9", Content.Load<Texture2D>("rune9"));
+      AddTexture("rune10", Content.Load<Texture2D>("rune10"));
+
+      AddFont("font1", Content.Load<SpriteFont>("Font"));
+    }
+
     public static void AddTexture(string name, Texture2D tex)
     {
       Textures.Add(name, tex);

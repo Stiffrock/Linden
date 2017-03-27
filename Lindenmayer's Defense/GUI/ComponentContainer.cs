@@ -21,7 +21,6 @@ namespace Lindenmayers_Defense.GUI
     {
       name = null;
       mouseOverEffect = true;
-      defaultColor = Color.Blue * 0.5f;
       effectColor = Color.Blue;
     }
     public void SetComponent(LComponent component)

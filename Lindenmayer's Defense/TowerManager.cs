@@ -45,27 +45,32 @@ namespace Lindenmayers_Defense
     public void SetTowerType(Tower t)
     {
     }
-    public void CreateTower(Vector2 pos)
+    public void CreateTower(Vector2 pos, string grammar, Texture2D[] textures)
     {
       if (!towerOnMouse)
       {
-        string g = world.GetGrammar();
-        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, g, 5);
-        t.componentTextures = world.GetComponentTextures();
+        //string g = world.GetGrammar();
+        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 5);
+        t.componentTextures = textures;
+        //t.componentTextures = world.GetComponentTextures();
         towerOnMouse = true;
-        world.AddGameObject(t);
       }
     }
     public void Update(GameTime gt)
     { 
       if (t != null && towerOnMouse)
-        t.pos = Input.GetMousePos();        
+        t.pos = Input.GetMousePos();
 
       if (towerOnMouse && Input.RightMouseButtonClicked())
+      {
+        world.AddGameObject(t);
         towerOnMouse = false;
+      }
     }
     public void Draw(SpriteBatch sb)
     {
+      if (t != null && towerOnMouse)
+        t.Draw(sb);
     }
   }
 }

@@ -18,6 +18,10 @@ namespace Lindenmayers_Defense.GUI
     public Rectangle rec;
     protected bool showComponentInfo, effect, clickEffect, mouseOverEffect;
     protected Color defaultColor, effectColor, currentColor;
+    //protected Texture2D tex;
+    //public Vector2 pos;
+    //public Rectangle rec;
+    //protected Color color;
 
 
     public Container(Texture2D tex, Vector2 pos) : base(tex,pos)
@@ -26,6 +30,10 @@ namespace Lindenmayers_Defense.GUI
       this.pos = pos;
       this.rec = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
       origin = Vector2.Zero;
+    }
+    public bool ClickedOn()
+    {
+      return Input.LeftMouseButtonClicked() && rec.Contains(Input.GetMousePoint());
     }
 
     public override void Update(GameTime gt)
@@ -41,6 +49,7 @@ namespace Lindenmayers_Defense.GUI
         {
           showComponentInfo = false;
           effect = false;
+          color = defaultColor;
         }
       }
     }

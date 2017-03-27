@@ -58,29 +58,20 @@ namespace Lindenmayers_Defense.GUI
       return towerBox;
     }
 
-    public bool MouseIntersect(Rectangle uiObject)
-    {
-      if (uiObject.Contains(Input.GetMousePoint()))
-      {
-        return true;
-      }
-      return false;
-    }
-
-    public string GetResult()
-    {
-      string result = "";
-      for (int i = 0; i < componentList.Count; i++)
-      {
-        if (componentList[i].chosen)
-        {
-          result += componentList[i].grammar;
-        }
-      }
-      if (!result.Contains('Y'))
-        result += "X";
-      return result;
-    }
+    //public string GetResult()
+    //{
+    //  string result = "";
+    //  for (int i = 0; i < componentList.Count; i++)
+    //  {
+    //    if (componentList[i].chosen)
+    //    {
+    //      result += componentList[i].grammar;
+    //    }
+    //  }
+    //  if (!result.Contains('Y'))
+    //    result += "X";
+    //  return result;
+    //}
 
     public Texture2D[] GetTextures()
     {
@@ -192,7 +183,24 @@ namespace Lindenmayers_Defense.GUI
       if (displayedStatContainer != null)
         displayedStatContainer.StatButtonClick();        
     }
-    private void HandleAddComponent(int i)
+//    private void HandleAddComponent(int i)
+//=======
+//        displayedStatContainer.StatButtonClick();     
+//    }
+
+    //private void BuildStatWindow(GameObject t)
+    //{
+    //  Tower temp = (Tower)t;    
+    //  StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp);  
+    //  displayedStatContainer = towerStatContainer;
+    //}
+
+    public bool MouseIntersect(Rectangle uiObject)
+    {
+      return uiObject.Contains(Input.GetMousePoint());
+    }
+
+    private void HandleComponent(int i)
     {
       if (compContainerList[i].name == null)
         return;
@@ -246,7 +254,7 @@ namespace Lindenmayers_Defense.GUI
       {
         compContainerList[i].Update(gt);
         if (Input.LeftMouseButtonClicked())
-          HandleAddComponent(i);
+          HandleComponent(i);
       }
       if (Input.LeftMouseButtonClicked())
       {
@@ -255,6 +263,22 @@ namespace Lindenmayers_Defense.GUI
         StatButtonClick();
       }
     }
+
+    public string GenerateGrammar()
+    {
+      string result = "";
+      for (int i = 0; i < componentList.Count; i++)
+      {
+        if (componentList[i].chosen)
+        {
+          result += componentList[i].grammar;
+        }
+      }
+      if(!result.Contains('Y'))
+        result += "X";
+      return result;
+    }
+
     public virtual void Draw(SpriteBatch sb)
     {
       towerBox.Draw(sb);
