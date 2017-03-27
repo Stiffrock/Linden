@@ -7,26 +7,29 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Lindenmayers_Defense
 {
-  class LComponent
+  class LComponent : GameObject
   {
     public string grammar;
-    public string info;
-    public Texture2D tex;
-    public Vector2 pos;
     public Rectangle rec;
     public bool chosen;
 
-    public LComponent(Texture2D tex, string grammar)
+    public LComponent(Texture2D tex, Vector2 pos, string grammar) : base(tex, pos)
     {
       this.tex = tex;
       this.grammar = grammar;
+      origin = Vector2.Zero;
+      rec = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
+      //spriteRec = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
+      scale = 0.5f;
+
     }
-    public void Draw(SpriteBatch sb)
+    public override void Draw(SpriteBatch sb)
     {
-      sb.Draw(tex, pos, rec, Color.Red);
+      base.Draw(sb);
     }
-    public void Update(GameTime gt)
+    public override void Update(GameTime gt)
     {
+      base.Update(gt);
     }
   }
 }

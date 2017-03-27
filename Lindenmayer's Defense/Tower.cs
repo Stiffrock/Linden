@@ -20,7 +20,7 @@ namespace Lindenmayers_Defense
     protected float shootCooldown;
     protected double shootTimer;
     protected World world;
-
+    public Texture2D[] componentTextures;
     private float damage, firerate, turnspeed, speed, size, health;
     public int damageLvl, firerateLvl, turnspeedLvl, speedLvl, sizeLvl, healthLvl, generationLvl;
     private float damageFactor, firerateFactor, turnspeedFactor, speedFactor, sizeFactor, healthFactor;
@@ -38,11 +38,12 @@ namespace Lindenmayers_Defense
       aggroRadius = 5000.0f;
       shootCooldown = 1000.0f;
       shootTimer = shootCooldown;
+      componentTextures = new Texture2D[4];
       target = null;
       Layer = CollisionLayer.TOWER;
       LayerMask = CollisionLayer.NONE;
       color = new Color(Game1.rnd.Next(255), Game1.rnd.Next(255), Game1.rnd.Next(255));
-      damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = this.generations = 1;
+      damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = generationLvl = 1;
       InitStats();
     }
     //private float damage, firerate, turnspeed, speed, size, health, generations;

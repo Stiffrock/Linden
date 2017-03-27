@@ -32,15 +32,15 @@ namespace Lindenmayers_Defense
     }
     private void InitGrammarComponents()
     {
-      grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("dot"), "LL"));
-      grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("dot"), "W"));
-      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("dot"), "SF"));
-      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "f[+FY][-FY]"));
+      grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("rune1"), Vector2.Zero, "LL"));
+      grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("rune2"), Vector2.Zero, "W"));
+      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("rune3"), Vector2.Zero, "SF"));
+      grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("rune4"), Vector2.Zero,"f[+FY][-FY]"));
       //grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY][-FY]"));
-      grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("dot"), "RR"));
-      grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("dot"), "EF"));
-      grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("dot"), "HF"));
-      grammarComponents.Add("slow", new LComponent(AssetManager.GetTexture("dot"), "ZF"));
+      grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("rune5"), Vector2.Zero, "RR"));
+      grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("rune6"), Vector2.Zero, "EF"));
+      grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("rune7"), Vector2.Zero,"HF"));
+      grammarComponents.Add("slow", new LComponent(AssetManager.GetTexture("rune8"), Vector2.Zero, "ZF"));
     }
     public void SetTowerType(Tower t)
     {
@@ -51,6 +51,7 @@ namespace Lindenmayers_Defense
       {
         string g = world.GetGrammar();
         t = new Tower(world, AssetManager.GetTexture("tower01"), pos, g, 5);
+        t.componentTextures = world.GetComponentTextures();
         towerOnMouse = true;
         world.AddGameObject(t);
       }

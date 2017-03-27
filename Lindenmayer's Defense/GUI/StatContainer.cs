@@ -19,18 +19,18 @@ namespace Lindenmayers_Defense.GUI
     private int statStringOffsetX, statStringOffsetY, statOffsetX, OffsetY;
     private int[] stats;
     public List<Button> statButtonList;
+    public Texture2D[] componentTextures;
 
     public StatContainer(Texture2D tex, Vector2 pos, Tower tower) : base(tex, pos)
     {
       font = AssetManager.GetFont("font1");
       this.tower = tower;
       statList = new List<int>();
+      componentTextures = new Texture2D[4];
       rec.Width = 300;
       rec.Height = 230;
       scale = 3.0f;
       this.rec = new Rectangle((int)pos.X, (int)pos.Y, (tex.Width * (int)scale), (tex.Height * (int)scale));
-
-      //spriteRec = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
       mouseOverEffect = false;
       statName = new List<string>();
       statStringOffsetX = 20;
@@ -86,63 +86,61 @@ namespace Lindenmayers_Defense.GUI
     }
 
     public void StatButtonClick()
-    {
-      //if (Input.LeftMouseButtonClicked())
-      {    
-        foreach (Button b in statButtonList)
+    {   
+      foreach (Button b in statButtonList)
+      {
+        if (MouseIntersect(b.hitbox))
         {
-          if (MouseIntersect(b.hitbox))
+          switch (b.statID)
           {
-            switch (b.statID)
-            {
-              case "damage":
-                {
-                  tower.IncreaseLevel_Damage(1);
-                  statList[0] = tower.damageLvl;
-                  break;
-                }
-              case "firerate":
-                {
-                  tower.IncreaseLevel_Firerate(1);
-                  statList[1] = tower.firerateLvl;
-                  break;
-                }
-              case "turnspeed":
-                {
-                  tower.IncreaseLevel_TurnSpeed(1);
-                  statList[2] = tower.turnspeedLvl;
-                  break;
-                }
-              case "speed":
-                {
-                  tower.IncreaseLevel_Speed(1);
-                  statList[3] = tower.speedLvl;
-                  break;
-                }
-              case "size":
-                {
-                  tower.IncreaseLevel_Size(1);
-                  statList[4] = tower.sizeLvl;
-                  break;
-                }
-              case "health":
-                {
-                  tower.IncreaseLevel_Health(1);
-                  statList[5] = tower.healthLvl;
-                  break;
-                }
-              case "generation":
-                {
-                  tower.IncreaseLevel_Generations(1);
-                  statList[6] = tower.generationLvl;
-                  break;
-                }
-              default:
+            case "damage":
+              {
+                tower.IncreaseLevel_Damage(1);
+                statList[0] = tower.damageLvl;
                 break;
-            }
+              }
+            case "firerate":
+              {
+                tower.IncreaseLevel_Firerate(1);
+                statList[1] = tower.firerateLvl;
+                break;
+              }
+            case "turnspeed":
+              {
+                tower.IncreaseLevel_TurnSpeed(1);
+                statList[2] = tower.turnspeedLvl;
+                break;
+              }
+            case "speed":
+              {
+                tower.IncreaseLevel_Speed(1);
+                statList[3] = tower.speedLvl;
+                break;
+              }
+            case "size":
+              {
+                tower.IncreaseLevel_Size(1);
+                statList[4] = tower.sizeLvl;
+                break;
+              }
+            case "health":
+              {
+                tower.IncreaseLevel_Health(1);
+                statList[5] = tower.healthLvl;
+                break;
+              }
+            case "generation":
+              {
+                tower.IncreaseLevel_Generations(1);
+                statList[6] = tower.generationLvl;
+                break;
+              }
+            default:
+              break;
           }
-        }        
-      }
+        }
+      }        
+     
     }
 
     public override void Update(GameTime gt)
@@ -150,6 +148,7 @@ namespace Lindenmayers_Defense.GUI
       base.Update(gt);
       StatButtonClick();
     }
+
     public override void Draw(SpriteBatch sb)
     {
       base.Draw(sb);
@@ -161,11 +160,19 @@ namespace Lindenmayers_Defense.GUI
         sb.DrawString(font, statList[j].ToString(), new Vector2(pos.X + statOffsetX, pos.Y + OffsetY * j + 20), Color.Black);
       }
       for (int j = 0; j < statButtonList.Count; j++)
-      {
-        //sb.Draw(statButtonList[j].tex, statButtonList[j].pos, statButtonList[j].spriteRec, Color.Red);
         statButtonList[j].Draw(sb);
-      }
 
+      if (componentTextures[0] != null)
+      {
+        for (int j = 0; j < componentTextures.GetLength(0); j++)
+        {
+          if (componentTextures[j] != null)
+          {
+            sb.Draw(componentTextures[j], new Vector2((pos.X+30) + (55 * j), pos.Y + 250), spriteRec, Color.White, rotation, origin, 0.5f, SpriteEffects.None, layerDepth);
+
+          }
+        }
+      }
     }
     
   }

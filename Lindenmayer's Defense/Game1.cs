@@ -59,11 +59,21 @@ namespace Lindenmayers_Defense
       AssetManager.AddTexture("particle02", Content.Load<Texture2D>("particle02"));
       AssetManager.AddTexture("particle03", Content.Load<Texture2D>("particle03"));
       AssetManager.AddTexture("particle04", Content.Load<Texture2D>("particle04"));
-      AssetManager.AddTexture("button", Content.Load<Texture2D>("button"));
+      AssetManager.AddTexture("button", Content.Load<Texture2D>("arrow"));
       AssetManager.AddTexture("container1", Content.Load<Texture2D>("container1"));
       AssetManager.AddTexture("container2", Content.Load<Texture2D>("container2"));
       AssetManager.AddTexture("panel", Content.Load<Texture2D>("panel"));
       AssetManager.AddTexture("pixel", Content.Load<Texture2D>("pixel"));
+      AssetManager.AddTexture("rune1", Content.Load<Texture2D>("rune1"));
+      AssetManager.AddTexture("rune2", Content.Load<Texture2D>("rune2"));
+      AssetManager.AddTexture("rune3", Content.Load<Texture2D>("rune3"));
+      AssetManager.AddTexture("rune4", Content.Load<Texture2D>("rune4"));
+      AssetManager.AddTexture("rune5", Content.Load<Texture2D>("rune5"));
+      AssetManager.AddTexture("rune6", Content.Load<Texture2D>("rune6"));
+      AssetManager.AddTexture("rune7", Content.Load<Texture2D>("rune7"));
+      AssetManager.AddTexture("rune8", Content.Load<Texture2D>("rune8"));
+      AssetManager.AddTexture("rune9", Content.Load<Texture2D>("rune9"));
+      AssetManager.AddTexture("rune10", Content.Load<Texture2D>("rune10"));
       AssetManager.AddFont("font1", Content.Load<SpriteFont>("Font"));
 
       //world måste vara sist om den ska anväda inladdade texturer

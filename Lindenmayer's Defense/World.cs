@@ -48,6 +48,10 @@ namespace Lindenmayers_Defense
     {
       return UI.GetResult();
     }
+    public Texture2D[] GetComponentTextures()
+    {
+      return UI.GetTextures();
+    }
     public void Update(GameTime gt)
     {
       UI.Update(gt);
@@ -55,10 +59,10 @@ namespace Lindenmayers_Defense
       {
         towerManager.CreateTower(Input.GetMousePos());
       }
-      if (Input.RightMouseButtonClicked())
-      {
-        string res = UI.GetResult();
-      }
+      //if (Input.RightMouseButtonClicked())
+      //{
+      //  string res = UI.GetResult();
+      //}
 
       for (int i = 0; i < gameObjects.Count; i++)
       {

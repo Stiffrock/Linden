@@ -15,25 +15,17 @@ namespace Lindenmayers_Defense.GUI
   /// </summary>
   class Container : GameObject
   {
-    protected Texture2D tex;
-    public Vector2 pos;
     public Rectangle rec;
-
-    protected bool showComponentInfo;
-    protected Color color, defaultColor, highlightColor;
-    public bool mouseOverEffect;
+    protected bool showComponentInfo, effect, clickEffect, mouseOverEffect;
+    protected Color defaultColor, effectColor, currentColor;
 
 
     public Container(Texture2D tex, Vector2 pos) : base(tex,pos)
     {
       this.tex = tex;
       this.pos = pos;
-      this.rec = new Rectangle((int)pos.X, (int)pos.Y, 50, 50);
+      this.rec = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
       origin = Vector2.Zero;
-      mouseOverEffect = true;
-      color = Color.White;
-      defaultColor = Color.Blue;
-      highlightColor = Color.White;
     }
 
     public override void Update(GameTime gt)
@@ -42,23 +34,20 @@ namespace Lindenmayers_Defense.GUI
       {
         if (rec.Contains(Input.GetMousePoint()))
         {
-          color = highlightColor;
           showComponentInfo = true;
+          effect = true;
         }
         else
         {
           showComponentInfo = false;
-          color = defaultColor;
-          
+          effect = false;
         }
       }
     }
 
     public override void Draw(SpriteBatch sb)
     {
-      base.Draw(sb);
-      //sb.Draw(tex, rec, Color.Blue * 0.5f);
-      //sb.Draw(tex, rec, color);
+      sb.Draw(tex, rec, color);
     }
   }
 }

@@ -22,7 +22,6 @@ namespace Lindenmayers_Defense.GUI
     {
       this.statID = statID;
       scale = 0.5f;
-      color = Color.Red;
       hitbox.Width = (int)(tex.Width * scale);
       hitbox.Height = (int)(tex.Height * scale);
       hitbox.X = (int)(pos.X - (0.5f * hitbox.Width));
@@ -30,8 +29,8 @@ namespace Lindenmayers_Defense.GUI
     }
     public override void Draw(SpriteBatch sb)
     {
-      sb.Draw(AssetManager.GetTexture("pixel"), hitbox, Color.Blue * 0.5f);
-      base.Draw(sb);
+      sb.Draw(tex, hitbox, Color.White);
+      //base.Draw(sb);
     }
   }
 }

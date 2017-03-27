@@ -14,6 +14,8 @@ namespace Lindenmayers_Defense.GUI
   {
     public TowerContainer(Texture2D tex, Vector2 pos) : base(tex, pos)
     {
+      mouseOverEffect = true;
+      this.rec = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
 
     }
     public override void Update(GameTime gt)
@@ -22,7 +24,11 @@ namespace Lindenmayers_Defense.GUI
     }
     public override void Draw(SpriteBatch sb)
     {
-      base.Draw(sb);
+      if (effect)
+        sb.Draw(AssetManager.GetTexture("container1"), rec, Color.LightBlue * 0.8f);
+      else
+        sb.Draw(AssetManager.GetTexture("container2"), rec, Color.LightBlue * 0.5f);
+
     }
   }
 }

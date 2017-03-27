@@ -13,29 +13,33 @@ namespace Lindenmayers_Defense.GUI
   /// TO DO
   /// Switch to arrays instead of lists
   /// 
+  #region Class definition
   class UserInterface
   {
     private ComponentContainer[,] inventoryArray;
     private ComponentContainer[] componentArray;
-    private ComponentContainer towerBox;
+    private TowerContainer towerBox;
     private List<ComponentContainer> compContainerList;
     private List<StatContainer> statContainerList;
-    private List<TowerContainer> towerContainerList;
     private List<LComponent> componentList;
+    private Point TowerBoxRecSize;
     public List<LComponent> result;
+    private Vector2 compOffset;
     private TowerManager tm;
     private StatContainer displayedStatContainer;
     private Dictionary<string, LComponent> grammarComponents;
     private World world;
+ 
 
     public UserInterface(TowerManager tm, World world)
     {
       compContainerList = new List<ComponentContainer>();
       statContainerList = new List<StatContainer>();
-      towerContainerList = new List<TowerContainer>();
       inventoryArray = new ComponentContainer[3, 6];
       componentArray = new ComponentContainer[5];
+      compOffset = new Vector2(14, 10);
       displayedStatContainer = null;
+      TowerBoxRecSize = new Point(100, 100);
       this.tm = tm;
       grammarComponents = tm.GetGrammarComponents();
       componentList = new List<LComponent>();
@@ -46,13 +50,55 @@ namespace Lindenmayers_Defense.GUI
       InitTowerBox();
       InitComponent();
     }
+    #endregion
 
-
+    #region Properties
     public Container GetTowerCreator()
     {
       return towerBox;
     }
 
+    public bool MouseIntersect(Rectangle uiObject)
+    {
+      if (uiObject.Contains(Input.GetMousePoint()))
+      {
+        return true;
+      }
+      return false;
+    }
+
+    public string GetResult()
+    {
+      string result = "";
+      for (int i = 0; i < componentList.Count; i++)
+      {
+        if (componentList[i].chosen)
+        {
+          result += componentList[i].grammar;
+        }
+      }
+      if (!result.Contains('Y'))
+        result += "X";
+      return result;
+    }
+
+    public Texture2D[] GetTextures()
+    {
+      Texture2D[] temp = new Texture2D[5];
+      int count = 0;
+      for (int i = 0; i < componentList.Count; i++)
+      {
+        if (componentList[i].chosen)
+        {
+          temp[count] = componentList[i].tex;
+          ++count;
+        }
+      }
+      return temp;
+    }
+    #endregion
+
+    #region Initialize UI
     private void InitComponent()
     {
       int i = 0, j = 0;
@@ -60,8 +106,8 @@ namespace Lindenmayers_Defense.GUI
       {
         inventoryArray[j, i].component = entry.Value;
         inventoryArray[j, i].name = entry.Key;
-        inventoryArray[j, i].component.pos = inventoryArray[j, i].pos;
-        inventoryArray[j, i].component.rec = new Rectangle(100, 100, 20, 20);//inventoryArray[j, i].rec;
+        inventoryArray[j, i].component.pos.X = inventoryArray[j, i].pos.X + 14;
+        inventoryArray[j, i].component.pos.Y = inventoryArray[j, i].pos.Y + 10;
         componentList.Add(inventoryArray[j, i].component);
 
         ++i;
@@ -75,9 +121,8 @@ namespace Lindenmayers_Defense.GUI
 
     private void InitTowerBox()
     {
-      towerBox = new ComponentContainer(AssetManager.GetTexture("container1"), new Vector2(950, 655));
-      towerBox.rec.Size = new Point(100, 100);
-      compContainerList.Add(towerBox);
+      towerBox = new TowerContainer(AssetManager.GetTexture("container2"), new Vector2((Game1.ScreenWidth / 2 + Game1.ScreenWidth / 4) - TowerBoxRecSize.X / 2, (Game1.ScreenHeight - Game1.ScreenHeight / 6) - 10));
+      towerBox.rec.Size = TowerBoxRecSize;
     }
 
     private void InitInventoryArray()
@@ -86,7 +131,7 @@ namespace Lindenmayers_Defense.GUI
       {
         for (int j = 0; j < inventoryArray.GetLength(1); j++)
         {
-          inventoryArray[i, j] = new ComponentContainer(AssetManager.GetTexture("container1"), new Vector2(100 + 55 * j, 600 + 55 * i));
+          inventoryArray[i, j] = new ComponentContainer(AssetManager.GetTexture("container2"), new Vector2((Game1.ScreenWidth / 2 - (Game1.ScreenWidth / 4) - 225/*offset*/)+ 55 * j, (Game1.ScreenHeight - Game1.ScreenHeight / 8) - 55 * i));
           compContainerList.Add(inventoryArray[i, j]);
         }
       }
@@ -96,12 +141,21 @@ namespace Lindenmayers_Defense.GUI
     {
       for (int i = 0; i < componentArray.GetLength(0); i++)
       {
-        componentArray[i] = new ComponentContainer(AssetManager.GetTexture("container1"), new Vector2(550 + 55 * i, 705));
+        componentArray[i] = new ComponentContainer(AssetManager.GetTexture("container2"), new Vector2(Game1.ScreenWidth / 2  - 137.5f /*offset*/ + 55 * i, (Game1.ScreenHeight - Game1.ScreenHeight / 8)));
         componentArray[i].ComponentArray = true;
         compContainerList.Add(componentArray[i]);
       }
     }
+    private void BuildStatWindow(GameObject t)
+    {
+      Tower temp = (Tower)t;
+      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp);
+      towerStatContainer.componentTextures = temp.componentTextures;
+      displayedStatContainer = towerStatContainer;
+    }
+    #endregion
 
+    #region HandleEvents
     private void HandleStatDisplay()
     {
       List<GameObject> golist = world.GetGameObjects();
@@ -126,38 +180,19 @@ namespace Lindenmayers_Defense.GUI
                 displayedStatContainer = null;
                 break;
               }
-            }
-     
+            }     
           }
-        }    
+        }
+         
       }          
     }
 
     private void StatButtonClick()
     {
-
       if (displayedStatContainer != null)
-        displayedStatContainer.StatButtonClick();     
-      
+        displayedStatContainer.StatButtonClick();        
     }
-
-    private void BuildStatWindow(GameObject t)
-    {
-      Tower temp = (Tower)t;    
-      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp);  
-      displayedStatContainer = towerStatContainer;
-    }
-
-    public bool MouseIntersect(Rectangle uiObject)
-    {
-      if (uiObject.Contains(Input.GetMousePoint()))
-      {
-        return true;
-      }
-      return false;
-    }
-
-    private void HandleComponent(int i)
+    private void HandleAddComponent(int i)
     {
       if (compContainerList[i].name == null)
         return;
@@ -171,9 +206,8 @@ namespace Lindenmayers_Defense.GUI
             componentArray[j].component = componentList[i];
             componentArray[j].name = compContainerList[i].name;
 
-            LComponent temp = new LComponent(componentList[i].tex, componentList[i].grammar);
-            temp.pos = componentArray[j].pos;
-            temp.rec = new Rectangle(100, 100, 20, 20);
+            LComponent temp = new LComponent(componentList[i].tex, new Vector2(componentArray[j].pos.X + compOffset.X, componentArray[j].pos.Y + compOffset.Y), componentList[i].grammar);
+            temp.rec = new Rectangle((int)temp.pos.X, (int)temp.pos.Y, 40, 40);
             temp.chosen = true;
             result.Add(temp);
             componentList.Add(temp);
@@ -183,7 +217,7 @@ namespace Lindenmayers_Defense.GUI
       }
     }
 
-    private void CheckforRemoveComponent()
+    private void HandleRemoveComponent()
     {
       for (int i = 0; i < componentArray.GetLength(0); i++)
       {
@@ -191,51 +225,39 @@ namespace Lindenmayers_Defense.GUI
         {
           for (int j = 0; j < componentList.Count; j++)
           {
-            if (componentList[j].pos == componentArray[i].pos)
+            if (componentList[j].pos == componentArray[i].pos + compOffset)
             {
               componentArray[i].component = null;
               componentArray[i].name = null;
               componentList.Remove(componentList[j]);
+              break;
             }
           }
         }
       }
     }
+    #endregion
 
+    #region Update/Draw
     public virtual void Update(GameTime gt)
     {
+      towerBox.Update(gt);
       for (int i = 0; i < compContainerList.Count; i++)
       {
         compContainerList[i].Update(gt);
         if (Input.LeftMouseButtonClicked())
-          HandleComponent(i);
+          HandleAddComponent(i);
       }
       if (Input.LeftMouseButtonClicked())
       {
-        CheckforRemoveComponent();
+        HandleRemoveComponent();
         HandleStatDisplay();
         StatButtonClick();
       }
     }
-
-    public string GetResult()
-    {
-      string result = "";
-      for (int i = 0; i < componentList.Count; i++)
-      {
-        if (componentList[i].chosen)
-        {
-          result += componentList[i].grammar;
-        }
-      }
-      if(!result.Contains('Y'))
-        result += "X";
-      return result;
-    }
-
     public virtual void Draw(SpriteBatch sb)
     {
- 
+      towerBox.Draw(sb);
 
       for (int i = 0; i < compContainerList.Count; i++)
         compContainerList[i].Draw(sb);
@@ -243,12 +265,9 @@ namespace Lindenmayers_Defense.GUI
       for (int i = 0; i < componentList.Count; i++)
         componentList[i].Draw(sb);
 
-      for (int i = 0; i < towerContainerList.Count; i++)
-        towerContainerList[i].Draw(sb);
-
       if (displayedStatContainer != null)
         displayedStatContainer.Draw(sb);
     }
-
+    #endregion
   }
 }
