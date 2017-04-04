@@ -34,7 +34,7 @@ namespace Lindenmayers_Defense
         string lstr = p.BracketSubstring(p.commandIndex);
         LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, lstr, p.Forward(), p.Speed, p.Damage/2);
         p.Damage *= 0.5f;
-        newP.Lifetime = p.Lifetime*Game1.rnd.NextDouble()*0.5f+0.5f;
+        newP.Lifetime = p.Lifetime;// *Game1.rnd.NextDouble()*0.5f+0.5f;
         newP.Target = p.Target;
         newP.TurnRate = p.TurnRate;
         newP.Scale = p.Scale * 0.9f;

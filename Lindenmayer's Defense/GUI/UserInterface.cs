@@ -70,7 +70,7 @@ namespace Lindenmayers_Defense.GUI
         }
       }
       if (!result.Contains('Y'))
-        result += "X";
+        result.Insert(0, "X");
       return result;
     }
 

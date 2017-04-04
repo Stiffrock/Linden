@@ -12,8 +12,8 @@ namespace Lindenmayers_Defense
   public class Game1 : Game
   {
     public static Random rnd = new Random();
-    public static readonly int ScreenWidth = 1920;
-    public static readonly int ScreenHeight = 1080;
+    public static readonly int ScreenWidth = 1800;
+    public static readonly int ScreenHeight = 1000;
 
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
@@ -23,8 +23,8 @@ namespace Lindenmayers_Defense
     {
       graphics = new GraphicsDeviceManager(this);
       graphics.IsFullScreen = false;
-      graphics.PreferredBackBufferWidth = 1920;
-      graphics.PreferredBackBufferHeight = 1080;
+      graphics.PreferredBackBufferWidth = ScreenWidth;
+      graphics.PreferredBackBufferHeight = ScreenHeight;
       graphics.ApplyChanges();
       Content.RootDirectory = "Content";
     }
@@ -100,8 +100,10 @@ namespace Lindenmayers_Defense
       world.Draw(spriteBatch);
       ui.Draw(spriteBatch);
       //show mouse position
-      //Texture2D dot = AssetManager.GetTexture("dot");
-      //spriteBatch.Draw(dot, Input.GetMousePos(), null, Color.Purple, 0.0f, new Vector2((float)dot.Width / 2, (float)dot.Height / 2), 0.025f, SpriteEffects.None, 0.0f);
+      Texture2D dot = AssetManager.GetTexture("dot");
+      string mouseXY = Input.GetMousePos().ToString();
+      spriteBatch.DrawString(AssetManager.GetFont("font1"), mouseXY, Vector2.Zero, Color.White);
+      spriteBatch.Draw(dot, Input.GetMousePos(), null, Color.Purple, 0.0f, new Vector2((float)dot.Width / 2, (float)dot.Height / 2), 0.025f, SpriteEffects.None, 0.0f);
       spriteBatch.End();
 
       base.Draw(gameTime);
