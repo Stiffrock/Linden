@@ -17,7 +17,7 @@ namespace Lindenmayers_Defense
     {
       origin = new Vector2(tex.Width / 2, tex.Height / 2);
       platform = AssetManager.GetTexture("towerplatform");
-      shootCooldown = 200.0f;
+      shootCooldown = 2000000.0f;
       L = new LSystem("(--fff++ssssssssFhFhFhFhFhFhFhFhFhF)(++fff--ssssssssFhFhFhFhFhFhFhFhFhF)", "", 0.0f);
       L.Evolve(5);
       Scale = 2.0f;

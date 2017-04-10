@@ -18,7 +18,7 @@ namespace Lindenmayers_Defense
     float damage;
     ValueBar healthBar;
     float health;
-    float speed = 100;
+    public float speed = 100;
 
     public Enemy(World world, Texture2D tex, Vector2 pos, float damage, float health, float speed) : base(tex, pos)
     {

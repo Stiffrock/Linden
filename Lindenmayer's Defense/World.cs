@@ -55,6 +55,8 @@ namespace Lindenmayers_Defense
 
     public void Update(GameTime gt)
     {
+      if (Input.KeyPressed(Keys.Space))
+        enemyManager.IsActive = !enemyManager.IsActive;
       for (int i = 0; i < gameObjects.Count; i++)
       {
         GameObject go = gameObjects[i];

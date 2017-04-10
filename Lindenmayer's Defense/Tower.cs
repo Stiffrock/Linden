@@ -31,12 +31,12 @@ namespace Lindenmayers_Defense
     {
       this.pos = pos;
       this.world = world;
-      L = new LSystem("(X)", grammar);
+      L = new LSystem("X", grammar);
       L.Evolve(generations);
       muzzlePos = new Vector2(0, -35);
       origin += new Vector2(0, 15);
       aggroRadius = 5000.0f;
-      shootCooldown = 1000.0f;
+      shootCooldown = 100.0f;
       shootTimer = shootCooldown;
       componentTextures = new Texture2D[4];
       target = null;
@@ -44,6 +44,7 @@ namespace Lindenmayers_Defense
       LayerMask = CollisionLayer.NONE;
       color = new Color(Game1.rnd.Next(255), Game1.rnd.Next(255), Game1.rnd.Next(255));
       damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = generationLvl = 1;
+      generationLvl = generations = L.Generations;
       InitStats();
     }
     //private float damage, firerate, turnspeed, speed, size, health, generations;
@@ -104,9 +105,9 @@ namespace Lindenmayers_Defense
 
     public void IncreaseLevel_Generations(int x)
     {
-      generationLvl = generations += x;
+      L.Evolve(x);
+      generationLvl = generations = L.Generations;
     }
-
 
     /// <summary>
     /// Sets the target. Target is null if no valid targets can be found.
@@ -132,8 +133,6 @@ namespace Lindenmayers_Defense
 
     protected virtual void ShootProjectile()
     {
-      if (target == null)
-        return;
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
       LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, L.Str, this.Forward(), 150.0f, 20);
       p.color = color;
@@ -149,15 +148,21 @@ namespace Lindenmayers_Defense
     public override void Update(GameTime gt)
     {
       base.Update(gt);
+      if (hitbox.Contains(Input.GetMousePoint()) && Input.KeyPressed(Keys.Delete))
+        this.Die();
 
       AcquireTarget();
       if (target != null)
       {
-        float targetAngle = Utility.Vector2ToAngle(target.pos - pos);
+        float targetAngle = Utility.Vector2ToAngle(target.pos + target.Forward() * target.speed - pos);
         rotation += Utility.TurnAngle(rotation, targetAngle, (float)Math.PI, gt);
       }
+      else
+      {
+        rotation += Utility.TurnAngle(rotation, 0, (float)Math.PI, gt);
+      }
       shootTimer += gt.ElapsedGameTime.Milliseconds;
-      if (target != null && shootTimer >= shootCooldown)
+      if (shootTimer >= shootCooldown)
       {
         ShootProjectile();
         shootTimer = 0;

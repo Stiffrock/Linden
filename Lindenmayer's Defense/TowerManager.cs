@@ -34,13 +34,13 @@ namespace Lindenmayers_Defense
     {
       grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("rune1"), Vector2.Zero, "LL"));
       grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("rune2"), Vector2.Zero, "F[WY][VY]"));
-      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("rune3"), Vector2.Zero, "SF"));
+      grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("rune3"), Vector2.Zero, "sSF"));
       grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("rune4"), Vector2.Zero,"f[+FY][-FY]"));
       //grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("dot"), "[+FY][-FY]"));
       grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("rune5"), Vector2.Zero, "RR"));
-      grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("rune6"), Vector2.Zero, "EF"));
-      grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("rune7"), Vector2.Zero,"HF"));
-      grammarComponents.Add("slow", new LComponent(AssetManager.GetTexture("rune8"), Vector2.Zero, "ZF"));
+      grammarComponents.Add("explosive", new LComponent(AssetManager.GetTexture("rune6"), Vector2.Zero, "eEF"));
+      grammarComponents.Add("homing", new LComponent(AssetManager.GetTexture("rune7"), Vector2.Zero,"hHF"));
+      grammarComponents.Add("slow", new LComponent(AssetManager.GetTexture("rune8"), Vector2.Zero, "zZF"));
     }
     public void SetTowerType(Tower t)
     {
@@ -50,7 +50,7 @@ namespace Lindenmayers_Defense
       if (!towerOnMouse)
       {
         //string g = world.GetGrammar();
-        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 5);
+        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 3);
         t.componentTextures = textures;
         //t.componentTextures = world.GetComponentTextures();
         towerOnMouse = true;

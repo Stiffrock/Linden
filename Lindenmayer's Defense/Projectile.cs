@@ -46,7 +46,7 @@ namespace Lindenmayers_Defense
     public override void Update(GameTime gt)
     {
       base.Update(gt);
-      if (Target.Disposed)
+      if (Target == null || Target.Disposed)
         AcquireTarget();
       Velocity = Forward() * Speed;
 

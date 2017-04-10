@@ -9,6 +9,7 @@ namespace Lindenmayers_Defense
 {
   class EnemyManager
   {
+    public bool IsActive { get; set; }
     World world;
     double spawnElapsed;
     double spawnNext;
@@ -23,6 +24,8 @@ namespace Lindenmayers_Defense
     }
     public void Update(GameTime gt)
     {
+      if (!IsActive)
+        return;
       spawnElapsed += gt.ElapsedGameTime.TotalSeconds;
       if (spawnElapsed >= spawnNext)
       {
