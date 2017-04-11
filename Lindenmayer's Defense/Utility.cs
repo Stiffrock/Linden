@@ -9,6 +9,7 @@ namespace Lindenmayers_Defense
 {
   public class Utility
   {
+    static Random rnd = new Random();
     /// <summary>
     /// Converts a rotation into a direction. 0 rotation means straight up.
     /// </summary>
@@ -48,6 +49,11 @@ namespace Lindenmayers_Defense
       else
         turnAmount = amount * (angleDiff > 0 ? 1 : -1);
       return turnAmount;
+    }
+
+    public static int RandomInt(int min, int max)
+    {
+      return rnd.Next(min, max);
     }
   }
 }

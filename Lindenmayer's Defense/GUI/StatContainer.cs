@@ -55,7 +55,7 @@ namespace Lindenmayers_Defense.GUI
 
     private void BuildStatBox()
     {
-      statList.Add(tower.damageLvl);
+      statList.Add((int)tower.damage);
       statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY), "damage"));
 
       statList.Add(tower.firerateLvl);
@@ -96,7 +96,8 @@ namespace Lindenmayers_Defense.GUI
             case "damage":
               {
                 tower.IncreaseLevel_Damage(1);
-                statList[0] = tower.damageLvl;
+                statList[0] = (int)tower.damage;
+                //statList[0] = tower.damageLvl;
                 break;
               }
             case "firerate":

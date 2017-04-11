@@ -21,7 +21,7 @@ namespace Lindenmayers_Defense
     protected double shootTimer;
     protected World world;
     public Texture2D[] componentTextures;
-    private float damage, firerate, turnspeed, speed, size, health;
+    public float damage, firerate, turnspeed, speed, size, health;
     public int damageLvl, firerateLvl, turnspeedLvl, speedLvl, sizeLvl, healthLvl, generationLvl;
     private float damageFactor, firerateFactor, turnspeedFactor, speedFactor, sizeFactor, healthFactor;
     private int generations;
@@ -73,7 +73,7 @@ namespace Lindenmayers_Defense
     public void IncreaseLevel_Damage(int x)
     {
       damageLvl += x;
-      damage = damageLvl * damageFactor;
+      damage = damage * damageFactor;
     }
 
     public void IncreaseLevel_Firerate(int x)
@@ -134,7 +134,7 @@ namespace Lindenmayers_Defense
     protected virtual void ShootProjectile()
     {
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
-      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, L.Str, this.Forward(), 150.0f, 20);
+      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, L.Str, this.Forward(), 150.0f, damage);
       p.color = color;
       world.AddProjectile(p);
       for (int i = 0; i < 3; i++)
