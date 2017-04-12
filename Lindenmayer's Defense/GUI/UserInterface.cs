@@ -13,38 +13,46 @@ namespace Lindenmayers_Defense.GUI
   #region Class definition
   class UserInterface
   {
-    private ComponentContainer[,] inventoryArray;
-    private ComponentContainer[] componentArray;
     private TowerContainer towerBox;
-    private List<ComponentContainer> compContainerList;
+    private ComponentContainer[,] inventoryArray;
+    private ComponentContainer[] selectionArray;  
+    private List<ComponentContainer> componentContainerList;
     private List<StatContainer> statContainerList;
     private List<LComponent> componentList;
     private Point TowerBoxRecSize;
-    public List<LComponent> result;
+    //public List<LComponent> result;
     private Vector2 compOffset;
     private TowerManager tm;
     private StatContainer displayedStatContainer;
     private Dictionary<string, LComponent> grammarComponents;
     private World world;
+    private InventoryManager inventoryManager;
+
+    /*    
+    componentContainerList keeps track of all the containers, if a container from inventory is clicked, a copy of its component
+    is created but set with the selection arrays position, the recieveing container from selection array gets its name.       
+    */
 
     public UserInterface(TowerManager tm, World world)
     {
-      compContainerList = new List<ComponentContainer>();
-      statContainerList = new List<StatContainer>();
+      componentList = new List<LComponent>();  
+      componentContainerList = new List<ComponentContainer>();
+      statContainerList = new List<StatContainer>(); 
+
       inventoryArray = new ComponentContainer[3, 6];
-      componentArray = new ComponentContainer[5];
+      selectionArray = new ComponentContainer[5];   
       compOffset = new Vector2(12, 8);
       displayedStatContainer = null;
       TowerBoxRecSize = new Point(100, 100);
       this.tm = tm;
-      grammarComponents = tm.GetGrammarComponents();
-      componentList = new List<LComponent>();
-      result = new List<LComponent>();
       this.world = world;
-      InitInventoryArray();
-      InitComponentArray();
+      grammarComponents = tm.GetGrammarComponents();
+      inventoryManager = new InventoryManager();
+      inventoryArray = inventoryManager.CreateInventory(3, 6, ref componentContainerList);
+      selectionArray = inventoryManager.CreateSelectionArray(5, ref componentContainerList);
       InitTowerBox();
-      InitComponent();
+      InitComponents();
+    
     }
     #endregion
 
@@ -90,7 +98,7 @@ namespace Lindenmayers_Defense.GUI
     #endregion
 
     #region Initialize UI
-    private void InitComponent()
+    private void InitComponents()
     {
       int i = 0, j = 0;
       foreach (KeyValuePair<string, LComponent> entry in grammarComponents)
@@ -115,27 +123,6 @@ namespace Lindenmayers_Defense.GUI
       towerBox.rec.Size = TowerBoxRecSize;
     }
 
-    private void InitInventoryArray()
-    {
-      for (int i = 0; i < inventoryArray.GetLength(0); i++)
-      {
-        for (int j = 0; j < inventoryArray.GetLength(1); j++)
-        {
-          inventoryArray[i, j] = new ComponentContainer(AssetManager.GetTexture("container2"), new Vector2((Game1.ScreenWidth / 2 - (Game1.ScreenWidth / 4) - 225/*offset*/) + 55 * j, (Game1.ScreenHeight - Game1.ScreenHeight / 8) - 55 * i));
-          compContainerList.Add(inventoryArray[i, j]);
-        }
-      }
-    }
-
-    private void InitComponentArray()
-    {
-      for (int i = 0; i < componentArray.GetLength(0); i++)
-      {
-        componentArray[i] = new ComponentContainer(AssetManager.GetTexture("container2"), new Vector2(Game1.ScreenWidth / 2 - 137.5f /*offset*/ + 55 * i, (Game1.ScreenHeight - Game1.ScreenHeight / 8)));
-        componentArray[i].ComponentArray = true;
-        compContainerList.Add(componentArray[i]);
-      }
-    }
     private void BuildStatWindow(GameObject t)
     {
       Tower temp = (Tower)t;
@@ -184,23 +171,16 @@ namespace Lindenmayers_Defense.GUI
 
     private void HandleAddComponent(int i)
     {
-      if (compContainerList[i].name == null)
+      if (componentContainerList[i].name == null) 
         return;
 
-      if (MouseIntersect(compContainerList[i].rec))
+      if (MouseIntersect(componentContainerList[i].rec))
       {
-        for (int j = 0; j < componentArray.GetLength(0); j++)
+        for (int j = 0; j < selectionArray.GetLength(0); j++)
         {
-          if (componentArray[j].name == null && !compContainerList[i].ComponentArray)
+          if (selectionArray[j].name == null && !componentContainerList[i].bInSelectionArray)           
           {
-            componentArray[j].component = componentList[i];
-            componentArray[j].name = compContainerList[i].name;
-
-            LComponent temp = new LComponent(componentList[i].tex, new Vector2(componentArray[j].pos.X + compOffset.X, componentArray[j].pos.Y + compOffset.Y), componentList[i].grammar);
-            temp.rec = new Rectangle((int)temp.pos.X, (int)temp.pos.Y, 40, 40);
-            temp.chosen = true;
-            result.Add(temp);
-            componentList.Add(temp);
+            inventoryManager.AddToSelectionArray(ref selectionArray, ref componentList, componentContainerList, compOffset, i, j);
             break;
           }
         }
@@ -209,16 +189,15 @@ namespace Lindenmayers_Defense.GUI
 
     private void HandleRemoveComponent()
     {
-      for (int i = 0; i < componentArray.GetLength(0); i++)
+      for (int i = 0; i < selectionArray.GetLength(0); i++)
       {
-        if (componentArray[i].name != null && MouseIntersect(componentArray[i].rec))
+        if (selectionArray[i].name != null && MouseIntersect(selectionArray[i].rec))
         {
           for (int j = 0; j < componentList.Count; j++)
           {
-            if (componentList[j].pos == componentArray[i].pos + compOffset)
+            if (componentList[j].pos == selectionArray[i].pos + compOffset)
             {
-              componentArray[i].component = null;
-              componentArray[i].name = null;
+              inventoryManager.RemoveFromSelectionArray(ref selectionArray, i);
               componentList.Remove(componentList[j]);
               break;
             }
@@ -227,43 +206,42 @@ namespace Lindenmayers_Defense.GUI
       }
     }
 
-    public void RandomizeComponents()
+    public void SelectRandomComponents()
     {
-      for (int i = 0; i < componentArray.Length; i++)
+      for (int i = 0; i < selectionArray.Length; i++)
       {
         for (int j = 0; j < componentList.Count; j++)
         {
-          if (componentList[j].pos == componentArray[i].pos + compOffset)
+          if (componentList[j].pos == selectionArray[i].pos + compOffset)
           {
-            componentArray[i].component = null;
-            componentArray[i].name = null;
+            selectionArray[i].component = null;
+            selectionArray[i].name = null;
             componentList.Remove(componentList[j]);
             break;
           }
         }
         int index = Utility.RandomInt(0, componentList.Count() - 1);
-        componentArray[i].component = componentList[index];
-        componentArray[i].name = compContainerList[index].name;
+        selectionArray[i].component = componentList[index];
+        selectionArray[i].name = componentContainerList[index].name;
 
-        LComponent temp = new LComponent(componentList[index].tex, new Vector2(componentArray[i].pos.X + compOffset.X, componentArray[i].pos.Y + compOffset.Y), componentList[index].grammar);
+        LComponent temp = new LComponent(componentList[index].tex, new Vector2(selectionArray[i].pos.X + compOffset.X, selectionArray[i].pos.Y + compOffset.Y), componentList[index].grammar);
         temp.rec = new Rectangle((int)temp.pos.X, (int)temp.pos.Y, 40, 40);
         temp.chosen = true;
-        result.Add(temp);
         componentList.Add(temp);
       }
     }
     #endregion
+
     #region Update/Draw
     public virtual void Update(GameTime gt)
     {
       towerBox.Update(gt);
       if (Input.KeyPressed(Keys.R))
+        SelectRandomComponents();
+
+      for (int i = 0; i < componentContainerList.Count; i++) 
       {
-        RandomizeComponents();
-      }
-      for (int i = 0; i < compContainerList.Count; i++)
-      {
-        compContainerList[i].Update(gt);
+        componentContainerList[i].Update(gt);
         if (Input.LeftMouseButtonClicked())
           HandleAddComponent(i);
       }
@@ -279,8 +257,8 @@ namespace Lindenmayers_Defense.GUI
     {
       towerBox.Draw(sb);
 
-      for (int i = 0; i < compContainerList.Count; i++)
-        compContainerList[i].Draw(sb);
+      for (int i = 0; i < componentContainerList.Count; i++)
+        componentContainerList[i].Draw(sb);
 
       for (int i = 0; i < componentList.Count; i++)
         componentList[i].Draw(sb);

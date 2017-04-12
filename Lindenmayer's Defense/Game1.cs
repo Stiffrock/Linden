@@ -160,7 +160,7 @@ namespace Lindenmayers_Defense
       }
       if (Input.KeyPressed(Keys.F1))
       {
-        ui.RandomizeComponents();
+        ui.SelectRandomComponents();
         world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures());
         world.TowerManager.PlaceTower(new Vector2(Utility.RandomInt(0, ScreenWidth), Utility.RandomInt(0, ScreenHeight)));
       }
