@@ -32,6 +32,14 @@ namespace Lindenmayers_Defense
       hitbox = new Rectangle((int)(pos.X - origin.X), (int)(pos.Y - origin.Y), tex.Width, tex.Height);
       UpdateHitbox();
     }
+    public GameObject(GameObject other) : base(other)
+    {
+      Layer = other.Layer;
+      LayerMask = other.LayerMask;
+      Disposed = other.Disposed;
+      hitbox = other.hitbox;
+      drawHitbox = other.drawHitbox;
+    }
     protected void UpdateHitbox()
     {
       hitbox.Width = (int)(tex.Width * Scale);
@@ -42,6 +50,11 @@ namespace Lindenmayers_Defense
     public Vector2 Forward()
     {
       Vector2 direction = new Vector2((float)Math.Sin(rotation), (float)-Math.Cos(rotation));
+      return direction;
+    }
+    public Vector2 Right()
+    {
+      Vector2 direction = new Vector2((float)Math.Sin(rotation + Math.PI / 2), (float)-Math.Cos(rotation + Math.PI / 2));
       return direction;
     }
     public virtual void Die()

@@ -26,7 +26,7 @@ namespace Lindenmayers_Defense
     protected World world;
 
     public Projectile(World world, Tower owner, Texture2D tex, Vector2 pos, Vector2 direction, float speed, float damage,
-      float explosionRadius = 0.0f, float turnRate = 0.5f, GameObject target = null)
+      float explosionRadius = 0.0f, float turnRate = 0.2f, GameObject target = null)
       : base(tex, pos)
     {
       this.world = world;
@@ -42,6 +42,18 @@ namespace Lindenmayers_Defense
       Lifetime = 15.0f;
       Layer = CollisionLayer.PROJECTILE;
       LayerMask = CollisionLayer.ENEMY;
+    }
+    public Projectile(Projectile other) : base(other)
+    {
+      TurnRate = other.TurnRate;
+      Speed = other.Speed;
+      Lifetime = other.Lifetime;
+      ExplosionRadius = other.ExplosionRadius;
+      Velocity = other.Velocity;
+      Damage = other.Damage;
+      Target = other.Target;
+      Tower = other.Tower;
+      world = other.world;
     }
     public override void Update(GameTime gt)
     {

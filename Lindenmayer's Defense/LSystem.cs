@@ -17,10 +17,15 @@ namespace Lindenmayers_Defense
       {'S', "sfS" },  //arrow
       {'Z', "zfZ" },  //arrow
       {'W', "++F----FF++++F--W" }, //wave
-      {'V', "--F++++FF----F++V" }, //wave
+      {'V', "--F++++FF----F++W" }, //wave
       {'Y', "X" },      //sub-branch
       {'E', "(f)fE" }, //explosive
-      {'H', "hfH" } //homing
+      {'H', "hfH" }, //homing
+      {'0', "1" },
+      {'1', "2" },
+      {'2', "3" },
+      {'3', "4" },
+      {'4', "5" },
 
       //{'X', "S[+FY][-FY][++FY][--FY][FY]" }
       //{'X', "S[+++LRY][---RLY]FF[+FY][-FY]" } //snake + fork

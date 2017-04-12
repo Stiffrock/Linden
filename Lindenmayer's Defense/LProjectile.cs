@@ -25,15 +25,28 @@ namespace Lindenmayers_Defense
         p.pos += p.Velocity * (float)gt.ElapsedGameTime.TotalSeconds;
       })},
       {'-', new PCommand(0.0f, (p, gt)=> {
-        p.rotation -= (float)Math.PI/8f;
+        p.rotation -= (float)Math.PI/8f * p.mirrored;
       })},
       {'+', new PCommand(0.0f, (p, gt)=> {
-        p.rotation += (float)Math.PI/8f;
+        p.rotation += (float)Math.PI/8f * p.mirrored;
+      })},
+      {'K', new PCommand(0.0f, (p, gt)=> {
+        string forks = "";
+        forks += p.LStr[p.commandIndex + 1];
+        int n = int.Parse(forks);
+        p.Fork(n);
+      })},
+      {'Q', new PCommand(0.0f, (p, gt)=> {
+        string forks = "";
+        forks += p.LStr[p.commandIndex + 1];
+        int n = int.Parse(forks);
+        p.Volley(n);
       })},
       {'[', new PCommand(0.0f, (p, gt)=> {
         string lstr = p.BracketSubstring(p.commandIndex);
-        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, lstr, p.Forward(), p.Speed, p.Damage/2);
-        p.Damage *= 0.5f;
+        p.Damage *= 0.7f;
+        LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, lstr, p.Forward(), p.Speed, p.Damage);
+
         newP.Lifetime = p.Lifetime;// *Game1.rnd.NextDouble()*0.5f+0.5f;
         newP.Target = p.Target;
         newP.TurnRate = p.TurnRate;
@@ -54,25 +67,26 @@ namespace Lindenmayers_Defense
       {'s', new PCommand(0.0f, (p, gt)=> {
         p.Speed *= 1.1f;
         for (int i = 0; i < 2; i++)
-          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 200.0f, 0.5f, p.color);
+          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 200.0f, 0.25f, p.color*0.7f);
       })},
       {'z', new PCommand(0.0f, (p, gt)=> {
         p.Speed *= 0.9f;
         for (int i = 0; i < 2; i++)
-          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle02"), p.pos, 0.35f, 200.0f, 0.5f, p.color);
+          p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle02"), p.pos, 0.25f, 200.0f, 0.25f, p.color*0.8f);
       })},
       {'h', new PCommand(0.0f, (p, gt)=> {
         if(p.Target == null)
           return;
         float targetAngle = Utility.Vector2ToAngle(p.Target.pos - p.pos);
         p.rotation += Utility.TurnAngle(p.rotation, targetAngle, p.TurnRate);
-        p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 50.0f, 1.0f, p.color);
+        p.world.ParticleManager.GenerateParticle(AssetManager.GetTexture("particle04"), p.pos, 0.25f, 50.0f, .7f, p.color*0.6f);
       })}
     };
     static Dictionary<char, char> bracketPairs = new Dictionary<char, char>()
     { {'[', ']' }, {'(', ')'} };
 
     protected int commandIndex;
+    protected int mirrored;
 
     protected string LStr;
     protected PCommand currentCommand;
@@ -84,9 +98,58 @@ namespace Lindenmayers_Defense
       this.LStr = LStr;
       currentCommandElapsedTime = 0.0f;
       commandIndex = -1;
+      mirrored = 1;
       GotoNextCommand();
     }
-
+    public LProjectile(LProjectile other)
+      : base(other)
+    {
+      LStr = other.LStr;
+      commandIndex = other.commandIndex;
+      currentCommand = other.currentCommand;
+      currentCommandElapsedTime = other.currentCommandElapsedTime;
+      TurnRate = other.TurnRate;
+      Target = other.Target;
+      Scale = other.Scale;
+      color = other.color;
+      mirrored = other.mirrored;
+    }
+    protected void Fork(int n)
+    {
+      if (n <= 1 || Scale < 0.6f)
+        return;
+      float rotDiff = (float)Math.PI / 8f;
+      Damage *= 0.7f;
+      Scale *= 0.9f;
+      rotation -= (n - 1) / 2f * rotDiff;
+      for (int i = 0; i < n - 1; i++)
+      {
+        LProjectile newP = new LProjectile(this);
+        newP.GotoNextCommand();
+        world.AddProjectile(newP);
+        rotation += rotDiff;
+        if (i < n / 2)
+          newP.mirrored = -1;
+      }
+    }
+    protected void Volley(int n)
+    {
+      if (n <= 1 || Scale < 0.6f)
+        return;
+      float distBetween = 15;
+      Damage *= 0.7f;
+      Scale *= 0.9f;
+      pos -= Right() * ((n - 1) / 2f * distBetween);
+      for (int i = 0; i < n - 1; i++)
+      {
+        LProjectile newP = new LProjectile(this);
+        newP.GotoNextCommand();
+        world.AddProjectile(newP);
+        pos += Right() * distBetween;
+        if (i < n / 2)
+          newP.mirrored = -mirrored;
+      }
+    }
     protected void GotoNextCommand()
     {
       for (int i = commandIndex + 1; i < LStr.Length; i++)
@@ -126,7 +189,7 @@ namespace Lindenmayers_Defense
     {
       base.Update(gt);
       currentCommand.Invoke(this, gt);
-      if(commandIndex == LStr.Length - 1)
+      if (commandIndex == LStr.Length - 1)
         alpha = 1 - currentCommandElapsedTime / currentCommand.Duration;
       currentCommandElapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
       if (currentCommandElapsedTime >= currentCommand.Duration)

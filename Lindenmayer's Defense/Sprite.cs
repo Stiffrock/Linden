@@ -26,6 +26,18 @@ namespace Lindenmayers_Defense
       this.pos = pos;
       origin = new Vector2(tex.Width / 2.0f, tex.Height / 2.0f);
     }
+    public Sprite(Sprite other)
+    {
+      tex = other.tex;
+      pos = other.pos;
+      rotation = other.rotation;
+      scale = other.scale;
+      color = other.color;
+      alpha = other.alpha;
+      origin = other.origin;
+      spriteRec = other.spriteRec;
+      layerDepth = other.layerDepth;
+    }
     public virtual void Draw(SpriteBatch sb)
     {
       sb.Draw(tex, pos, spriteRec, color * alpha, rotation, origin, scale, SpriteEffects.None, layerDepth);

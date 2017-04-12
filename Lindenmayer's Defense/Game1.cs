@@ -24,6 +24,7 @@ namespace Lindenmayers_Defense
 
     bool showHeatMap, updateHeatMap;
     Texture2D heatMap;
+    int nrOfTowers;
     public Game1()
     {
       graphics = new GraphicsDeviceManager(this);
@@ -83,7 +84,7 @@ namespace Lindenmayers_Defense
       List<Projectile> projectiles = world.GetProjectiles();
       List<GameObject> towers = world.GetGameObjects();
       towers.RemoveAll(x => !(x is Tower));
-
+      nrOfTowers = towers.Count;
       foreach (Tower t in towers)
       {
         foreach (Projectile p in projectiles)
@@ -158,6 +159,13 @@ namespace Lindenmayers_Defense
       {
         updateHeatMap = !updateHeatMap;
       }
+      if (Input.KeyPressed(Keys.F4))
+      {
+        foreach (var item in world.GetGameObjects())
+        {
+          item.Die();
+        }
+      }
       if (Input.KeyPressed(Keys.F1))
       {
         ui.SelectRandomComponents();
@@ -191,13 +199,12 @@ namespace Lindenmayers_Defense
       ui.Draw(spriteBatch);
       //show mouse position
       Texture2D dot = AssetManager.GetTexture("dot");
-      string mouseXY = Input.GetMousePos().ToString();
-      spriteBatch.DrawString(AssetManager.GetFont("font1"), mouseXY, Vector2.Zero, Color.White);
-      //spriteBatch.Draw(dot, Input.GetMousePos(), null, Color.Purple, 0.0f, new Vector2((float)dot.Width / 2, (float)dot.Height / 2), 0.025f, SpriteEffects.None, 0.0f);
-      //spriteBatch.Draw(dot, Input.GetMousePos(), null, test, 0.0f, new Vector2((float)dot.Width / 2, (float)dot.Height / 2), 0.25f, SpriteEffects.None, 0.0f);
+      spriteBatch.Draw(dot, Input.GetMousePos(), null, Color.Purple, 0.0f, new Vector2((float)dot.Width / 2, (float)dot.Height / 2), 0.025f, SpriteEffects.None, 0.0f);
       spriteBatch.End();
 
       spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+      spriteBatch.DrawString(AssetManager.GetFont("font1"), Input.GetMousePos().ToString(), Vector2.Zero, Color.White);
+      spriteBatch.DrawString(AssetManager.GetFont("font1"), "Towers: " + nrOfTowers.ToString(), new Vector2(0, 50), Color.White);
       if (showHeatMap && heatMap != null)
         spriteBatch.Draw(heatMap, Input.GetMousePos(), null, Color.White, 0.0f, new Vector2((float)heatMap.Width / 2, (float)heatMap.Height / 2), 8.0f, SpriteEffects.None, 0.0f);
       spriteBatch.End();

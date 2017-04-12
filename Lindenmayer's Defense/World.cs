@@ -19,6 +19,7 @@ namespace Lindenmayers_Defense
     public ResourceManager ResourceManager { get; private set; }
     List<GameObject> gameObjects;
     List<Projectile> projectiles;
+    List<Projectile> pToAdd;
 
     Dictionary<string, LComponent> grammarComponents;
     public Base baseTower;
@@ -32,6 +33,7 @@ namespace Lindenmayers_Defense
       TowerManager = new TowerManager(this);
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
+      pToAdd = new List<Projectile>();
       grammarComponents = new Dictionary<string, LComponent>();
       baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
       AddGameObject(baseTower);
@@ -43,6 +45,10 @@ namespace Lindenmayers_Defense
     {
       if (Input.KeyPressed(Keys.Space))
         enemyManager.IsActive = !enemyManager.IsActive;
+      foreach (var item in pToAdd)
+        projectiles.Add(item);
+      pToAdd.Clear();
+
       for (int i = 0; i < gameObjects.Count; i++)
       {
         GameObject go = gameObjects[i];
@@ -59,7 +65,7 @@ namespace Lindenmayers_Defense
         p.Update(gt);
         foreach (GameObject go in gameObjects)
         {
-          if(p.CollidesWith(go))
+          if (p.CollidesWith(go))
           {
             p.DoCollision(go);
           }
@@ -96,7 +102,7 @@ namespace Lindenmayers_Defense
     }
     public void AddProjectile(Projectile p)
     {
-      projectiles.Add(p);
+      pToAdd.Add(p);
     }
     public List<Projectile> GetProjectiles()
     {

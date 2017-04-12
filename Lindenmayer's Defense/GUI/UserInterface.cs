@@ -80,8 +80,8 @@ namespace Lindenmayers_Defense.GUI
           result += componentList[i].grammar;
         }
       }
-      if (!result.Contains('Y'))
-        result.Insert(0, "X");
+      //if (!result.Contains('Y'))
+        //result += "X";
       return result;
     }
 
