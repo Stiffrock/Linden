@@ -161,7 +161,7 @@ namespace Lindenmayers_Defense
       if (Input.KeyPressed(Keys.F1))
       {
         ui.SelectRandomComponents();
-        world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures());
+        world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures(), 0);
         world.TowerManager.PlaceTower(new Vector2(Utility.RandomInt(0, ScreenWidth), Utility.RandomInt(0, ScreenHeight)));
       }
       world.Update(gameTime);
@@ -169,7 +169,10 @@ namespace Lindenmayers_Defense
 
       if (ui.GetTowerCreator().ClickedOn())
       {
-        world.TowerManager.CreateTower(Input.GetMousePos(), ui.GenerateGrammar(), ui.GetTextures());
+        bool success = false;
+        success = world.TowerManager.CreateTower(Input.GetMousePos(), ui.GenerateGrammar(), ui.GetTextures(), ui.GetCost());
+        if(success)
+        world.ResourceManager.RemoveGold(ui.GetCost());
       }
       if (updateHeatMap)
         CollectProjectileData(false);

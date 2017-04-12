@@ -27,6 +27,7 @@ namespace Lindenmayers_Defense.GUI
     private Dictionary<string, LComponent> grammarComponents;
     private World world;
     private InventoryManager inventoryManager;
+    private int CurrentTowerCost;
 
     /*    
     componentContainerList keeps track of all the containers, if a container from inventory is clicked, a copy of its component
@@ -52,6 +53,7 @@ namespace Lindenmayers_Defense.GUI
       selectionArray = inventoryManager.CreateSelectionArray(5, ref componentContainerList);
       InitTowerBox();
       InitComponents();
+      CurrentTowerCost = 0;
     
     }
     #endregion
@@ -61,6 +63,8 @@ namespace Lindenmayers_Defense.GUI
     {
       return towerBox;
     }
+
+    public int GetCost() { return CurrentTowerCost; }
     public bool MouseIntersect(Rectangle uiObject)
     {
       return uiObject.Contains(Input.GetMousePoint());
@@ -126,7 +130,7 @@ namespace Lindenmayers_Defense.GUI
     private void BuildStatWindow(GameObject t)
     {
       Tower temp = (Tower)t;
-      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp);
+      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp, world);
       towerStatContainer.componentTextures = temp.componentTextures;
       displayedStatContainer = towerStatContainer;
     }
@@ -221,12 +225,25 @@ namespace Lindenmayers_Defense.GUI
         inventoryManager.AddToSelectionArray(ref selectionArray, ref componentList, componentContainerList, compOffset, index, i);
       }
     }
+
+    private void UpdateTowerCost()
+    {
+      int count = 0;
+      for (int i = 0; i < selectionArray.GetLength(0); i++)
+      {
+        if (selectionArray[i].name != null)
+          ++count;
+      }
+      CurrentTowerCost = count * 10;   
+    }
+
     #endregion
 
     #region Update/Draw
     public virtual void Update(GameTime gt)
     {
       towerBox.Update(gt);
+      UpdateTowerCost();
       if (Input.KeyPressed(Keys.R))
         SelectRandomComponents();
 
@@ -247,6 +264,7 @@ namespace Lindenmayers_Defense.GUI
     public virtual void Draw(SpriteBatch sb)
     {
       towerBox.Draw(sb);
+      sb.DrawString(AssetManager.GetFont("font1"), "Cost of tower: " + CurrentTowerCost.ToString(), new Vector2(765, 850), Color.GreenYellow);
 
       for (int i = 0; i < componentContainerList.Count; i++)
         componentContainerList[i].Draw(sb);

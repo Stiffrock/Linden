@@ -17,11 +17,13 @@ namespace Lindenmayers_Defense
     private Tower t;
     private Dictionary<string, LComponent> grammarComponents;    
     private bool towerOnMouse;
+    private int cost;
 
     public TowerManager(World world)
     {
       this.world = world;
       t = null;
+      cost = 0;
       grammarComponents = new Dictionary<string, LComponent>();
       InitGrammarComponents();
     }
@@ -45,16 +47,17 @@ namespace Lindenmayers_Defense
     public void SetTowerType(Tower t)
     {
     }
-    public void CreateTower(Vector2 pos, string grammar, Texture2D[] textures)
+    public bool CreateTower(Vector2 pos, string grammar, Texture2D[] textures, int cost)
     {
-      if (!towerOnMouse)
+      if (!towerOnMouse && world.ResourceManager.CanAfford(cost))
       {
         //string g = world.GetGrammar();
         t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 3);
         t.componentTextures = textures;
-        //t.componentTextures = world.GetComponentTextures();
         towerOnMouse = true;
+        return true;
       }
+      return false;
     }
     public void PlaceTower(Vector2 pos)
     {

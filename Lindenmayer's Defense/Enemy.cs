@@ -19,6 +19,7 @@ namespace Lindenmayers_Defense
     ValueBar healthBar;
     float health;
     public float speed = 100;
+    int goldGain;
 
     public Enemy(World world, Texture2D tex, Vector2 pos, float damage, float health, float speed) : base(tex, pos)
     {
@@ -33,6 +34,7 @@ namespace Lindenmayers_Defense
       pixel = AssetManager.GetTexture("pixel");
       Layer = CollisionLayer.ENEMY;
       LayerMask = CollisionLayer.TOWER;
+      goldGain = 5;
     }
     public override void Update(GameTime gt)
     {
@@ -55,7 +57,10 @@ namespace Lindenmayers_Defense
       health -= damage;
       healthBar.Value = health;
       if (health <= 0)
+      {
+        world.ResourceManager.AddGold(goldGain);
         Die();
+      }
     }
     public override void DoCollision(GameObject other)
     {

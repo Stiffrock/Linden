@@ -26,8 +26,9 @@ namespace Lindenmayers_Defense
     public Texture2D[] componentTextures;
     public float damage, firerate, turnspeed, speed, size, health;
     public int damageLvl, firerateLvl, turnspeedLvl, speedLvl, sizeLvl, healthLvl, generationLvl;
+    private int damageCost, firerateCost, turnspeedCost, speedCost, sizeCost, healthCost, generationCost;
     private float damageFactor, firerateFactor, turnspeedFactor, speedFactor, sizeFactor, healthFactor;
-    private int generations;
+    private int generations, costFactor;
     public bool displayStats;
 
     public Tower(World world, Texture2D tex, Vector2 pos, string grammar = "f[+++LR[X]][---RL[X]]", int generations = 3) : base(tex, pos)
@@ -38,6 +39,7 @@ namespace Lindenmayers_Defense
       L = new LSystem("X", grammar);
       L.Evolve(generations);
       muzzlePos = new Vector2(0, -35);
+      costFactor = 10;
       origin += new Vector2(0, 15);
       aggroRadius = 5000.0f;
       shootCooldown = 100.0f;
@@ -52,6 +54,14 @@ namespace Lindenmayers_Defense
       InitStats();
     }
     //private float damage, firerate, turnspeed, speed, size, health, generations;
+
+     public int GetDamageCost() { return damageLvl * costFactor; }
+     public int GetFireRateCost() { return firerateLvl * costFactor; }
+     public int GetTurnSpeedCost() { return turnspeedLvl * costFactor; }
+     public int GetSpeedCost() { return speedLvl * costFactor; }
+     public int GetSizeCost() { return sizeLvl * costFactor; }
+     public int GetHealthCost() { return healthLvl * costFactor; }
+     public int GetGenerationCost() { return generationLvl * (costFactor * 2); }
 
     private void InitStats()
     {
@@ -73,6 +83,7 @@ namespace Lindenmayers_Defense
       health = 100.0f;
       healthFactor = 1.2f;
     }
+
 
     public void IncreaseLevel_Damage(int x)
     {
@@ -134,6 +145,8 @@ namespace Lindenmayers_Defense
         }
       }
     }
+
+
 
     protected virtual void ShootProjectile()
     {

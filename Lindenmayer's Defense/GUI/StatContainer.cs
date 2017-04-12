@@ -13,6 +13,7 @@ namespace Lindenmayers_Defense.GUI
   class StatContainer : Container
   {
     private SpriteFont font;
+    private World world;
     public Tower tower;
     public List<int> statList;
     private List<string> statName;
@@ -21,9 +22,10 @@ namespace Lindenmayers_Defense.GUI
     public List<Button> statButtonList;
     public Texture2D[] componentTextures;
 
-    public StatContainer(Texture2D tex, Vector2 pos, Tower tower) : base(tex, pos)
+    public StatContainer(Texture2D tex, Vector2 pos, Tower tower, World world) : base(tex, pos)
     {
       font = AssetManager.GetFont("font1");
+      this.world = world;
       this.tower = tower;
       statList = new List<int>();
       componentTextures = new Texture2D[4];
@@ -34,7 +36,7 @@ namespace Lindenmayers_Defense.GUI
       mouseOverEffect = false;
       statName = new List<string>();
       statStringOffsetX = 20;
-      statOffsetX = 150;
+      statOffsetX = 130;
       OffsetY = 30;
       statButtonList = new List<Button>();
       statList = new List<int>();
@@ -95,53 +97,92 @@ namespace Lindenmayers_Defense.GUI
           {
             case "damage":
               {
-                tower.IncreaseLevel_Damage(1);
-                statList[0] = (int)tower.damage;
+                if(world.ResourceManager.CanAfford(tower.GetDamageCost()))
+                {
+                  world.ResourceManager.RemoveGold(tower.GetDamageCost());
+                  tower.IncreaseLevel_Damage(1);
+                  statList[0] = (int)tower.damage;
+                }                               
                 //statList[0] = tower.damageLvl;
                 break;
               }
             case "firerate":
               {
-                tower.IncreaseLevel_Firerate(1);
-                statList[1] = tower.firerateLvl;
+                if (world.ResourceManager.CanAfford(tower.GetFireRateCost()))
+                {
+                  world.ResourceManager.RemoveGold(tower.GetFireRateCost());
+                  tower.IncreaseLevel_Firerate(1);
+                  statList[1] = tower.firerateLvl;
+                }            
                 break;
               }
             case "turnspeed":
               {
-                tower.IncreaseLevel_TurnSpeed(1);
-                statList[2] = tower.turnspeedLvl;
+                if (world.ResourceManager.CanAfford(tower.GetTurnSpeedCost()))
+                {
+                  world.ResourceManager.RemoveGold(tower.GetTurnSpeedCost());
+                  tower.IncreaseLevel_TurnSpeed(1);
+                  statList[2] = tower.turnspeedLvl;
+                }           
                 break;
               }
             case "speed":
               {
-                tower.IncreaseLevel_Speed(1);
-                statList[3] = tower.speedLvl;
+                if (world.ResourceManager.CanAfford(tower.GetSpeedCost()))
+                {
+                  world.ResourceManager.RemoveGold(tower.GetSpeedCost());
+                  tower.IncreaseLevel_Speed(1);
+                  statList[3] = tower.speedLvl;
+                }            
                 break;
               }
             case "size":
               {
-                tower.IncreaseLevel_Size(1);
-                statList[4] = tower.sizeLvl;
+                if (world.ResourceManager.CanAfford(tower.GetSizeCost()))
+                {
+                  world.ResourceManager.RemoveGold(tower.GetSizeCost());
+                  tower.IncreaseLevel_Size(1);
+                  statList[4] = tower.sizeLvl;
+                }               
                 break;
               }
             case "health":
               {
-                tower.IncreaseLevel_Health(1);
-                statList[5] = tower.healthLvl;
+                if (world.ResourceManager.CanAfford(tower.GetHealthCost()))
+                {
+                  world.ResourceManager.RemoveGold(tower.GetHealthCost());
+                  tower.IncreaseLevel_Health(1);
+                  statList[5] = tower.healthLvl;
+                }         
                 break;
               }
             case "generation":
               {
-                tower.IncreaseLevel_Generations(1);
-                statList[6] = tower.generationLvl;
+                if (world.ResourceManager.CanAfford(tower.GetGenerationCost()))
+                {
+                  world.ResourceManager.RemoveGold(tower.GetGenerationCost());
+                  tower.IncreaseLevel_Generations(1);
+                  statList[6] = tower.generationLvl;
+                }
+           
                 break;
               }
             default:
               break;
           }
         }
-      }        
-     
+      }           
+    }
+
+    private void DrawStatCost(SpriteBatch sb)
+    {
+      sb.DrawString(AssetManager.GetFont("font1"), tower.GetDamageCost().ToString(), new Vector2(pos.X + statStringOffsetX + 245, pos.Y + OffsetY * 0 + 20), Color.Black);
+      sb.DrawString(AssetManager.GetFont("font1"), tower.GetFireRateCost().ToString(), new Vector2(pos.X + statStringOffsetX + 245, pos.Y + OffsetY * 1 + 20), Color.Black);
+      sb.DrawString(AssetManager.GetFont("font1"), tower.GetTurnSpeedCost().ToString(), new Vector2(pos.X + statStringOffsetX + 245, pos.Y + OffsetY * 2 + 20), Color.Black);
+      sb.DrawString(AssetManager.GetFont("font1"), tower.GetSpeedCost().ToString(), new Vector2(pos.X + statStringOffsetX + 245, pos.Y + OffsetY * 3 + 20), Color.Black);
+      sb.DrawString(AssetManager.GetFont("font1"), tower.GetSizeCost().ToString(), new Vector2(pos.X + statStringOffsetX + 245, pos.Y + OffsetY * 4 + 20), Color.Black);
+      sb.DrawString(AssetManager.GetFont("font1"), tower.GetHealthCost().ToString(), new Vector2(pos.X + statStringOffsetX + 245, pos.Y + OffsetY * 5 + 20), Color.Black);
+      sb.DrawString(AssetManager.GetFont("font1"), tower.GetGenerationCost().ToString(), new Vector2(pos.X + statStringOffsetX + 245, pos.Y + OffsetY * 6 + 20), Color.Black);
     }
 
     public override void Update(GameTime gt)
@@ -152,14 +193,13 @@ namespace Lindenmayers_Defense.GUI
 
     public override void Draw(SpriteBatch sb)
     {
-      base.Draw(sb);
-
-   
+      base.Draw(sb);  
       for (int j = 0; j < statList.Count; j++)
       {
         sb.DrawString(font, statName[j], new Vector2(pos.X + statStringOffsetX,  pos.Y + OffsetY * j + 20), Color.Black);
-        sb.DrawString(font, statList[j].ToString(), new Vector2(pos.X + statOffsetX, pos.Y + OffsetY * j + 20), Color.Black);
+        sb.DrawString(font, statList[j].ToString(), new Vector2(pos.X + statOffsetX, pos.Y + OffsetY * j + 20), Color.Black);      
       }
+      DrawStatCost(sb);
       for (int j = 0; j < statButtonList.Count; j++)
         statButtonList[j].Draw(sb);
 

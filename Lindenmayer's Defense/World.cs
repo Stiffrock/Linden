@@ -16,6 +16,7 @@ namespace Lindenmayers_Defense
     public ParticleManager ParticleManager { get; private set; }
     public TowerManager TowerManager { get; private set; }
     EnemyManager enemyManager;
+    public ResourceManager ResourceManager { get; private set; }
     List<GameObject> gameObjects;
     List<Projectile> projectiles;
 
@@ -26,6 +27,7 @@ namespace Lindenmayers_Defense
     public World()
     {
       ParticleManager = new ParticleManager();
+      ResourceManager = new ResourceManager(100);
       enemyManager = new EnemyManager(this);
       TowerManager = new TowerManager(this);
       gameObjects = new List<GameObject>();
@@ -36,22 +38,6 @@ namespace Lindenmayers_Defense
       testTower = new Tower(this, AssetManager.GetTexture("tower01"), new Vector2(600, 500));
       AddGameObject(testTower);
     }
-
-    //public string GetGrammar()
-    //{
-    //  return UI.GetResult();
-    //}
-    //public Texture2D[] GetComponentTextures()
-    //{
-    //  return UI.GetTextures();
-    //}
-    //public void Update(GameTime gt)
-    //{
-    //  UI.Update(gt);
-    //  if (UI.GetTowerCreator().rec.Contains(Input.GetMousePoint()) && Input.LeftMouseButtonClicked())
-    //  {
-    //    TowerManager.CreateTower(Input.GetMousePos());
-    //  }
 
     public void Update(GameTime gt)
     {
@@ -96,6 +82,7 @@ namespace Lindenmayers_Defense
       {
         p.Draw(sb);
       }
+      ResourceManager.Draw(sb);
       TowerManager.Draw(sb);
       ParticleManager.Draw(sb);
     }

@@ -67,6 +67,7 @@
     <Compile Include="GUI\TowerContainer.cs" />
     <Compile Include="GUI\UserInterface.cs" />
     <Compile Include="HeatMap.cs" />
+    <Compile Include="ResourceManager.cs" />
     <Compile Include="ValueBar.cs" />
     <Compile Include="IDamageable.cs" />
     <Compile Include="Input.cs" />
