@@ -62,6 +62,7 @@
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\ComponentContainer.cs" />
     <Compile Include="GUI\Container.cs" />
+    <Compile Include="GUI\InventoryManager.cs" />
     <Compile Include="GUI\StatContainer.cs" />
     <Compile Include="GUI\TowerContainer.cs" />
     <Compile Include="GUI\UserInterface.cs" />

@@ -14,7 +14,7 @@ namespace Lindenmayers_Defense.GUI
   {
     public string name;
     public LComponent component;
-    public bool ComponentArray;
+    public bool bInSelectionArray;
 
 
     public ComponentContainer(Texture2D tex, Vector2 pos) : base(tex, pos)
@@ -26,6 +26,10 @@ namespace Lindenmayers_Defense.GUI
     public void SetComponent(LComponent component)
     {
       this.component = component;
+    }
+    public void RemoveComponent()
+    {
+      this.component = null;
     }
 
     public void ComponentClick(SpriteBatch sb)
@@ -46,10 +50,10 @@ namespace Lindenmayers_Defense.GUI
       else
         sb.Draw(AssetManager.GetTexture("container2"), rec, Color.LightBlue*0.5f);
 
-      if (showComponentInfo && name != null && !ComponentArray)
+      if (showComponentInfo && name != null && !bInSelectionArray)
         sb.DrawString(AssetManager.GetFont("font1"), name, new Vector2(pos.X, (Game1.ScreenHeight - Game1.ScreenHeight / 4)), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
 
-      if (showComponentInfo && name != null && ComponentArray)
+      if (showComponentInfo && name != null && bInSelectionArray)
         sb.DrawString(AssetManager.GetFont("font1"), name, new Vector2(pos.X, (Game1.ScreenHeight - Game1.ScreenHeight / 7- 7)), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
     }
   }
