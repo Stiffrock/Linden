@@ -45,10 +45,11 @@ namespace Lindenmayers_Defense.GUI
     }
 
 
-    public void RemoveFromSelectionArray(ref ComponentContainer[] componentContainer, int i)
+    public void RemoveFromSelectionArray(ref ComponentContainer[] componentContainer, ref List<LComponent> componentList, int i, int j)
     {
       componentContainer[i].component = null;
-      componentContainer[i].name = null;   
+      componentContainer[i].name = null;
+      componentList.Remove(componentList[j]);
     }
 
     public void AddToSelectionArray(ref ComponentContainer[] selectionArray, ref List<LComponent> componentList, List<ComponentContainer> componentContainerList, Vector2 compOffset, int i, int j)

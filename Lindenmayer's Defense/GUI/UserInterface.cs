@@ -197,8 +197,7 @@ namespace Lindenmayers_Defense.GUI
           {
             if (componentList[j].pos == selectionArray[i].pos + compOffset)
             {
-              inventoryManager.RemoveFromSelectionArray(ref selectionArray, i);
-              componentList.Remove(componentList[j]);
+              inventoryManager.RemoveFromSelectionArray(ref selectionArray,ref componentList, i, j);
               break;
             }
           }
@@ -214,20 +213,12 @@ namespace Lindenmayers_Defense.GUI
         {
           if (componentList[j].pos == selectionArray[i].pos + compOffset)
           {
-            selectionArray[i].component = null;
-            selectionArray[i].name = null;
-            componentList.Remove(componentList[j]);
+            inventoryManager.RemoveFromSelectionArray(ref selectionArray, ref componentList, i, j);
             break;
           }
         }
         int index = Utility.RandomInt(0, componentList.Count() - 1);
-        selectionArray[i].component = componentList[index];
-        selectionArray[i].name = componentContainerList[index].name;
-
-        LComponent temp = new LComponent(componentList[index].tex, new Vector2(selectionArray[i].pos.X + compOffset.X, selectionArray[i].pos.Y + compOffset.Y), componentList[index].grammar);
-        temp.rec = new Rectangle((int)temp.pos.X, (int)temp.pos.Y, 40, 40);
-        temp.chosen = true;
-        componentList.Add(temp);
+        inventoryManager.AddToSelectionArray(ref selectionArray, ref componentList, componentContainerList, compOffset, index, i);
       }
     }
     #endregion
