@@ -50,7 +50,14 @@ namespace Lindenmayers_Defense
         turnAmount = amount * (angleDiff > 0 ? 1 : -1);
       return turnAmount;
     }
-
+    public static Color LerpColor(Color a, Color b, float amount)
+    {
+      a.R = (byte)MathHelper.Lerp((float)a.R, (float)b.R, amount);
+      a.G = (byte)MathHelper.Lerp((float)a.G, (float)b.G, amount);
+      a.B = (byte)MathHelper.Lerp((float)a.B, (float)b.B, amount);
+      a.A = (byte)MathHelper.Lerp((float)a.A, (float)b.A, amount);
+      return a;
+    }
     public static int RandomInt(int min, int max)
     {
       return rnd.Next(min, max);

@@ -111,5 +111,9 @@ namespace Lindenmayers_Defense
     {
       projectiles.Add(p);
     }
+    public List<Projectile> GetProjectiles()
+    {
+      return projectiles;
+    }
   }
 }

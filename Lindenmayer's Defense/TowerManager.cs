@@ -56,6 +56,14 @@ namespace Lindenmayers_Defense
         towerOnMouse = true;
       }
     }
+    public void PlaceTower(Vector2 pos)
+    {
+      if (!towerOnMouse)
+        return;
+      t.pos = pos;
+      world.AddGameObject(t);
+      towerOnMouse = false;
+    }
     public void Update(GameTime gt)
     { 
       if (t != null && towerOnMouse)
@@ -63,8 +71,7 @@ namespace Lindenmayers_Defense
 
       if (towerOnMouse && Input.RightMouseButtonClicked())
       {
-        world.AddGameObject(t);
-        towerOnMouse = false;
+        PlaceTower(t.pos);
       }
     }
     public void Draw(SpriteBatch sb)

@@ -226,36 +226,40 @@ namespace Lindenmayers_Defense.GUI
         }
       }
     }
-    #endregion
 
+    public void RandomizeComponents()
+    {
+      for (int i = 0; i < componentArray.Length; i++)
+      {
+        for (int j = 0; j < componentList.Count; j++)
+        {
+          if (componentList[j].pos == componentArray[i].pos + compOffset)
+          {
+            componentArray[i].component = null;
+            componentArray[i].name = null;
+            componentList.Remove(componentList[j]);
+            break;
+          }
+        }
+        int index = Utility.RandomInt(0, componentList.Count() - 1);
+        componentArray[i].component = componentList[index];
+        componentArray[i].name = compContainerList[index].name;
+
+        LComponent temp = new LComponent(componentList[index].tex, new Vector2(componentArray[i].pos.X + compOffset.X, componentArray[i].pos.Y + compOffset.Y), componentList[index].grammar);
+        temp.rec = new Rectangle((int)temp.pos.X, (int)temp.pos.Y, 40, 40);
+        temp.chosen = true;
+        result.Add(temp);
+        componentList.Add(temp);
+      }
+    }
+    #endregion
     #region Update/Draw
     public virtual void Update(GameTime gt)
     {
       towerBox.Update(gt);
       if (Input.KeyPressed(Keys.R))
       {
-        for (int i = 0; i < componentArray.Length; i++)
-        {
-          for (int j = 0; j < componentList.Count; j++)
-          {
-            if (componentList[j].pos == componentArray[i].pos + compOffset)
-            {
-              componentArray[i].component = null;
-              componentArray[i].name = null;
-              componentList.Remove(componentList[j]);
-              break;
-            }
-          }
-          int index = Utility.RandomInt(0, componentList.Count() - 1);
-          componentArray[i].component = componentList[index];
-          componentArray[i].name = compContainerList[index].name;
-
-          LComponent temp = new LComponent(componentList[index].tex, new Vector2(componentArray[i].pos.X + compOffset.X, componentArray[i].pos.Y + compOffset.Y), componentList[index].grammar);
-          temp.rec = new Rectangle((int)temp.pos.X, (int)temp.pos.Y, 40, 40);
-          temp.chosen = true;
-          result.Add(temp);
-          componentList.Add(temp);
-        }
+        RandomizeComponents();
       }
       for (int i = 0; i < compContainerList.Count; i++)
       {

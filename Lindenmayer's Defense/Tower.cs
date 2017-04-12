@@ -12,6 +12,9 @@ namespace Lindenmayers_Defense
 {
   class Tower : GameObject
   {
+    static int TowerIDCounter = 0;
+
+    public int TowerID { get; private set; }
     public LSystem L { get; protected set; }
 
     public Enemy target;
@@ -29,6 +32,7 @@ namespace Lindenmayers_Defense
 
     public Tower(World world, Texture2D tex, Vector2 pos, string grammar = "f[+++LR[X]][---RL[X]]", int generations = 3) : base(tex, pos)
     {
+      TowerID = TowerIDCounter++;
       this.pos = pos;
       this.world = world;
       L = new LSystem("X", grammar);
