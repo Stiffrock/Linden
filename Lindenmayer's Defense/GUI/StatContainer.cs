@@ -60,10 +60,10 @@ namespace Lindenmayers_Defense.GUI
       statList.Add((int)tower.damage);
       statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY), "damage"));
 
-      statList.Add(tower.firerateLvl);
+      statList.Add(tower.fireRateLvl);
       statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 2), "firerate"));
 
-      statList.Add(tower.turnspeedLvl);
+      statList.Add(tower.turnSpeedLvl);
       statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 3), "turnspeed"));
 
       statList.Add(tower.speedLvl);
@@ -112,7 +112,7 @@ namespace Lindenmayers_Defense.GUI
                 {
                   world.ResourceManager.RemoveGold(tower.GetFireRateCost());
                   tower.IncreaseLevel_Firerate(1);
-                  statList[1] = tower.firerateLvl;
+                  statList[1] = tower.fireRateLvl;
                 }            
                 break;
               }
@@ -122,7 +122,7 @@ namespace Lindenmayers_Defense.GUI
                 {
                   world.ResourceManager.RemoveGold(tower.GetTurnSpeedCost());
                   tower.IncreaseLevel_TurnSpeed(1);
-                  statList[2] = tower.turnspeedLvl;
+                  statList[2] = tower.turnSpeedLvl;
                 }           
                 break;
               }

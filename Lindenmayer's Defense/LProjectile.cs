@@ -87,6 +87,7 @@ namespace Lindenmayers_Defense
 
     protected int commandIndex;
     protected int mirrored;
+    protected int generation;
 
     protected string LStr;
     protected PCommand currentCommand;
@@ -99,6 +100,7 @@ namespace Lindenmayers_Defense
       currentCommandElapsedTime = 0.0f;
       commandIndex = -1;
       mirrored = 1;
+      generation = 0;
       GotoNextCommand();
     }
     public LProjectile(LProjectile other)
@@ -113,11 +115,13 @@ namespace Lindenmayers_Defense
       Scale = other.Scale;
       color = other.color;
       mirrored = other.mirrored;
+      generation = other.generation;
     }
     protected void Fork(int n)
     {
-      if (n <= 1 || Scale < 0.6f)
+      if (n <= 1 || generation >= 5)
         return;
+      ++generation;
       float rotDiff = (float)Math.PI / 8f;
       Damage *= 0.7f;
       Scale *= 0.9f;
@@ -134,8 +138,9 @@ namespace Lindenmayers_Defense
     }
     protected void Volley(int n)
     {
-      if (n <= 1 || Scale < 0.6f)
+      if (n <= 1 || generation >= 5)
         return;
+      ++generation;
       float distBetween = 15;
       Damage *= 0.7f;
       Scale *= 0.9f;

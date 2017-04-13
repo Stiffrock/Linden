@@ -24,8 +24,8 @@ namespace Lindenmayers_Defense
     protected double shootTimer;
     protected World world;
     public Texture2D[] componentTextures;
-    public float damage, firerate, turnspeed, speed, size, health;
-    public int damageLvl, firerateLvl, turnspeedLvl, speedLvl, sizeLvl, healthLvl, generationLvl;
+    public float damage, fireRate, turnSpeed, speed, size, health;
+    public int damageLvl, fireRateLvl, turnSpeedLvl, speedLvl, sizeLvl, healthLvl, generationLvl;
     private int damageCost, firerateCost, turnspeedCost, speedCost, sizeCost, healthCost, generationCost;
     private float damageFactor, firerateFactor, turnspeedFactor, speedFactor, sizeFactor, healthFactor;
     private int generations, costFactor;
@@ -49,32 +49,33 @@ namespace Lindenmayers_Defense
       Layer = CollisionLayer.TOWER;
       LayerMask = CollisionLayer.NONE;
       color = new Color(Game1.rnd.Next(255), Game1.rnd.Next(255), Game1.rnd.Next(255));
-      damageLvl = firerateLvl = turnspeedLvl = speedLvl = sizeLvl = healthLvl = generationLvl = 1;
+      damageLvl = fireRateLvl = turnSpeedLvl = speedLvl = sizeLvl = healthLvl = generationLvl = 1;
       generationLvl = generations = L.Generations;
       InitStats();
     }
     //private float damage, firerate, turnspeed, speed, size, health, generations;
 
-     public int GetDamageCost() { return damageLvl * costFactor; }
-     public int GetFireRateCost() { return firerateLvl * costFactor; }
-     public int GetTurnSpeedCost() { return turnspeedLvl * costFactor; }
-     public int GetSpeedCost() { return speedLvl * costFactor; }
-     public int GetSizeCost() { return sizeLvl * costFactor; }
-     public int GetHealthCost() { return healthLvl * costFactor; }
-     public int GetGenerationCost() { return generationLvl * (costFactor * 2); }
+    public int GetDamageCost() { return damageLvl * costFactor; }
+    public int GetFireRateCost() { return fireRateLvl * costFactor; }
+    public int GetTurnSpeedCost() { return turnSpeedLvl * costFactor; }
+    public int GetSpeedCost() { return speedLvl * costFactor; }
+    public int GetSizeCost() { return sizeLvl * costFactor; }
+    public int GetHealthCost() { return healthLvl * costFactor; }
+    public int GetGenerationCost() { return generationLvl * (costFactor * 2); }
 
     private void InitStats()
     {
       damage = 10.0f;
       damageFactor = 1.2f;
 
-      firerate = 1.0f;
+      fireRate = 5.0f;
       firerateFactor = 1.2f;
+      shootCooldown = 1000 / fireRate;
 
-      turnspeed = 1.0f;
+      turnSpeed = (float)Math.PI;
       turnspeedFactor = 1.2f;
 
-      speed = 1.0f;
+      speed = 150.0f;
       speedFactor = 1.2f;
 
       size = 1.0f;
@@ -93,29 +94,30 @@ namespace Lindenmayers_Defense
 
     public void IncreaseLevel_Firerate(int x)
     {
-      firerateLvl += x;
-      firerate = firerateLvl * firerateFactor;
+      fireRateLvl += x;
+      fireRate = fireRate * firerateFactor;
+      shootCooldown = 1000 / fireRate;
     }
     public void IncreaseLevel_TurnSpeed(int x)
     {
-      turnspeedLvl += x;
-      turnspeed = turnspeedLvl * turnspeedFactor;
+      turnSpeedLvl += x;
+      turnSpeed = turnSpeed * turnspeedFactor;
     }
     public void IncreaseLevel_Speed(int x)
     {
       speedLvl += x;
-      speed = speedLvl * speedFactor;
+      speed = speed * speedFactor;
 
     }
     public void IncreaseLevel_Size(int x)
     {
       sizeLvl += x;
-      size = sizeLvl * sizeFactor;
+      size = (float)Math.Pow(sizeFactor, sizeLvl);
     }
     public void IncreaseLevel_Health(int x)
     {
       healthLvl += x;
-      health = healthLvl * healthFactor;
+      health = health * healthFactor;
     }
 
     public void IncreaseLevel_Generations(int x)
@@ -146,12 +148,11 @@ namespace Lindenmayers_Defense
       }
     }
 
-
-
     protected virtual void ShootProjectile()
     {
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
-      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, L.Str, this.Forward(), 150.0f, damage);
+      LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, L.Str, this.Forward(), speed, damage);
+      p.Scale = size;
       p.color = color;
       world.AddProjectile(p);
       for (int i = 0; i < 3; i++)
@@ -172,7 +173,7 @@ namespace Lindenmayers_Defense
       if (target != null)
       {
         float targetAngle = Utility.Vector2ToAngle(target.pos + target.Forward() * target.speed - pos);
-        rotation += Utility.TurnAngle(rotation, targetAngle, (float)Math.PI, gt);
+        rotation += Utility.TurnAngle(rotation, targetAngle, turnSpeed, gt);
       }
       else
       {
