@@ -72,19 +72,18 @@ namespace Lindenmayers_Defense
       // TODO: Unload any non ContentManager content here
     }
 
+    float[,] frequencyMap = new float[256, 256];
     void CollectProjectileData(bool saveToFile)
     {
-      int width = 128;
-      int height = 128;
-      int ceiling = 25;
+      int width = 256;
+      int height = 256;
+      int ceiling = 50;
       int resolution = 8;
-      float[,] frequencyMap = new float[width, height];
       float highest = 0;
 
       List<Projectile> projectiles = world.GetProjectiles();
-      List<GameObject> towers = world.GetGameObjects();
+      List<GameObject> towers = new List<GameObject>(world.GetGameObjects());
       towers.RemoveAll(x => !(x is Tower));
-      nrOfTowers = towers.Count;
       foreach (Tower t in towers)
       {
         foreach (Projectile p in projectiles)
@@ -93,8 +92,8 @@ namespace Lindenmayers_Defense
             continue;
 
           Vector2 posOffset = (p.pos - t.pos) / resolution;
-          int X = (int)(posOffset.X) + width / 2;
-          int Y = (int)(posOffset.Y) + height / 2;
+          int X = (int)(posOffset.X + width / 2.0f);
+          int Y = (int)(posOffset.Y + height / 1.5f);
           X = MathHelper.Clamp(X, 0, width - 1);
           Y = MathHelper.Clamp(Y, 0, height - 1);
           highest = Math.Max(++frequencyMap[X, Y], highest);
@@ -120,19 +119,21 @@ namespace Lindenmayers_Defense
         sw.Close();
       }
 
+      float[,] normalizedValues = new float[width, height];
       for (int i = 0; i < frequencyMap.GetLength(0); i++)
       {
         for (int j = 0; j < frequencyMap.GetLength(1); j++)
         {
-          frequencyMap[i, j] /= ceiling;
+          normalizedValues[i, j] = frequencyMap[i, j] / ceiling;
         }
       }
 
-      heatMap = HeatMap.Generate(GraphicsDevice, frequencyMap);
+      heatMap = HeatMap.Generate(GraphicsDevice, normalizedValues);
       if (saveToFile)
       {
         Stream stream = File.Create("heatMap.png");
         heatMap.SaveAsPng(stream, heatMap.Width, heatMap.Height);
+        stream.Close();
       }
     }
 
@@ -149,7 +150,24 @@ namespace Lindenmayers_Defense
         Exit();
       if (Input.KeyPressed(Keys.F5))
       {
+
         CollectProjectileData(true);
+      }
+      if (Input.KeyPressed(Keys.F6))
+      {
+        for (int i = 0; i < 1000; i++)
+        {
+          ui.SelectRandomComponents();
+          world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures(), 0);
+          world.TowerManager.PlaceTower(Vector2.Zero);
+        }
+        for (int i = 0; i < 600; i++)
+        {
+          world.DebugUpdate(gameTime);
+        }
+        CollectProjectileData(true);
+        world.GetGameObjects().Clear();
+        world.GetProjectiles().Clear();
       }
       if (Input.KeyPressed(Keys.F2))
       {
@@ -179,11 +197,14 @@ namespace Lindenmayers_Defense
       {
         bool success = false;
         success = world.TowerManager.CreateTower(Input.GetMousePos(), ui.GenerateGrammar(), ui.GetTextures(), ui.GetCost());
-        if(success)
-        world.ResourceManager.RemoveGold(ui.GetCost());
+        if (success)
+          world.ResourceManager.RemoveGold(ui.GetCost());
       }
       if (updateHeatMap)
         CollectProjectileData(false);
+      List<GameObject> towers = new List<GameObject>(world.GetGameObjects());
+      towers.RemoveAll(x => !(x is Tower));
+      nrOfTowers = towers.Count;
       base.Update(gameTime);
     }
 
@@ -206,7 +227,7 @@ namespace Lindenmayers_Defense
       spriteBatch.DrawString(AssetManager.GetFont("font1"), Input.GetMousePos().ToString(), Vector2.Zero, Color.White);
       spriteBatch.DrawString(AssetManager.GetFont("font1"), "Towers: " + nrOfTowers.ToString(), new Vector2(0, 50), Color.White);
       if (showHeatMap && heatMap != null)
-        spriteBatch.Draw(heatMap, Input.GetMousePos(), null, Color.White, 0.0f, new Vector2((float)heatMap.Width / 2, (float)heatMap.Height / 2), 8.0f, SpriteEffects.None, 0.0f);
+        spriteBatch.Draw(heatMap, Input.GetMousePos(), null, Color.White, 0.0f, new Vector2((float)heatMap.Width / 2, (float)heatMap.Height / 2), 4.0f, SpriteEffects.None, 0.0f);
       spriteBatch.End();
       base.Draw(gameTime);
     }

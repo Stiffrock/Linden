@@ -28,7 +28,7 @@ namespace Lindenmayers_Defense
     public World()
     {
       ParticleManager = new ParticleManager();
-      ResourceManager = new ResourceManager(100);
+      ResourceManager = new ResourceManager(10000);
       enemyManager = new EnemyManager(this);
       TowerManager = new TowerManager(this);
       gameObjects = new List<GameObject>();
@@ -107,6 +107,23 @@ namespace Lindenmayers_Defense
     public List<Projectile> GetProjectiles()
     {
       return projectiles;
+    }
+
+    public void DebugUpdate(GameTime gt)
+    {
+      foreach (var item in pToAdd)
+        projectiles.Add(item);
+      pToAdd.Clear();
+
+      for (int i = 0; i < gameObjects.Count; i++)
+      {
+        gameObjects[i].Update(gt);
+      }
+      for (int i = 0; i < projectiles.Count; i++)
+      {
+        projectiles[i].DebugUpdate(gt);
+      }
+      projectiles.RemoveAll(p => p.Disposed);
     }
   }
 }

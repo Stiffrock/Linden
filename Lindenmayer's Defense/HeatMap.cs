@@ -48,7 +48,7 @@ namespace Lindenmayers_Defense
         return heatMapColors[heatMapColors.Length - 1];
       else
       {
-        value = value * heatMapColors.Length - 1;
+        value = value * (heatMapColors.Length - 1);
         index1 = (int)value;
         index2 = index1 + 1;
         fractBetween = value - index1;

@@ -72,6 +72,13 @@ namespace Lindenmayers_Defense
         Die();
       }
     }
+    public virtual void DebugUpdate(GameTime gt)
+    {
+      Velocity = Forward() * Speed;
+      Lifetime -= (float)gt.ElapsedGameTime.TotalSeconds;
+      if (Lifetime <= 0)
+        Die();
+    }
     public override void DoCollision(GameObject other)
     {
       if (other is Enemy)
@@ -111,7 +118,7 @@ namespace Lindenmayers_Defense
       {
         if (go is Enemy && Vector2.DistanceSquared(pos, go.pos) <= ExplosionRadius * ExplosionRadius)
         {
-          ((Enemy)go).TakeDamage(Damage / 2);
+          ((Enemy)go).TakeDamage(Damage / 4);
         }
       }
     }

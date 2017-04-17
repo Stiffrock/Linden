@@ -53,7 +53,7 @@ namespace Lindenmayers_Defense
       if (!towerOnMouse && world.ResourceManager.CanAfford(cost))
       {
         //string g = world.GetGrammar();
-        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 3);
+        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 5);
         t.componentTextures = textures;
         towerOnMouse = true;
         return true;

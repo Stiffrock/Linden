@@ -172,7 +172,7 @@ namespace Lindenmayers_Defense
       AcquireTarget();
       if (target != null)
       {
-        float targetAngle = Utility.Vector2ToAngle(target.pos + target.Forward() * target.speed - pos);
+        float targetAngle = Utility.Vector2ToAngle(target.pos - pos);
         rotation += Utility.TurnAngle(rotation, targetAngle, turnSpeed, gt);
       }
       else

@@ -57,10 +57,10 @@ namespace Lindenmayers_Defense
       {'(', new PCommand(0.0f, (p, gt)=> {
         string lstr = p.BracketSubstring(p.commandIndex);
         LProjectile newP = new LProjectile(p.world, p.Tower, p.tex, p.pos, lstr, p.Forward(), p.Speed, p.Damage);
-        newP.ExplosionRadius = 100.0f;
         newP.TurnRate = p.TurnRate;
         newP.Target = p.Target;
         newP.Scale = p.Scale * 0.9f;
+        newP.ExplosionRadius = 100.0f * p.Scale;
         newP.color = p.color;
         p.world.AddProjectile(newP);
       })},
@@ -194,8 +194,23 @@ namespace Lindenmayers_Defense
     {
       base.Update(gt);
       currentCommand.Invoke(this, gt);
-      if (commandIndex == LStr.Length - 1)
+      if (commandIndex >= LStr.Length - 1)
         alpha = 1 - currentCommandElapsedTime / currentCommand.Duration;
+      currentCommandElapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
+      if (currentCommandElapsedTime >= currentCommand.Duration)
+      {
+        GotoNextCommand();
+      }
+      while (currentCommand.Duration < 0.0001f)
+      {
+        currentCommand.Invoke(this, gt);
+        GotoNextCommand();
+      }
+    }
+    public override void DebugUpdate(GameTime gt)
+    {
+      base.DebugUpdate(gt);
+      currentCommand.Invoke(this, gt);
       currentCommandElapsedTime += (float)gt.ElapsedGameTime.TotalSeconds;
       if (currentCommandElapsedTime >= currentCommand.Duration)
       {

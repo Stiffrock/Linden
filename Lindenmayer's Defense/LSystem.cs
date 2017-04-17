@@ -15,11 +15,11 @@ namespace Lindenmayers_Defense
       {'L', "L--F" }, //turn left
       {'R', "R++F" }, //turn right
       {'S', "sfS" },  //arrow
-      {'Z', "zfZ" },  //arrow
+      {'Z', "zfZ" },  //slow
       {'W', "++F----FF++++F--W" }, //wave
       {'V', "--F++++FF----F++W" }, //wave
       {'Y', "X" },      //sub-branch
-      {'E', "(f)fE" }, //explosive
+      {'E', "(f)FE" }, //explosive
       {'H', "hfH" }, //homing
       {'0', "1" },
       {'1', "2" },
@@ -51,7 +51,7 @@ namespace Lindenmayers_Defense
     public double MutationRate { get; set; }
     public int Generations { get; protected set; }
 
-    public LSystem(string axiom, string xRule = "", double mutationRate = 0.0d)
+    public LSystem(string axiom, string xRule = "", double mutationRate = 0.05d)
     {
       Str = axiom;
       XRule = xRule;
@@ -65,22 +65,24 @@ namespace Lindenmayers_Defense
         string result = "";
         foreach (char c in Str)
         {
-          if (Game1.rnd.NextDouble() < MutationRate)
-          {
-            IEnumerable<char> l = LProjectile.commands.Keys;
-            int j = Game1.rnd.Next(0, l.Count());
-            char ch = l.ElementAt(j);
-            if (ch != '(' && ch != '[')
-              result += ch;
-            else if (ch == '(')
-              result += "(f)";
-          }
           if (c == 'X')
             result += XRule;
           else if (grammar.ContainsKey(c))
             result += grammar[c];
           else
             result += c;
+          if (Game1.rnd.NextDouble() < MutationRate && c != 'K' && c != 'Q')
+          {
+            IEnumerable<char> l = LProjectile.commands.Keys;
+            int j = Game1.rnd.Next(0, l.Count());
+            char ch = l.ElementAt(j);
+            if (ch == 'K' || ch == 'Q')
+              result += ch + '0';
+            else if (ch == '(')
+              result += "(f)";
+            else if (ch != '[')
+              result += ch;
+          }
         }
         Str = result;
       }
