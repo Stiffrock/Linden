@@ -131,7 +131,14 @@ namespace Lindenmayers_Defense.GUI
     private void BuildStatWindow(GameObject t)
     {
       Tower temp = (Tower)t;
-      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), t.pos, temp, world);
+      float boundsX = t.pos.X + 300, boundsY = t.pos.Y + 230;
+      Vector2 statWindowPos = t.pos;
+
+      if (boundsX >= Game1.ScreenWidth)
+        statWindowPos.X -= 300;
+      if (boundsY >= Game1.ScreenHeight)
+        statWindowPos.Y -= 300;
+      StatContainer towerStatContainer = new StatContainer(AssetManager.GetTexture("panel"), statWindowPos, temp, world);
       towerStatContainer.componentTextures = temp.componentTextures;
       displayedStatContainer = towerStatContainer;
     }
