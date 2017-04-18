@@ -35,6 +35,7 @@ namespace Lindenmayers_Defense
       Layer = CollisionLayer.ENEMY;
       LayerMask = CollisionLayer.TOWER;
       goldGain = 5;
+      Scale = 2.0f;
     }
     public override void Update(GameTime gt)
     {

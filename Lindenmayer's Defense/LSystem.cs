@@ -17,7 +17,6 @@ namespace Lindenmayers_Defense
       {'S', "sfS" },  //arrow
       {'Z', "zfZ" },  //slow
       {'W', "++F----FF++++F--W" }, //wave
-      {'V', "--F++++FF----F++W" }, //wave
       {'Y', "X" },      //sub-branch
       {'E', "(f)FE" }, //explosive
       {'H', "hfH" }, //homing

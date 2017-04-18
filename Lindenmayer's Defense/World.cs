@@ -28,17 +28,18 @@ namespace Lindenmayers_Defense
     public World()
     {
       ParticleManager = new ParticleManager();
-      ResourceManager = new ResourceManager(10000);
+      ResourceManager = new ResourceManager(100);
       enemyManager = new EnemyManager(this);
       TowerManager = new TowerManager(this);
       gameObjects = new List<GameObject>();
       projectiles = new List<Projectile>();
       pToAdd = new List<Projectile>();
       grammarComponents = new Dictionary<string, LComponent>();
-      baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(800, 300));
+      baseTower = new Base(this, AssetManager.GetTexture("tower02"), new Vector2(Game1.ScreenWidth/2, Game1.ScreenHeight/2.3f));
       AddGameObject(baseTower);
-      testTower = new Tower(this, AssetManager.GetTexture("tower01"), new Vector2(600, 500));
-      AddGameObject(testTower);
+      
+      //testTower = new Tower(this, AssetManager.GetTexture("tower01"), new Vector2(600, 500));
+      //AddGameObject(testTower);
     }
 
     public void Update(GameTime gt)

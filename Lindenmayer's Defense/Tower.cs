@@ -152,7 +152,7 @@ namespace Lindenmayers_Defense
     {
       Vector2 spawnPos = pos + Vector2.Transform(muzzlePos, Matrix.CreateRotationZ(rotation));
       LProjectile p = new LProjectile(world, this, AssetManager.GetTexture("bullet01"), spawnPos, L.Str, this.Forward(), speed, damage);
-      p.Scale = size;
+      p.Scale = size*0.7f;
       p.color = color;
       world.AddProjectile(p);
       for (int i = 0; i < 3; i++)

@@ -58,25 +58,25 @@ namespace Lindenmayers_Defense.GUI
     private void BuildStatBox()
     {
       statList.Add((int)tower.damage);
-      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY), "damage"));
+      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(pos.X + 250, pos.Y + OffsetY), "damage"));
 
       statList.Add(tower.fireRateLvl);
-      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 2), "firerate"));
+      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(pos.X + 250, pos.Y + OffsetY * 2), "firerate"));
 
       statList.Add(tower.turnSpeedLvl);
-      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 3), "turnspeed"));
+      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(pos.X + 250, pos.Y + OffsetY * 3), "turnspeed"));
 
       statList.Add(tower.speedLvl);
-      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 4), "speed"));
+      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(pos.X + 250, pos.Y + OffsetY * 4), "speed"));
 
       statList.Add(tower.sizeLvl);
-      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 5), "size"));
+      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(pos.X + 250, pos.Y + OffsetY * 5), "size"));
 
       statList.Add(tower.healthLvl);
-      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 6), "health"));
+      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(pos.X + 250, pos.Y + OffsetY * 6), "health"));
 
       statList.Add(tower.generationLvl);
-      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(tower.pos.X + 250, tower.pos.Y + OffsetY * 7), "generation"));
+      statButtonList.Add(new Button(AssetManager.GetTexture("button"), new Vector2(pos.X + 250, pos.Y + OffsetY * 7), "generation"));
     }
     public bool MouseIntersect(Rectangle uiObject)
     {

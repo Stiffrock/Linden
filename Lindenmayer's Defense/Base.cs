@@ -17,11 +17,14 @@ namespace Lindenmayers_Defense
     {
       origin = new Vector2(tex.Width / 2, tex.Height / 2);
       platform = AssetManager.GetTexture("towerplatform");
-      shootCooldown = 200.0f;
-      L = new LSystem("(--fff++ssssssssFhFhFhFhFhFhFhFhFhF)(++fff--ssssssssFhFhFhFhFhFhFhFhFhF)", "", 0.0f);
+      shootCooldown = 1600.0f;
+      L = new LSystem("(--fff++ssssssssFFFFFFFFFF)(++fff--ssssssssFFFFFFFFFF)", "", 0.0f);
       L.Evolve(5);
+      size = 2.0f;
       Scale = 2.0f;
-      health = 1000;
+      fireRate = 0.625f;
+      damage = 20;
+      health = 1500;
       healthBar = new ValueBar(new Rectangle(0, 0, 150, 10), health, health, Color.Green*0.7f, Color.Red * 0.5f);
       healthBar.SetPos(pos+new Vector2(0,70));
       color = Color.White;

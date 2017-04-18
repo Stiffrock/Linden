@@ -36,7 +36,6 @@ namespace Lindenmayers_Defense
     {
       grammarComponents.Add("spinner left", new LComponent(AssetManager.GetTexture("rune1"), Vector2.Zero, "LL"));
       grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("rune2"), Vector2.Zero, "W"));
-      //grammarComponents.Add("wave", new LComponent(AssetManager.GetTexture("rune2"), Vector2.Zero, "[WY][VY]"));
       grammarComponents.Add("arrow", new LComponent(AssetManager.GetTexture("rune3"), Vector2.Zero, "sSFF"));
       grammarComponents.Add("fork", new LComponent(AssetManager.GetTexture("rune4"), Vector2.Zero,"fK0FF"));
       grammarComponents.Add("spinner right", new LComponent(AssetManager.GetTexture("rune5"), Vector2.Zero, "RR"));
@@ -53,7 +52,7 @@ namespace Lindenmayers_Defense
       if (!towerOnMouse && world.ResourceManager.CanAfford(cost))
       {
         //string g = world.GetGrammar();
-        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 5);
+        t = new Tower(world, AssetManager.GetTexture("tower01"), pos, grammar, 3);
         t.componentTextures = textures;
         towerOnMouse = true;
         return true;
