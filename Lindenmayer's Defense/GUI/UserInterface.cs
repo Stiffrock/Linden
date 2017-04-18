@@ -28,6 +28,7 @@ namespace Lindenmayers_Defense.GUI
     private World world;
     private InventoryManager inventoryManager;
     private int CurrentTowerCost;
+    private bool statWindowLock;
 
     /*    
     componentContainerList keeps track of all the containers, if a container from inventory is clicked, a copy of its component
@@ -38,8 +39,8 @@ namespace Lindenmayers_Defense.GUI
     {
       componentList = new List<LComponent>();  
       componentContainerList = new List<ComponentContainer>();
-      statContainerList = new List<StatContainer>(); 
-
+      statContainerList = new List<StatContainer>();
+      statWindowLock = false;
       inventoryArray = new ComponentContainer[3, 6];
       selectionArray = new ComponentContainer[5];   
       compOffset = new Vector2(12, 8);
@@ -145,10 +146,11 @@ namespace Lindenmayers_Defense.GUI
         if (t is Tower)
         {
           Tower temp = (Tower)t;
-          if (MouseIntersect(temp.hitbox))
+          if (MouseIntersect(temp.hitbox) && !statWindowLock)
           {
             BuildStatWindow(t);
             temp.displayStats = true;
+            statWindowLock = true;
             break;
           }
           if (displayedStatContainer != null && !MouseIntersect(displayedStatContainer.rec))
@@ -158,6 +160,7 @@ namespace Lindenmayers_Defense.GUI
               if (!MouseIntersect(displayedStatContainer.statButtonList[i].hitbox))
               {
                 temp.displayStats = false;
+                statWindowLock = false;
                 displayedStatContainer = null;
                 break;
               }
