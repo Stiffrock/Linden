@@ -148,6 +148,7 @@ namespace Lindenmayers_Defense
     {
       if (this.IsActive)
         Input.Update();
+#if DEBUG
       if (Input.KeyDown(Keys.Escape))
         Exit();
       if (Input.KeyPressed(Keys.F5))
@@ -195,10 +196,6 @@ namespace Lindenmayers_Defense
         world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures(), 0);
         world.TowerManager.PlaceTower(new Vector2(Utility.RandomInt(0, ScreenWidth), Utility.RandomInt(0, ScreenHeight)));
       }
-      if (Input.KeyPressed(Keys.F9))
-      {
-        world.ResourceManager.AddGold(10000);
-      }
       if (Input.KeyPressed(Keys.F10))
       {
         world.AddGameObject(new Enemy(world, AssetManager.GetTexture("enemy01"), Input.GetMousePos(), 0, 10000, 0));
@@ -210,6 +207,11 @@ namespace Lindenmayers_Defense
       if (Input.KeyPressed(Keys.OemMinus))
       {
         heatMapScale -= 1.0f;
+      } 
+#endif
+      if (Input.KeyPressed(Keys.F9))
+      {
+        world.ResourceManager.AddGold(10000);
       }
       world.Update(gameTime);
       ui.Update(gameTime);

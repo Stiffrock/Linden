@@ -28,11 +28,11 @@ namespace Lindenmayers_Defense
     }
     public void Update(GameTime gt)
     {
+      if (!IsActive)
+        return;
       spawnMax = baseSpawnRate * (1.0 / difficulty);
       spawnMin = spawnMax / 2.0;
       difficulty += gt.ElapsedGameTime.TotalSeconds / 100;
-      if (!IsActive)
-        return;
       spawnElapsed += gt.ElapsedGameTime.TotalSeconds;
       if (spawnElapsed >= spawnNext)
       {
@@ -63,8 +63,8 @@ namespace Lindenmayers_Defense
       int stats = (int)(500 * difficulty);//350;
       int speed = Game1.rnd.Next(30, 100);
       stats -= speed * 2;
-      int damage = Game1.rnd.Next(10, (stats - 20) / 3);
-      stats -= damage * 3;
+      int damage = Game1.rnd.Next(10, (stats - 20) / 4);
+      stats -= damage * 4;
       int health = stats;
 
       Enemy e = new Enemy(world, AssetManager.GetTexture("enemy01"), spawnPos, damage, health, speed);

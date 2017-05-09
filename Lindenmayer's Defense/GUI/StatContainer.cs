@@ -148,6 +148,7 @@ namespace Lindenmayers_Defense.GUI
               }
             case "health":
               {
+                return;
                 if (world.ResourceManager.CanAfford(tower.GetHealthCost()))
                 {
                   world.ResourceManager.RemoveGold(tower.GetHealthCost());
@@ -158,6 +159,8 @@ namespace Lindenmayers_Defense.GUI
               }
             case "generation":
               {
+                if (tower.generationLvl >= 5)
+                  return;
                 if (world.ResourceManager.CanAfford(tower.GetGenerationCost()))
                 {
                   world.ResourceManager.RemoveGold(tower.GetGenerationCost());
