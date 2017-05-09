@@ -16,6 +16,7 @@ namespace Lindenmayers_Defense
     public static Random rnd = new Random();
     public static readonly int ScreenWidth = 1800;
     public static readonly int ScreenHeight = 1000;
+    public static bool debugMode;
 
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
@@ -72,12 +73,13 @@ namespace Lindenmayers_Defense
       // TODO: Unload any non ContentManager content here
     }
 
-    float[,] frequencyMap = new float[256, 256];
+    float heatMapScale = 8.0f;
+    float[,] frequencyMap = new float[512, 512];
     void CollectProjectileData(bool saveToFile)
     {
-      int width = 256;
-      int height = 256;
-      int ceiling = 50;
+      int width = 512;
+      int height = 512;
+      int ceiling = 500;
       int resolution = 8;
       float highest = 0;
 
@@ -93,7 +95,7 @@ namespace Lindenmayers_Defense
 
           Vector2 posOffset = (p.pos - t.pos) / resolution;
           int X = (int)(posOffset.X + width / 2.0f);
-          int Y = (int)(posOffset.Y + height / 1.5f);
+          int Y = (int)(posOffset.Y + height / 2.0f);
           X = MathHelper.Clamp(X, 0, width - 1);
           Y = MathHelper.Clamp(Y, 0, height - 1);
           highest = Math.Max(++frequencyMap[X, Y], highest);
@@ -150,24 +152,27 @@ namespace Lindenmayers_Defense
         Exit();
       if (Input.KeyPressed(Keys.F5))
       {
-
         CollectProjectileData(true);
       }
-      if (Input.KeyPressed(Keys.F6))
+      if (Input.KeyPressed(Keys.F6) && !debugMode)
       {
-        for (int i = 0; i < 1000; i++)
+        debugMode = true;
+        for (int j = 0; j < 10; j++)
         {
-          ui.SelectRandomComponents();
-          world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures(), 0);
-          world.TowerManager.PlaceTower(Vector2.Zero);
+          for (int i = 0; i < 1000; i++)
+          {
+            ui.SelectRandomComponents();
+            world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures(), 0);
+            world.TowerManager.PlaceTower(Vector2.Zero);
+          }
+          for (int i = 0; i < 600; i++)
+          {
+            world.DebugUpdate(gameTime);
+          }
+          CollectProjectileData(true);
+          world.GetGameObjects().Clear();
+          world.GetProjectiles().Clear();
         }
-        for (int i = 0; i < 600; i++)
-        {
-          world.DebugUpdate(gameTime);
-        }
-        CollectProjectileData(true);
-        world.GetGameObjects().Clear();
-        world.GetProjectiles().Clear();
       }
       if (Input.KeyPressed(Keys.F2))
       {
@@ -189,6 +194,22 @@ namespace Lindenmayers_Defense
         ui.SelectRandomComponents();
         world.TowerManager.CreateTower(Vector2.Zero, ui.GenerateGrammar(), ui.GetTextures(), 0);
         world.TowerManager.PlaceTower(new Vector2(Utility.RandomInt(0, ScreenWidth), Utility.RandomInt(0, ScreenHeight)));
+      }
+      if (Input.KeyPressed(Keys.F9))
+      {
+        world.ResourceManager.AddGold(10000);
+      }
+      if (Input.KeyPressed(Keys.F10))
+      {
+        world.AddGameObject(new Enemy(world, AssetManager.GetTexture("enemy01"), Input.GetMousePos(), 0, 10000, 0));
+      }
+      if (Input.KeyPressed(Keys.OemPlus))
+      {
+        heatMapScale += 1.0f;
+      }
+      if (Input.KeyPressed(Keys.OemMinus))
+      {
+        heatMapScale -= 1.0f;
       }
       world.Update(gameTime);
       ui.Update(gameTime);
@@ -227,7 +248,7 @@ namespace Lindenmayers_Defense
       spriteBatch.DrawString(AssetManager.GetFont("font1"), Input.GetMousePos().ToString(), Vector2.Zero, Color.White);
       spriteBatch.DrawString(AssetManager.GetFont("font1"), "Towers: " + nrOfTowers.ToString(), new Vector2(0, 50), Color.White);
       if (showHeatMap && heatMap != null)
-        spriteBatch.Draw(heatMap, Input.GetMousePos(), null, Color.White, 0.0f, new Vector2((float)heatMap.Width / 2, (float)heatMap.Height / 2), 4.0f, SpriteEffects.None, 0.0f);
+        spriteBatch.Draw(heatMap, Input.GetMousePos(), null, Color.White, 0.0f, new Vector2((float)heatMap.Width / 2, (float)heatMap.Height / 2), heatMapScale, SpriteEffects.None, 0.0f);
       spriteBatch.End();
       base.Draw(gameTime);
     }

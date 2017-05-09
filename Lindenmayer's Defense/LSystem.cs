@@ -50,7 +50,7 @@ namespace Lindenmayers_Defense
     public double MutationRate { get; set; }
     public int Generations { get; protected set; }
 
-    public LSystem(string axiom, string xRule = "", double mutationRate = 0.05d)
+    public LSystem(string axiom, string xRule = "", double mutationRate = 0.05)
     {
       Str = axiom;
       XRule = xRule;

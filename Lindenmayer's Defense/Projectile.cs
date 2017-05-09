@@ -22,6 +22,7 @@ namespace Lindenmayers_Defense
     public float Damage { get; set; }
     public GameObject Target { get; set; }
     public Tower Tower { get; protected set; }
+    protected bool debug;
 
     protected World world;
 
@@ -62,6 +63,7 @@ namespace Lindenmayers_Defense
         AcquireTarget();
       Velocity = Forward() * Speed;
 
+      world.ParticleManager.GenerateParticle(tex, pos, 0.2f, 0.0f, 0.5f * Scale, color * 0.5f);
       Lifetime -= (float)gt.ElapsedGameTime.TotalSeconds;
       if (Lifetime < 0.5f)
       {

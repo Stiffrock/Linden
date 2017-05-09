@@ -94,6 +94,8 @@ namespace Lindenmayers_Defense.GUI
       {
         if (componentList[i].chosen)
         {
+          if (count >= temp.Length)
+            break;
           temp[count] = componentList[i].tex;
           ++count;
         }

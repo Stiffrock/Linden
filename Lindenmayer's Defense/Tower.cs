@@ -186,5 +186,14 @@ namespace Lindenmayers_Defense
         shootTimer = 0;
       }
     }
+    public void DebugUpdate(GameTime gt)
+    {
+      shootTimer += gt.ElapsedGameTime.Milliseconds;
+      if (shootTimer >= shootCooldown)
+      {
+        ShootProjectile();
+        shootTimer = 0;
+      }
+    }
   }
 }

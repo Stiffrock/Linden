@@ -118,7 +118,7 @@ namespace Lindenmayers_Defense
 
       for (int i = 0; i < gameObjects.Count; i++)
       {
-        gameObjects[i].Update(gt);
+        ((Tower)gameObjects[i]).DebugUpdate(gt);
       }
       for (int i = 0; i < projectiles.Count; i++)
       {

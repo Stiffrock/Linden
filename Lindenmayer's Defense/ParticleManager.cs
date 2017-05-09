@@ -19,6 +19,8 @@ namespace Lindenmayers_Defense
 
     public void GenerateParticle(Texture2D tex, Vector2 pos, float lifeTime, float speed, float scale = 1.0f, Color? color = null)
     {
+      if (Game1.debugMode)
+        return;
       float lt = lifeTime * (float)(1 + Game1.rnd.NextDouble() * 0.4f - 0.2f);
       if(color == null)
         color = new Color(Game1.rnd.Next(0, 255), Game1.rnd.Next(0, 255), Game1.rnd.Next(0, 255));
@@ -31,11 +33,15 @@ namespace Lindenmayers_Defense
     }
     public void CreateParticle(Texture2D tex, Vector2 pos, float lifeTime, Color color, float scale, Vector2 velocity, float rotationalSpeed, float alpha, bool fades)
     {
+      if (Game1.debugMode)
+        return;
       Particle p = new Particle(tex, pos, lifeTime, color, scale, velocity, rotationalSpeed, alpha, fades);
       particles.Add(p);
     }
     public void CreateExplosion(Vector2 pos, float radius, Color color, float duration)
     {
+      if (Game1.debugMode)
+        return;
       Particle exp = new Particle(AssetManager.GetTexture("particle03"), pos, duration, color, radius/64.0f, Vector2.Zero, 0.0f, 1.0f, true);
       //Particle exp = new Particle(AssetManager.GetTexture("dot"), pos, duration, color, radius / 512.0f, Vector2.Zero, 0.0f, 0.8f, true);
       particles.Add(exp);
