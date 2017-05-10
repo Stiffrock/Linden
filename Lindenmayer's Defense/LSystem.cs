@@ -48,6 +48,7 @@ namespace Lindenmayers_Defense
     public string Str { get; protected set; }
     public string XRule { get; protected set; }
     public double MutationRate { get; set; }
+    public double MutationFactor { get; set; }
     public int Generations { get; protected set; }
 
     public LSystem(string axiom, string xRule = "", double mutationRate = 0.05)
@@ -55,7 +56,26 @@ namespace Lindenmayers_Defense
       Str = axiom;
       XRule = xRule;
       MutationRate = mutationRate;
+      MutationFactor = SetMutationFactor(xRule);
       Generations = 0;
+    }
+
+    //New mutation factor, loops through every character in XRule, the character that appears the most times decides the mutationfactor
+    private double SetMutationFactor(string xRule)
+    {
+      int maxCount = 0;
+      for (int i = 0; i < xRule.Length; i++)
+      {
+        int tempCount = 0;
+        for (int j = 0; j < xRule.Length; j++)
+        {
+          if (xRule[i] == xRule[j])
+            ++tempCount;
+        }
+        if (tempCount > maxCount)
+          maxCount = tempCount;
+      }
+      return maxCount;
     }
     public void Evolve(int generations)
     {
@@ -70,7 +90,7 @@ namespace Lindenmayers_Defense
             result += grammar[c];
           else
             result += c;
-          if (Game1.rnd.NextDouble() < MutationRate && c != 'K' && c != 'Q')
+          if (Game1.rnd.NextDouble() < (MutationRate * MutationFactor) && c != 'K' && c != 'Q')
           {
             IEnumerable<char> l = LProjectile.commands.Keys;
             int j = Game1.rnd.Next(0, l.Count());

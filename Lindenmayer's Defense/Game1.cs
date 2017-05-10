@@ -14,8 +14,8 @@ namespace Lindenmayers_Defense
   public class Game1 : Game
   {
     public static Random rnd = new Random();
-    public static readonly int ScreenWidth = 1800;
-    public static readonly int ScreenHeight = 1000;
+    public static readonly int ScreenWidth = 1200;
+    public static readonly int ScreenHeight = 800;
     public static bool debugMode;
 
     GraphicsDeviceManager graphics;
